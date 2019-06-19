@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="app,">
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="hexo-xuelangwang">
-<meta property="og:url" content="http://yoursite.com/tags/hexo/index.html">
+<meta name="description" content="app性能分析图 app通过调用CPU来计算； app通过MEM来读取/存储数据； app通过NET来请求数据通信；  检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检">
+<meta name="keywords" content="app">
+<meta property="og:type" content="article">
+<meta property="og:title" content="app性能分析">
+<meta property="og:url" content="http://yoursite.com/2019/06/19/app性能分析/index.html">
 <meta property="og:site_name" content="hexo-xuelangwang">
+<meta property="og:description" content="app性能分析图 app通过调用CPU来计算； app通过MEM来读取/存储数据； app通过NET来请求数据通信；  检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-19T02:47:10.091Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo-xuelangwang">
+<meta name="twitter:title" content="app性能分析">
+<meta name="twitter:description" content="app性能分析图 app通过调用CPU来计算； app通过MEM来读取/存储数据； app通过NET来请求数据通信；  检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/hexo/">
+  <link rel="canonical" href="http://yoursite.com/2019/06/19/app性能分析/">
 
 
 
 
 
-  <title>标签: hexo | hexo-xuelangwang</title>
+  <title>app性能分析 | hexo-xuelangwang</title>
   
 
 
@@ -140,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,52 +219,152 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>hexo<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/19/app性能分析/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/06/17/first-stage-hexo/" itemprop="url">
-              
-                <span itemprop="name">first stage hexo</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">app性能分析</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-17T12:57:29+08:00" content="2019-06-17">
-          06-17
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-19T10:47:29+08:00">
+                2019-06-19
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="app性能分析图"><a href="#app性能分析图" class="headerlink" title="app性能分析图"></a>app性能分析图</h4><ul>
+<li>app通过调用<em>CPU</em>来计算；</li>
+<li>app通过<em>MEM</em>来读取/存储数据；</li>
+<li>app通过<em>NET</em>来请求数据通信；</li>
+</ul>
+<p>检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检测工具，network的优化可以通过减少请求次数（合并请求次数），和压缩请求的数据(例如gzip)；</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/app/" rel="tag"># app</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/17/first-stage-hexo/" rel="next" title="first stage hexo">
+                <i class="fa fa-chevron-left"></i> first stage hexo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -267,6 +372,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -287,8 +396,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -339,6 +457,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#app性能分析图"><span class="nav-number">1.</span> <span class="nav-text">app性能分析图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -479,6 +613,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
