@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="hexo,">
+  <meta name="keywords" content="shell,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="常用命令 $ hexo init [folder] 新建一个网站 $ hexo new [layout] &amp;lt;title&amp;gt;  新建一篇文章 $ hexo generate 生成静态文件 $ hexo server 启动服务器 $ hexo deploy 部署网站 $ hexo clean 清除缓存(db.json 和 public中的静态文件) $ hexo list &amp;lt;type&amp;">
-<meta name="keywords" content="hexo">
+<meta name="description" content="写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T） grepgrep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令man grep来查看grep的更多信息，这里列举一些常见用法：  grep [message]  过滤每一行包含">
+<meta name="keywords" content="shell">
 <meta property="og:type" content="article">
-<meta property="og:title" content="first stage hexo">
-<meta property="og:url" content="http://yoursite.com/2019/06/17/first-stage-hexo/index.html">
+<meta property="og:title" content="shell increase">
+<meta property="og:url" content="http://yoursite.com/2020/04/26/shell_increase/index.html">
 <meta property="og:site_name" content="hexo-xuelangwang">
-<meta property="og:description" content="常用命令 $ hexo init [folder] 新建一个网站 $ hexo new [layout] &amp;lt;title&amp;gt;  新建一篇文章 $ hexo generate 生成静态文件 $ hexo server 启动服务器 $ hexo deploy 部署网站 $ hexo clean 清除缓存(db.json 和 public中的静态文件) $ hexo list &amp;lt;type&amp;">
+<meta property="og:description" content="写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T） grepgrep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令man grep来查看grep的更多信息，这里列举一些常见用法：  grep [message]  过滤每一行包含">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-17T07:49:20.366Z">
+<meta property="og:updated_time" content="2020-04-26T01:19:11.124Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="first stage hexo">
-<meta name="twitter:description" content="常用命令 $ hexo init [folder] 新建一个网站 $ hexo new [layout] &amp;lt;title&amp;gt;  新建一篇文章 $ hexo generate 生成静态文件 $ hexo server 启动服务器 $ hexo deploy 部署网站 $ hexo clean 清除缓存(db.json 和 public中的静态文件) $ hexo list &amp;lt;type&amp;">
+<meta name="twitter:title" content="shell increase">
+<meta name="twitter:description" content="写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T） grepgrep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令man grep来查看grep的更多信息，这里列举一些常见用法：  grep [message]  过滤每一行包含">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/06/17/first-stage-hexo/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/26/shell_increase/">
 
 
 
 
 
-  <title>first stage hexo | hexo-xuelangwang</title>
+  <title>shell increase | hexo-xuelangwang</title>
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/first-stage-hexo/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/shell_increase/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xuelangwang">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">first stage hexo</h1>
+          <h1 class="post-title" itemprop="name headline">shell increase</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-17T12:57:29+08:00">
-                2019-06-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-26T08:51:00+08:00">
+                2020-04-26
               </time>
             
 
@@ -300,14 +300,30 @@
       
 
       
-        <h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
-<li><code>$ hexo init [folder]</code> 新建一个网站</li>
-<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
-<li><code>$ hexo generate</code> 生成静态文件</li>
-<li><code>$ hexo server</code> 启动服务器</li>
-<li><code>$ hexo deploy</code> 部署网站</li>
-<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
-<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
+        <p>写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T）</p>
+<h4 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h4><p>grep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令<label style="color:#b77a64"><code>man grep</code></label>来查看grep的更多信息，这里列举一些常见用法：</p>
+<ol>
+<li><p><label style="color:#b77a64">grep [message]</label></p>
+<p> 过滤每一行包含<em>message</em>的内容，并输出在控制台里</p>
+</li>
+<li><p><label style="color:#b77a64">grep ‘reg’</label></p>
+<p> 过滤每一行中符合正则表达式的内容，并输出在控制台里；如果你有考虑多个正则表达式，那么你可能会用到下面的命令来执行<label style="color:#b77a64"><code>grep -e &#39;regA&#39; -e &#39;regB&#39;</code> </label>（这个命令的意思是’或‘，内容只要符合其中任何一个正则表达式，就会被输出/拿到）、<label style="color:#b77a64"><code>grep &#39;regA&#39; | grep &#39;regB&#39;</code></label>(这个命令的意思是’与‘，相当于执行了两遍grep命令，如果是少数内容（几个文件）还好，多的话（上万个文件）还得找下grep对应的指令集了)</p>
+</li>
+<li><p><label style="color:#b77a64">grep -v ‘reg/message’</label></p>
+<p> 取反，不包含指定的正则表达式<em>reg</em>或者<em>message</em></p>
+</li>
+<li><p><label style="color:#b77a64">grep –color ‘message’</label></p>
+<p> 给<em>message</em>添加颜色，方便自己阅读</p>
+</li>
+</ol>
+<p>一些组合命令：</p>
+<ol>
+<li><p><label style="color:#b77a64">find [dir] -name ‘*.txt’ | xargs grep ‘message’&lt;</label>&gt;</p>
+<p> 前半段的意思是在<em>dir</em>中找到以后缀以.txt结尾的文件列表，后半段的意思就是过滤出来每个文件中包含message内容的行；grep后的命令你可以参考上面的内容来改动；</p>
+</li>
+<li><p><label style="color:#b77a64">grep ‘xxx’ | sed -n ‘/2020-04-20 16:00:00/,/2020-04-20 19:00:00/p’ test.log</label></p>
+<p> 过滤日志信息，结合sed的使用来过滤某一段时间的信息；</p>
+</li>
 </ol>
 
       
@@ -358,7 +374,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag"># hexo</a>
+            <a href="/tags/shell/" rel="tag"># shell</a>
           
         </div>
       
@@ -371,8 +387,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/17/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2020/04/24/git_increase/" rel="next" title="git increase">
+                <i class="fa fa-chevron-left"></i> git increase
               </a>
             
           </div>
@@ -380,10 +396,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/19/app性能分析/" rel="prev" title="app性能分析">
-                app性能分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -518,7 +530,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用命令"><span class="nav-number">1.</span> <span class="nav-text">常用命令</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#grep"><span class="nav-number">1.</span> <span class="nav-text">grep</span></a></li></ol></div>
             
 
           </div>
