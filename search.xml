@@ -15,23 +15,6 @@
       </tags>
   </entry>
   <entry>
-    <title>first stage hexo</title>
-    <url>/2019/06/17/first-stage-hexo/</url>
-    <content><![CDATA[<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
-<li><code>$ hexo init [folder]</code> 新建一个网站</li>
-<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
-<li><code>$ hexo generate</code> 生成静态文件</li>
-<li><code>$ hexo server</code> 启动服务器</li>
-<li><code>$ hexo deploy</code> 部署网站</li>
-<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
-<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>git increase</title>
     <url>/2020/04/24/git_increase/</url>
     <content><![CDATA[<p>写这篇文章的目的是为了缓存自己在git上的提示/升级路程，在平时使用过程的记录等；在文章不断增长的过程中，会把部分内容提取出来单独作为一个新的篇章记录说明；</p>
@@ -78,6 +61,23 @@
 ]]></content>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>first stage hexo</title>
+    <url>/2019/06/17/first-stage-hexo/</url>
+    <content><![CDATA[<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
+<li><code>$ hexo init [folder]</code> 新建一个网站</li>
+<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
+<li><code>$ hexo generate</code> 生成静态文件</li>
+<li><code>$ hexo server</code> 启动服务器</li>
+<li><code>$ hexo deploy</code> 部署网站</li>
+<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
+<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
