@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>app性能分析</title>
-    <url>/2019/06/19/app%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<h4 id="app性能分析图"><a href="#app性能分析图" class="headerlink" title="app性能分析图"></a>app性能分析图</h4><ul>
-<li>app通过调用<em>CPU</em>来计算；</li>
-<li>app通过<em>MEM</em>来读取/存储数据；</li>
-<li>app通过<em>NET</em>来请求数据通信；</li>
-</ul>
-<p>检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检测工具，network的优化可以通过减少请求次数（合并请求次数），和压缩请求的数据(例如gzip)；</p>
+    <title>first stage hexo</title>
+    <url>/2019/06/17/first-stage-hexo/</url>
+    <content><![CDATA[<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
+<li><code>$ hexo init [folder]</code> 新建一个网站</li>
+<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
+<li><code>$ hexo generate</code> 生成静态文件</li>
+<li><code>$ hexo server</code> 启动服务器</li>
+<li><code>$ hexo deploy</code> 部署网站</li>
+<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
+<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
+</ol>
 ]]></content>
       <tags>
-        <tag>app</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -64,21 +67,29 @@
       </tags>
   </entry>
   <entry>
-    <title>first stage hexo</title>
-    <url>/2019/06/17/first-stage-hexo/</url>
-    <content><![CDATA[<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
-<li><code>$ hexo init [folder]</code> 新建一个网站</li>
-<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
-<li><code>$ hexo generate</code> 生成静态文件</li>
-<li><code>$ hexo server</code> 启动服务器</li>
-<li><code>$ hexo deploy</code> 部署网站</li>
-<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
-<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
-</ol>
+    <title>app性能分析</title>
+    <url>/2019/06/19/app%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h4 id="app性能分析图"><a href="#app性能分析图" class="headerlink" title="app性能分析图"></a>app性能分析图</h4><ul>
+<li>app通过调用<em>CPU</em>来计算；</li>
+<li>app通过<em>MEM</em>来读取/存储数据；</li>
+<li>app通过<em>NET</em>来请求数据通信；</li>
+</ul>
+<p>检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检测工具，network的优化可以通过减少请求次数（合并请求次数），和压缩请求的数据(例如gzip)；</p>
 ]]></content>
       <tags>
-        <tag>hexo</tag>
+        <tag>app</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2019/06/21/ios%E5%AE%89%E5%85%A8/</url>
+    <content><![CDATA[<p>IOS安全是我看书的一些笔记；</p>
+<p>####第2章</p>
+<p>#####关键的几个类库</p>
+<p>Cocoa    :    部分框架和Objective-c gui编程APi的总称</p>
+<p>Cocoa Touch    :    Cocoa的一个超集</p>
+<p>Core Foundation    :    基于C的类库</p>
+]]></content>
   </entry>
   <entry>
     <title>Hello World</title>
@@ -96,17 +107,6 @@
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2019/06/21/ios%E5%AE%89%E5%85%A8/</url>
-    <content><![CDATA[<p>IOS安全是我看书的一些笔记；</p>
-<p>####第2章</p>
-<p>#####关键的几个类库</p>
-<p>Cocoa    :    部分框架和Objective-c gui编程APi的总称</p>
-<p>Cocoa Touch    :    Cocoa的一个超集</p>
-<p>Core Foundation    :    基于C的类库</p>
 ]]></content>
   </entry>
   <entry>
@@ -167,39 +167,6 @@
       </tags>
   </entry>
   <entry>
-    <title>shell increase</title>
-    <url>/2020/04/26/shell_increase/</url>
-    <content><![CDATA[<p>写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T）</p>
-<h4 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h4><p>grep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令<label style="color:#b77a64"><code>man grep</code></label>来查看grep的更多信息，这里列举一些常见用法：</p>
-<ol>
-<li><p><label style="color:#b77a64">grep [message]</label></p>
-<p> 过滤每一行包含<em>message</em>的内容，并输出在控制台里</p>
-</li>
-<li><p><label style="color:#b77a64">grep ‘reg’</label></p>
-<p> 过滤每一行中符合正则表达式的内容，并输出在控制台里；如果你有考虑多个正则表达式，那么你可能会用到下面的命令来执行<label style="color:#b77a64"><code>grep -e &#39;regA&#39; -e &#39;regB&#39;</code> </label>（这个命令的意思是’或‘，内容只要符合其中任何一个正则表达式，就会被输出/拿到）、<label style="color:#b77a64"><code>grep &#39;regA&#39; | grep &#39;regB&#39;</code></label>(这个命令的意思是’与‘，相当于执行了两遍grep命令，如果是少数内容（几个文件）还好，多的话（上万个文件）还得找下grep对应的指令集了)</p>
-</li>
-<li><p><label style="color:#b77a64">grep -v ‘reg/message’</label></p>
-<p> 取反，不包含指定的正则表达式<em>reg</em>或者<em>message</em></p>
-</li>
-<li><p><label style="color:#b77a64">grep –color ‘message’</label></p>
-<p> 给<em>message</em>添加颜色，方便自己阅读</p>
-</li>
-</ol>
-<p>一些组合命令：</p>
-<ol>
-<li><p><label style="color:#b77a64">find [dir] -name ‘*.txt’ | xargs grep ‘message’&lt;</label>&gt;</p>
-<p> 前半段的意思是在<em>dir</em>中找到以后缀以.txt结尾的文件列表，后半段的意思就是过滤出来每个文件中包含message内容的行；grep后的命令你可以参考上面的内容来改动；</p>
-</li>
-<li><p><label style="color:#b77a64">grep ‘xxx’ | sed -n ‘/2020-04-20 16:00:00/,/2020-04-20 19:00:00/p’ test.log</label></p>
-<p> 过滤日志信息，结合sed的使用来过滤某一段时间的信息；</p>
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>shell</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>blog update</title>
     <url>/2020/04/28/update_blog/</url>
     <content><![CDATA[<p>写这篇文章的目的是为了记录，自己需要改进自己的博客时，能快速找到各位前辈大能的文章，地址</p>
@@ -245,5 +212,109 @@
 <p><em>dig</em></p>
 <p>展示递归的dns解析</p>
 <h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>]]></content>
+  </entry>
+  <entry>
+    <title>shell increase</title>
+    <url>/2020/04/26/shell_increase/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T）</p>
+<h4 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h4><p>grep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令<label style="color:#b77a64"><code>man grep</code></label>来查看grep的更多信息，这里列举一些常见用法：</p>
+<ol>
+<li><p><label style="color:#b77a64">grep [message]</label></p>
+<p> 过滤每一行包含<em>message</em>的内容，并输出在控制台里</p>
+</li>
+<li><p><label style="color:#b77a64">grep ‘reg’</label></p>
+<p> 过滤每一行中符合正则表达式的内容，并输出在控制台里；如果你有考虑多个正则表达式，那么你可能会用到下面的命令来执行<label style="color:#b77a64"><code>grep -e &#39;regA&#39; -e &#39;regB&#39;</code> </label>（这个命令的意思是’或‘，内容只要符合其中任何一个正则表达式，就会被输出/拿到）、<label style="color:#b77a64"><code>grep &#39;regA&#39; | grep &#39;regB&#39;</code></label>(这个命令的意思是’与‘，相当于执行了两遍grep命令，如果是少数内容（几个文件）还好，多的话（上万个文件）还得找下grep对应的指令集了)</p>
+</li>
+<li><p><label style="color:#b77a64">grep -v ‘reg/message’</label></p>
+<p> 取反，不包含指定的正则表达式<em>reg</em>或者<em>message</em></p>
+</li>
+<li><p><label style="color:#b77a64">grep –color ‘message’</label></p>
+<p> 给<em>message</em>添加颜色，方便自己阅读</p>
+</li>
+</ol>
+<p>一些组合命令：</p>
+<ol>
+<li><p><label style="color:#b77a64">find [dir] -name ‘*.txt’ | xargs grep ‘message’&lt;</label>&gt;</p>
+<p> 前半段的意思是在<em>dir</em>中找到以后缀以.txt结尾的文件列表，后半段的意思就是过滤出来每个文件中包含message内容的行；grep后的命令你可以参考上面的内容来改动；</p>
+</li>
+<li><p><label style="color:#b77a64">grep ‘xxx’ | sed -n ‘/2020-04-20 16:00:00/,/2020-04-20 19:00:00/p’ test.log</label></p>
+<p> 过滤日志信息，结合sed的使用来过滤某一段时间的信息；</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>blog update</title>
+    <url>/2020/04/28/blog_comment/</url>
+    <content><![CDATA[<p>写这篇文章的目的旨在，记录自己是如何给自己的hexo博客添加comment的，希望能给到你一些帮助</p>
+<ol>
+<li><p>comment插件</p>
+<p> 当你使用一种主题的时候，你可以打开对应主题文件目录中的<label style="color:#b77a64">_config.yml</label>文件，你可以看到很多对应的功能或说明；<br> 我这里使用的主题是<label style="color:#b77a64">next</label>，对应的文件目录结构是<code>themes/next/_config.yml</code></p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Valine.</span><br><span class="line"># You can get your appid and appkey from https://leancloud.cn</span><br><span class="line"># more info please open https://valine.js.org</span><br><span class="line">valine:</span><br><span class="line">  enable: false</span><br><span class="line">  appid:  # your leancloud application appid</span><br><span class="line">  appkey: # your leancloud application appkey</span><br><span class="line">  notify: true # mail notifier , https://github.com/xCss/Valine/wiki</span><br><span class="line">  verify: false # Verification code</span><br><span class="line">  placeholder: Just go go # comment box placeholder</span><br><span class="line">  avatar: mm # gravatar style</span><br><span class="line">  guest_info: nick,mail,link # custom comment header</span><br><span class="line">  pageSize: 10 # pagination size</span><br></pre></td></tr></table></figure>
+
+<p> 上面你看到的就是next主题支持的comment插件valine；你也可以搜索你的主题可以支持的comment插件；</p>
+</li>
+<li><p><a href="https://valine.js.org/" target="_blank" rel="noopener">valine</a></p>
+<p> 是一款基于LeanCloud的快速、简洁且高效的无后端评论系统。<br> valine评论功能是依赖<a href="https://www.leancloud.cn/" target="_blank" rel="noopener">LeanCloud</a>的，需要你在leanCloud注册一个自己的产品，拿到对应的appid和appkey；</p>
+<ol>
+<li><p>配置leanCloud</p>
+<p> 在你创建好自己的产品后，（[如何创建自己的产品])，配置邮件模板路径<em><code>设置 =&gt; 邮件模板</code></em>，将其中用于重置密码的邮件主题更改内容（这是因为Valine官方提供的邮件提醒功能是基于Leancloud的密码重置邮件提醒）</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;p&gt;Hi, &#123;&#123;username&#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;p&gt;</span><br><span class="line">你在 &#123;&#123;appname&#125;&#125; 的评论收到了新的回复，请点击查看：</span><br><span class="line">&lt;/p&gt;</span><br><span class="line">&lt;p&gt;&lt;a href=&quot;你的网址首页链接&quot; style=&quot;display: inline-block; padding: 10px 20px; border-radius: 4px; background-color: #3090e4; color: #fff; text-decoration: none;&quot;&gt;马上查看&lt;/a&gt;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p> 上面代码中记得将<label style="color:#b77a64">“你的网址首页链接”</label>更换为自己的博客地址</p>
+</li>
+<li><p>修改_config.yml文件配置信息</p>
+<p> 修改next主题中对应的key-value，就是上面提到的_config.yml文件，将appid,appkey替换为你在leancloud中对应产品的appid,appkey(路径：设置 =&gt; 应用key)，enable设置为true</p>
+<p> 至此，你就可以看到评论系统了，尝试评论后，在leanCloud网站上查看自己应用的数据库消息，你将看到评论信息（路径：存储 =&gt; 结构化数据 =&gt; Comment)</p>
+</li>
+<li><p><a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin</a>实现邮件提醒功能</p>
+<p> 进入<a href="https://www.leancloud.cn/" target="_blank" rel="noopener">leancloud</a>中，自己应用目录下，点击云引擎 =&gt; 设置，填写valine-admin的代码库并保存<code>https://github.com/zhaojun1998/Valine-Admin</code></p>
+<p> 切换到部署标签，（路径：云引擎 =&gt; 部署），分支选择master，点击部署</p>
+<p> 设置云引擎的环境变量，（记得在保存后，需要重启云引擎，路径：云引擎 =&gt; 部署）</p>
+<ul>
+<li><p>SITE_NAME : 网站名称。</p>
+</li>
+<li><p>SITE_URL : 网站地址, 最后不要加 / 。</p>
+</li>
+<li><p>SMTP_USER : SMTP 服务用户名，一般为邮箱地址。</p>
+</li>
+<li><p>SMTP_PASS : SMTP 密码，一般为授权码，而不是邮箱的登陆密码，请自行查询对应邮件服务商的获取方式</p>
+</li>
+<li><p>SMTP_SERVICE : 邮件服务提供商，支持 QQ、163、126、Gmail、”Yahoo”、…… ，全部支持请参考 : <a href="https://nodemailer.com/smtp/well-known/#supported-services" target="_blank" rel="noopener">Nodemailer Supported services</a>。 — 如这里没有你使用的邮件提供商，请查看<a href="https://www.nhtzj.com/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8" target="_blank" rel="noopener">自定义邮件服务器</a></p>
+</li>
+<li><p>SENDER_NAME : 寄件人名称。</p>
+<p>如果这里你需要使用到自己的邮箱，或者SMTP_SERVICE中不支持，那么你需要额外设置以下三个环境变量，否则不用哈</p>
+</li>
+<li><p>SMTP_HOST : 邮件服务提供商 SMTP 地址，如 qq : smtp.qq.com，此项需要自行查询或询问其服务商。</p>
+</li>
+<li><p>SMTP_PORT : 邮件服务提供商 SMTP 端口, 此项需要自行查询或询问其服务商。</p>
+</li>
+<li><p>SMTP_SECURE : 是否启用加密, 默认为 true，一般不需要设置，如有特殊请自行配置。 此项需要自行查询或询问其服务商。</p>
+<p>额外的两个参数，可加可不加</p>
+</li>
+<li><p>TO_EMAIL：这个是填收邮件提醒的邮箱地址，若没有这个字段，则将邮件发到SMTP_USER。</p>
+</li>
+<li><p>TEMPLATE_NAME：设置提醒邮件的主题，目前内置了两款主题，分别为 default 与 rainbow。默认为 default 。</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<p>注：</p>
+<ol>
+<li><p>因为免费版的LeanCloud容器，是有强制性休眠策略的，不能24小时运行；每天必须休眠6个小时；30分钟内没有外部请求，则休眠；休眠后如果有新的外部请求实例则马上启动（但激活时此次发送邮件会失败）；所以，如果你要解决此问题，可参考<a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></p>
+</li>
+<li><p>关于SMTP_PASS，SMTP密码，SMTP授权码，如何获取，可以参看<a href="https://service.mail.qq.com/cgi-bin/help?subtype=1&id=28&no=1001256" target="_blank" rel="noopener">SMTP授权码</a></p>
+</li>
+</ol>
+<p>因为是根据大神博客来操作的，所以很多图片说明在大神文章中都有，在此就不再添加了<br>文献参考：<br>    * <a href="https://www.nhtzj.com/3315416634/" target="_blank" rel="noopener">NexT主题设置Valine评论系统邮件提醒</a><br>    * <a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin仓库地址</a><br>    * <a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></p>
+]]></content>
+      <tags>
+        <tag>blog</tag>
+      </tags>
   </entry>
 </search>
