@@ -261,6 +261,186 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/06/给自己仓库使用CocoaPod管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/06/给自己仓库使用CocoaPod管理/" itemprop="url">给自己的仓库使用cocoapod管理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-06T09:20:29+08:00">
+                2020-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/06/给自己仓库使用CocoaPod管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/06/给自己仓库使用CocoaPod管理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/05/06/给自己仓库使用CocoaPod管理/" class="leancloud_visitors" data-flag-title="给自己的仓库使用cocoapod管理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>使用CocoaPods后，你可以将自己写的一些类库，控件管理起来；方便自己在不同项目中导入，而不再通过手动拖拽文件/文件夹</p>
+<h3 id="CocoaPods简介"><a href="#CocoaPods简介" class="headerlink" title="CocoaPods简介"></a>CocoaPods简介</h3><ol>
+<li><p>cocoapods原理：根据podfile的描述，找到对应代码库的podspec文件，然后根据podspec中的描述，找到代码仓库，从中下载到自己工程中</p>
+</li>
+<li><p>cocoapods依赖trunk服务器管理，所以需要通过trunk推送自己的podspec<br> 注册trunk的命令</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod trunk register mail name  </span><br><span class="line"><span class="comment"># mail 是邮箱地址，name是用户名</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="CocoaPods的安装"><a href="#CocoaPods的安装" class="headerlink" title="CocoaPods的安装"></a>CocoaPods的安装</h3><p>如果你电脑里还没有安装cocoapods，安装命令是</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install cocoapods</span><br></pre></td></tr></table></figure>
+
+<p>查用切换ruby镜像源的命令，为了你能快速安装，当然，你也可以翻墙</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看ruby镜像源</span></span><br><span class="line">gem sources -l</span><br><span class="line"><span class="comment"># 移除当前国外镜像源，从上面拿取</span></span><br><span class="line">gem sources --remove https://rubygems.org</span><br><span class="line"><span class="comment"># 添加ruby china镜像源</span></span><br><span class="line">gem <span class="built_in">source</span> -a https://gems.ruby-china.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="podspec文件的说明"><a href="#podspec文件的说明" class="headerlink" title="podspec文件的说明"></a>podspec文件的说明</h3><p>生成*.podspec文件，放在自己的仓库中，需要你绑定tag（<code>git tag [your version]</code>），配置说明如下：</p>
+<figure class="highlight podspec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new <span class="keyword">do</span> <span class="params">|s|</span></span><br><span class="line"> </span><br><span class="line">  <span class="comment">#设置组件库的名称</span></span><br><span class="line">  s.name         = <span class="string">"xxx"</span>  </span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置组件库的版本号</span></span><br><span class="line">  s.version      = <span class="string">"5.4.9"</span> </span><br><span class="line"></span><br><span class="line">  <span class="comment">#组件库的简介</span></span><br><span class="line">  s.summary      = <span class="string">"xxxxxx"</span> </span><br><span class="line"></span><br><span class="line">  <span class="comment"># 组件库的详情描述，要求比简介的字数多些</span></span><br><span class="line">  s.description  = <span class="string">&lt;&lt;-DESC</span></span><br><span class="line"><span class="string">                  xxxxxxxxxxx</span></span><br><span class="line">                   DESC</span><br><span class="line">  <span class="comment">#设置仓库主页</span></span><br><span class="line">  s.homepage     = <span class="string">"https://www.yuntongxun.com/"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置许可</span></span><br><span class="line">  s.license      = <span class="string">"MIT"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置作者</span></span><br><span class="line">  s.author       = &#123; <span class="string">"xxx"</span> =&gt; <span class="string">"xxx"</span> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置支持的最低系统版本</span></span><br><span class="line">  s.ios.deployment_target = <span class="string">"8.0"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置仓库源,表示在哪可以找到组件工程(支持 git、svn、http 服务器)</span></span><br><span class="line">  s.source  = &#123; <span class="symbol">:git</span> =&gt; <span class="string">"https://xxxxxxx"</span>, <span class="symbol">:tag</span> =&gt; <span class="string">"<span class="subst">#&#123;s.version&#125;</span>"</span> &#125;</span><br><span class="line"><span class="comment">#s.source = &#123; :svn =&gt; 'http://xxxxxxx', :tag =&gt;  "#&#123;s.version&#125;" &#125;</span></span><br><span class="line"><span class="comment">#s.source = &#123; :http =&gt; 'http://xxxxxx/xxx.zip' &#125;</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">#资源文件</span></span><br><span class="line">  s.resources  = <span class="string">"sdk/CCPSDKBundle.bundle"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置源文件路径，不是整个工程的文件，而是自己封装的需要暴露出来的代码，以后别的工程引入，就会引入这里的代码。</span></span><br><span class="line">  s.source_files = <span class="string">"sdk/*.h"</span></span><br><span class="line"> </span><br><span class="line"> <span class="comment">#设置使用的静态库(非系统)</span></span><br><span class="line">  s.vendored_library = <span class="string">'sdk/*.a'</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置依赖库(系统)，不需要 lib，例如： libicucore写成icucore即可</span></span><br><span class="line">  s.libraries    = <span class="string">"resolv.9"</span>,<span class="string">"icucore"</span>,<span class="string">"sqlite3"</span>,<span class="string">"z"</span>,<span class="string">"xml2"</span>,<span class="string">"bz2.1.0"</span>,<span class="string">"c++"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置依赖的 framework(系统)，写的时候不需要后缀名</span></span><br><span class="line">  s.framework    = <span class="string">"CoreTelephony"</span>,<span class="string">"MediaPlayer"</span>,<span class="string">"CFNetwork"</span>,<span class="string">"SystemConfiguration"</span>,<span class="string">"MobileCoreServices"</span>,<span class="string">"AudioToolbox"</span>,<span class="string">"AVFoundation"</span>,<span class="string">"VideoToolbox"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置使用的framework(非系统)</span></span><br><span class="line"> <span class="comment"># vendored_frameworks = ""</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置子目录</span></span><br><span class="line">  s.subspec <span class="string">'Delegate'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/Delegate/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'enums'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/enums/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'Manager'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/Manager/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'private'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/private/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'types'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/types/*.h"</span></span><br><span class="line">  <span class="comment">#三级目录</span></span><br><span class="line">  ss.subspec <span class="string">'LiveChatRoomType'</span> <span class="keyword">do</span> <span class="params">|sss|</span></span><br><span class="line">  sss.source_files = <span class="string">"sdk/types/LiveChatRoomType/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'board'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/board/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置组件库是否是基于 ARC 内存管理的，默认为 true，如果不是，会自动添加-fno-objc-arc </span></span><br><span class="line">  s.requires_arc = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#如果部分是ARC</span></span><br><span class="line">  <span class="comment">#spec.requires_arc = false</span></span><br><span class="line">  <span class="comment">#spec.requires_arc = ['Classes/*ARC.m', 'Classes/ARC.mm'] //指定 ARC 的文件</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置依赖的其他 pod 库</span></span><br><span class="line">  <span class="comment"># s.dependency "JSONKit", "~&gt; 1.4"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置xcconfig</span></span><br><span class="line">  s.xcconfig = &#123;</span><br><span class="line">      <span class="string">'OTHER_LINKER_FLAGS'</span> =&gt; <span class="string">'-ObjC'</span>,</span><br><span class="line">      <span class="string">'ENABLE_BITCODE'</span> =&gt; <span class="string">'NO'</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="验证pod库，将自己的podspec推送到cocoapods的索引库"><a href="#验证pod库，将自己的podspec推送到cocoapods的索引库" class="headerlink" title="验证pod库，将自己的podspec推送到cocoapods的索引库"></a>验证pod库，将自己的podspec推送到cocoapods的索引库</h3><ol>
+<li>验证pod库命令<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pod lib lint </span><br><span class="line"><span class="comment"># --verbose             打印详细log</span></span><br><span class="line"><span class="comment"># --allow-warnings      当出现警告，但不影响pod库的使用的时候会验证通过</span></span><br><span class="line"><span class="comment"># --use-libraries       使用了自己的私有库</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>话外：<br>    如果是模拟器错误，找到对应的模拟器（xcode =&gt; window =&gt; devices and simulators），然后删除</p>
+<ol start="2">
+<li><p>推送自己的podspec到cocoapods的索引库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk push --verbose --allow-warnings --use-libraries</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试能否索引到</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod search [你在podspec中设置的仓库名]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加移除其他维护者命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod trunk add-owner [仓库名] [维护者邮件]</span><br><span class="line">pod trunk remove-owner [仓库名] [维护者邮件]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从trunk中移除仓库索引</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod trunk delete [仓库名] [tag]</span><br><span class="line"><span class="comment"># 不加tag，移除所有版本</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>搬砖文献：<br>    <a href="https://www.jianshu.com/p/e3ec9a8bec97" target="_blank" rel="noopener">如何将自己的组件库使用cocoapods管理</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/blog_comment/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -280,7 +460,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/04/30/blog_comment/" itemprop="url">blog add comment plug-in</a></h1>
+                <a class="post-title-link" href="/2020/04/30/blog_comment/" itemprop="url">blog config comment/visitors plug-in</a></h1>
         
 
         <div class="post-meta">
@@ -320,7 +500,7 @@
 
           
           
-             <span id="/2020/04/30/blog_comment/" class="leancloud_visitors" data-flag-title="blog add comment plug-in">
+             <span id="/2020/04/30/blog_comment/" class="leancloud_visitors" data-flag-title="blog config comment/visitors plug-in">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -354,7 +534,7 @@
         
           
             <p>写这篇文章的目的旨在，记录自己是如何给自己的hexo博客添加comment的，希望能给到你一些帮助</p>
-<h4 id="1-comment插件"><a href="#1-comment插件" class="headerlink" title="1. comment插件"></a>1. comment插件</h4><p>当你使用一种主题的时候，你可以打开对应主题文件目录中的<label style="color:#b77a64">_config.yml</label>文件，你可以看到很多对应的功能或说明；我这里使用的主题是<label style="color:#b77a64">next</label>，对应的文件目录结构是<code>themes/next/_config.yml</code></p>
+<h3 id="Comment"><a href="#Comment" class="headerlink" title="Comment"></a>Comment</h3><h4 id="1-comment插件"><a href="#1-comment插件" class="headerlink" title="1. comment插件"></a>1. comment插件</h4><p>当你使用一种主题的时候，你可以打开对应主题文件目录中的<label style="color:#b77a64">_config.yml</label>文件，你可以看到很多对应的功能或说明；我这里使用的主题是<label style="color:#b77a64">next</label>，对应的文件目录结构是<label style="color:#399ad6"><code>themes/next/_config.yml</code></label></p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Valine.</span></span><br><span class="line"><span class="comment"># You can get your appid and appkey from https://leancloud.cn</span></span><br><span class="line"><span class="comment"># more info please open https://valine.js.org</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">    enable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    appid:</span>  <span class="comment"># your leancloud application appid</span></span><br><span class="line"><span class="attr">    appkey:</span> <span class="comment"># your leancloud application appkey</span></span><br><span class="line"><span class="attr">    notify:</span> <span class="literal">true</span> <span class="comment"># mail notifier , https://github.com/xCss/Valine/wiki</span></span><br><span class="line"><span class="attr">    verify:</span> <span class="literal">false</span> <span class="comment"># Verification code</span></span><br><span class="line"><span class="attr">    placeholder:</span> <span class="string">Just</span> <span class="string">go</span> <span class="string">go</span> <span class="comment"># comment box placeholder</span></span><br><span class="line"><span class="attr">    avatar:</span> <span class="string">mm</span> <span class="comment"># gravatar style</span></span><br><span class="line"><span class="attr">    guest_info:</span> <span class="string">nick,mail,link</span> <span class="comment"># custom comment header</span></span><br><span class="line"><span class="attr">    pageSize:</span> <span class="number">10</span> <span class="comment"># pagination size</span></span><br></pre></td></tr></table></figure>
 
 <p>上面你看到的就是next主题支持的comment插件<label style="color:#b77a64">valine</label>；你也可以搜索你的主题可以支持的comment插件；</p>
@@ -389,14 +569,17 @@
 </blockquote>
 </li>
 </ol>
-<h4 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h4><ol>
+<h3 id="visitors"><a href="#visitors" class="headerlink" title="visitors"></a>visitors</h3><p>配置主题中的<label style="color:#b77a64">_config.yml</label>文件，对应的目录结构：<label style="color:#399ad6"><code>themes/next/_config.yml</code></label></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Show number of visitors to each article.</span></span><br><span class="line"><span class="comment"># You can visit https://leancloud.cn get AppID and AppKey.</span></span><br><span class="line"><span class="attr">leancloud_visitors:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  app_id:</span> <span class="comment"># your leancloud appid</span></span><br><span class="line"><span class="attr">  app_key:</span> <span class="comment"># your leancloud appkey</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><ol>
 <li><p>因为免费版的LeanCloud容器，是有强制性休眠策略的，不能24小时运行；每天必须休眠6个小时；30分钟内没有外部请求，则休眠；休眠后如果有新的外部请求实例则马上启动（但激活时此次发送邮件会失败）；所以，如果你要解决此问题，可参考<label style="color:#b77a64"><a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></label></p>
 </li>
 <li><p>关于SMTP_PASS，SMTP密码，SMTP授权码，如何获取，可以参看<a href="https://service.mail.qq.com/cgi-bin/help?subtype=1&id=28&no=1001256" target="_blank" rel="noopener">SMTP授权码</a></p>
 </li>
 </ol>
 <p>因为是根据大神博客来操作的，所以很多图片说明在大神文章中都有，在此就不再添加了</p>
-<h4 id="文献参考："><a href="#文献参考：" class="headerlink" title="文献参考："></a>文献参考：</h4><p>  <a href="https://www.nhtzj.com/3315416634/" target="_blank" rel="noopener">NexT主题设置Valine评论系统邮件提醒</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin仓库地址</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></p>
+<h3 id="文献参考："><a href="#文献参考：" class="headerlink" title="文献参考："></a>文献参考：</h3><p>  <a href="https://www.nhtzj.com/3315416634/" target="_blank" rel="noopener">NexT主题设置Valine评论系统邮件提醒</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin仓库地址</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></p>
 
           
         
@@ -1132,7 +1315,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/22/域名搭建/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/19/ios安全/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xuelangwang">
@@ -1151,7 +1334,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/06/22/域名搭建/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2019/10/19/ios安全/" itemprop="url">IOS</a></h1>
         
 
         <div class="post-meta">
@@ -1163,8 +1346,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-22T20:45:12+08:00">
-                2019-06-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-19T10:47:29+08:00">
+                2019-10-19
               </time>
             
 
@@ -1182,8 +1365,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/06/22/域名搭建/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/06/22/域名搭建/" itemprop="commentCount"></span>
+                <a href="/2019/10/19/ios安全/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/19/ios安全/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1191,7 +1374,153 @@
 
           
           
-             <span id="/2019/06/22/域名搭建/" class="leancloud_visitors" data-flag-title>
+             <span id="/2019/10/19/ios安全/" class="leancloud_visitors" data-flag-title="IOS">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>IOS安全是我看书的一些笔记；</p>
+<p>####第2章</p>
+<p>#####关键的几个类库</p>
+<p>Cocoa    :    部分框架和Objective-c gui编程APi的总称</p>
+<p>Cocoa Touch    :    Cocoa的一个超集</p>
+<p>Core Foundation    :    基于C的类库</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/06/域名搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/06/域名搭建/" itemprop="url">DNS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-06T09:20:29+08:00">
+                2019-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/06/域名搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/07/06/域名搭建/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/07/06/域名搭建/" class="leancloud_visitors" data-flag-title="DNS">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1247,152 +1576,6 @@
 <p><em>dig</em></p>
 <p>展示递归的dns解析</p>
 <h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/21/ios安全/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/21/ios安全/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-21T09:31:29+08:00">
-                2019-06-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/21/ios安全/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/06/21/ios安全/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2019/06/21/ios安全/" class="leancloud_visitors" data-flag-title>
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>IOS安全是我看书的一些笔记；</p>
-<p>####第2章</p>
-<p>#####关键的几个类库</p>
-<p>Cocoa    :    部分框架和Objective-c gui编程APi的总称</p>
-<p>Cocoa Touch    :    Cocoa的一个超集</p>
-<p>Core Foundation    :    基于C的类库</p>
-
           
         
       
@@ -1722,162 +1905,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/17/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-17T10:08:47+08:00">
-                2019-06-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/17/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/06/17/hello-world/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2019/06/17/hello-world/" class="leancloud_visitors" data-flag-title="Hello World">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1923,7 +1957,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1936,7 +1970,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
