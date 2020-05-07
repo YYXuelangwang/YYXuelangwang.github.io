@@ -1,6 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>blog config comment/visitors plug-in</title>
+    <url>/2020/04/30/blog_comment/</url>
+    <content><![CDATA[<p>写这篇文章的目的旨在，记录自己是如何给自己的hexo博客添加comment的，希望能给到你一些帮助</p>
+<h3 id="Comment"><a href="#Comment" class="headerlink" title="Comment"></a>Comment</h3><h4 id="1-comment插件"><a href="#1-comment插件" class="headerlink" title="1. comment插件"></a>1. comment插件</h4><p>当你使用一种主题的时候，你可以打开对应主题文件目录中的<label style="color:#b77a64">_config.yml</label>文件，你可以看到很多对应的功能或说明；我这里使用的主题是<label style="color:#b77a64">next</label>，对应的文件目录结构是<label style="color:#399ad6"><code>themes/next/_config.yml</code></label></p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Valine.</span></span><br><span class="line"><span class="comment"># You can get your appid and appkey from https://leancloud.cn</span></span><br><span class="line"><span class="comment"># more info please open https://valine.js.org</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">    enable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    appid:</span>  <span class="comment"># your leancloud application appid</span></span><br><span class="line"><span class="attr">    appkey:</span> <span class="comment"># your leancloud application appkey</span></span><br><span class="line"><span class="attr">    notify:</span> <span class="literal">true</span> <span class="comment"># mail notifier , https://github.com/xCss/Valine/wiki</span></span><br><span class="line"><span class="attr">    verify:</span> <span class="literal">false</span> <span class="comment"># Verification code</span></span><br><span class="line"><span class="attr">    placeholder:</span> <span class="string">Just</span> <span class="string">go</span> <span class="string">go</span> <span class="comment"># comment box placeholder</span></span><br><span class="line"><span class="attr">    avatar:</span> <span class="string">mm</span> <span class="comment"># gravatar style</span></span><br><span class="line"><span class="attr">    guest_info:</span> <span class="string">nick,mail,link</span> <span class="comment"># custom comment header</span></span><br><span class="line"><span class="attr">    pageSize:</span> <span class="number">10</span> <span class="comment"># pagination size</span></span><br></pre></td></tr></table></figure>
+
+<p>上面你看到的就是next主题支持的comment插件<label style="color:#b77a64">valine</label>；你也可以搜索你的主题可以支持的comment插件；</p>
+<h4 id="2-valine"><a href="#2-valine" class="headerlink" title="2. valine"></a>2. <a href="https://valine.js.org/" target="_blank" rel="noopener">valine</a></h4><blockquote>
+<p>valine是一款基于LeanCloud的快速、简洁且高效的无后端评论系统。<br>valine评论功能是依赖<a href="https://www.leancloud.cn/" target="_blank" rel="noopener">LeanCloud</a>的，需要你在leanCloud注册一个自己的产品，拿到对应的appid和appkey；</p>
+</blockquote>
+<ol>
+<li><p>配置leanCloud</p>
+<p> 在你创建好自己的产品后，（[如何创建自己的产品])，配置邮件模板路径<em><code>设置 =&gt; 邮件模板</code></em>，将其中用于重置密码的邮件主题更改内容（这是因为Valine官方提供的邮件提醒功能是基于Leancloud的密码重置邮件提醒）</p>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Hi, &#123;&#123;username&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">你在 &#123;&#123;appname&#125;&#125; 的评论收到了新的回复，请点击查看：</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"你的网址首页链接"</span> <span class="attr">style</span>=<span class="string">"display: inline-block; padding: 10px 20px; border-radius: 4px; background-color: #3090e4; color: #fff; text-decoration: none;"</span>&gt;</span>马上查看<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p> 上面代码中记得将<label style="color:#b77a64">“你的网址首页链接”</label>更换为自己的博客地址</p>
+</li>
+<li><p>修改_config.yml文件配置信息</p>
+<p> 修改next主题中对应的key-value，就是上面提到的_config.yml文件，将appid,appkey替换为你在leancloud中对应产品的appid,appkey<label style="color:#b77a64">(路径：设置 =&gt; 应用key)</label>，enable设置为true</p>
+<p> 至此，你就可以看到评论系统了，尝试评论后，在leanCloud网站上查看自己应用的数据库消息，你将看到评论信息<label style="color:#b77a64">(路径：存储 =&gt; 结构化数据 =&gt; Comment)</label></p>
+</li>
+<li><p><a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin</a>实现邮件提醒功能</p>
+<p> 进入<a href="https://www.leancloud.cn/" target="_blank" rel="noopener">leancloud</a>中，自己应用目录下，点击云引擎 =&gt; 设置，填写valine-admin的代码库并保存<code>https://github.com/zhaojun1998/Valine-Admin</code></p>
+<p> 切换到部署标签，<label style="color:#b77a64">（路径：云引擎 =&gt; 部署）</label>，分支选择master，点击部署</p>
+<p> 设置云引擎的环境变量，<label style="color:#b77a64">（记得在保存后，需要重启云引擎，路径：云引擎 =&gt; 部署）</label></p>
+<blockquote>
+<p><label style="color:#399ad6"><strong>SITE_NAME</strong></label> : 网站名称。<br> <label style="color:#399ad6"><strong>SITE_URL</strong></label> : 网站地址, 最后不要加 / 。<br> <label style="color:#399ad6"><strong>SMTP_USER</strong></label> : SMTP 服务用户名，一般为邮箱地址。<br> <label style="color:#399ad6"><strong>SMTP_PASS</strong></label> : SMTP 密码，一般为授权码，而不是邮箱的登陆密码，请自行查询对应邮件服务商的获取方式<br> <label style="color:#399ad6"><strong>SMTP_SERVICE</strong></label> : 邮件服务提供商，支持 QQ、163、126、Gmail、”Yahoo”、…… ，全部支持请参考 : <a href="https://nodemailer.com/smtp/well-known/#supported-services" target="_blank" rel="noopener">Nodemailer Supported services</a>。 — 如这里没有你使用的邮件提供商，请查看<a href="https://www.nhtzj.com/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8" target="_blank" rel="noopener">自定义邮件服务器</a><br> <label style="color:#399ad6"><strong>SENDER_NAME</strong></label> : 寄件人名称。</p>
+</blockquote>
+<p> 如果这里你需要使用到自己的邮箱，或者SMTP_SERVICE中不支持，那么你需要额外设置以下三个环境变量，否则不用哈</p>
+<blockquote>
+<p><label style="color:#399ad6"><strong>SMTP_HOST</strong></label> : 邮件服务提供商 SMTP 地址，如 qq : smtp.qq.com，此项需要自行查询或询问其服务商。<br> <label style="color:#399ad6"><strong>SMTP_PORT</strong></label> : 邮件服务提供商 SMTP 端口, 此项需要自行查询或询问其服务商。<br> <label style="color:#399ad6"><strong>SMTP_SECURE</strong></label> : 是否启用加密, 默认为 true，一般不需要设置，如有特殊请自行配置。 此项需要自行查询或询问其服务商。</p>
+</blockquote>
+<p> 额外的两个参数，可加可不加</p>
+<blockquote>
+<p><label style="color:#399ad6"><strong>TO_EMAIL</strong></label>：这个是填收邮件提醒的邮箱地址，若没有这个字段，则将邮件发到SMTP_USER。<br> <label style="color:#399ad6"><strong>TEMPLATE_NAME</strong></label>：设置提醒邮件的主题，目前内置了两款主题，分别为 default 与 rainbow。默认为 default 。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="visitors"><a href="#visitors" class="headerlink" title="visitors"></a>visitors</h3><p>配置主题中的<label style="color:#b77a64">_config.yml</label>文件，对应的目录结构：<label style="color:#399ad6"><code>themes/next/_config.yml</code></label></p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Show number of visitors to each article.</span></span><br><span class="line"><span class="comment"># You can visit https://leancloud.cn get AppID and AppKey.</span></span><br><span class="line"><span class="attr">leancloud_visitors:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  app_id:</span> <span class="comment"># your leancloud appid</span></span><br><span class="line"><span class="attr">  app_key:</span> <span class="comment"># your leancloud appkey</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><ol>
+<li><p>因为免费版的LeanCloud容器，是有强制性休眠策略的，不能24小时运行；每天必须休眠6个小时；30分钟内没有外部请求，则休眠；休眠后如果有新的外部请求实例则马上启动（但激活时此次发送邮件会失败）；所以，如果你要解决此问题，可参考<label style="color:#b77a64"><a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></label></p>
+</li>
+<li><p>关于SMTP_PASS，SMTP密码，SMTP授权码，如何获取，可以参看<a href="https://service.mail.qq.com/cgi-bin/help?subtype=1&id=28&no=1001256" target="_blank" rel="noopener">SMTP授权码</a></p>
+</li>
+</ol>
+<p>因为是根据大神博客来操作的，所以很多图片说明在大神文章中都有，在此就不再添加了</p>
+<h3 id="文献参考："><a href="#文献参考：" class="headerlink" title="文献参考："></a>文献参考：</h3><p>  <a href="https://www.nhtzj.com/3315416634/" target="_blank" rel="noopener">NexT主题设置Valine评论系统邮件提醒</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin仓库地址</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></p>
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>app性能分析</title>
     <url>/2019/06/19/app%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h4 id="app性能分析图"><a href="#app性能分析图" class="headerlink" title="app性能分析图"></a>app性能分析图</h4><ul>
@@ -10,8 +68,31 @@
 </ul>
 <p>检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检测工具，network的优化可以通过减少请求次数（合并请求次数），和压缩请求的数据(例如gzip)；</p>
 ]]></content>
+      <categories>
+        <category>app</category>
+      </categories>
       <tags>
         <tag>app</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>first stage hexo</title>
+    <url>/2019/06/17/first-stage-hexo/</url>
+    <content><![CDATA[<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
+<li><code>$ hexo init [folder]</code> 新建一个网站</li>
+<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
+<li><code>$ hexo generate</code> 生成静态文件</li>
+<li><code>$ hexo server</code> 启动服务器</li>
+<li><code>$ hexo deploy</code> 部署网站</li>
+<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
+<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
+</ol>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -33,20 +114,72 @@
 ]]></content>
   </entry>
   <entry>
-    <title>first stage hexo</title>
-    <url>/2019/06/17/first-stage-hexo/</url>
-    <content><![CDATA[<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
-<li><code>$ hexo init [folder]</code> 新建一个网站</li>
-<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
-<li><code>$ hexo generate</code> 生成静态文件</li>
-<li><code>$ hexo server</code> 启动服务器</li>
-<li><code>$ hexo deploy</code> 部署网站</li>
-<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
-<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
+    <title>git increase</title>
+    <url>/2020/04/24/git_increase/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了缓存自己在git上的提示/升级路程，在平时使用过程的记录等；在文章不断增长的过程中，会把部分内容提取出来单独作为一个新的篇章记录说明；</p>
+<h4 id="git-stash"><a href="#git-stash" class="headerlink" title="git stash"></a>git stash</h4><p>缓存处处理，当自己有调试代码穿插在项目中时，而这时由于自己或项目其他的人的观念不一致，不允许自己将调试代码上传到仓库时；当当当，你就可以使用这个来管理了，so easy</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">usage: git stash list [&lt;options&gt;]</span><br><span class="line">   or: git stash show [&lt;stash&gt;]</span><br><span class="line">   or: git stash drop [-q|--quiet] [&lt;stash&gt;]</span><br><span class="line">   or: git stash ( pop | apply ) [--index] [-q|--quiet] [&lt;stash&gt;]</span><br><span class="line">   or: git stash branch &lt;branchname&gt; [&lt;stash&gt;]</span><br><span class="line">   or: git stash save [--patch] [-k|--[no-]keep-index] [-q|--quiet]</span><br><span class="line">		      [-u|--include-untracked] [-a|--all] [&lt;message&gt;]</span><br><span class="line">   or: git stash [push [--patch] [-k|--[no-]keep-index] [-q|--quiet]</span><br><span class="line">		       [-u|--include-untracked] [-a|--all] [-m &lt;message&gt;]</span><br><span class="line">		       [-- &lt;pathspec&gt;...]]</span><br><span class="line">   or: git stash clear</span><br></pre></td></tr></table></figure>
+
+<p>那上面就是他的一些用法了，我就拿几个叨叨</p>
+<ol>
+<li><p><label style="color:#b77a64">git stash [message]</label></p>
+<p>等同于<code>git stash save</code>创建缓存，message是你缓存的说明；</p>
+</li>
+<li><p><label style="color:#b77a64">git stash list</label></p>
+<p>查看缓存列表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">stash@&#123;0&#125;: On release.1100:xxx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><label style="color:#b77a64">git stash pop stash@{num}</label></p>
+<p>应用缓存后将缓存删除，有点类似栈的操作，num代表你要操作的缓存序列号</p>
+</li>
+<li><p><label style="color:#b77a64">git stash drop stash@{num}</label></p>
+<p>删除缓存</p>
+</li>
+<li><p><label style="color:#b77a64">git stash apply stash@{num}</label></p>
+<p>应用缓存，但是不会删除缓存</p>
+</li>
+</ol>
+<h4 id="git-tag"><a href="#git-tag" class="headerlink" title="git tag"></a>git tag</h4><p>给自己的分支打tag/标签，</p>
+<ol>
+<li><p><label style="color:#b77a64">git tag</label></p>
+<p>罗列出来已经创建的tag</p>
+</li>
+<li><p><label style="color:#b77a64">git tag -a [xxx] -m [message]</label></p>
+<p>创建tag，<em>xxx</em>代表tag的值，版本号啊啥的，<em>message</em>代表说明</p>
+</li>
+<li><p><label style="color:#b77a64">git push origin [xxx]</label></p>
+<p>推送指定的tag到远程仓库</p>
+</li>
+<li><p><label style="color:#b77a64">git tag -d [xxx]</label></p>
+<p>删除指定的tag分支</p>
+</li>
+<li><p><label style="color:#b77a64">git push origin –delete [xxx]</label></p>
+<p>删除远程仓库的标签/tag</p>
+</li>
 </ol>
 ]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
       <tags>
-        <tag>hexo</tag>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IOS</title>
+    <url>/2019/10/19/ios%E5%AE%89%E5%85%A8/</url>
+    <content><![CDATA[<p>IOS安全是我看书的一些笔记；</p>
+<p>####第2章</p>
+<p>#####关键的几个类库</p>
+<p>Cocoa    :    部分框架和Objective-c gui编程APi的总称</p>
+<p>Cocoa Touch    :    Cocoa的一个超集</p>
+<p>Core Foundation    :    基于C的类库</p>
+]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
+      <tags>
+        <tag>ios</tag>
       </tags>
   </entry>
   <entry>
@@ -102,8 +235,68 @@
 <li>无自动分析运行结果的日志系统；脚本运行不是目的，最重要的是要看到运行的结果，对异常问题能够快速定位问题。</li>
 </ol>
 ]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
       <tags>
         <tag>ios</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>blog config tags/categories</title>
+    <url>/2020/05/07/%E7%BB%99hexo%E9%85%8D%E7%BD%AEtag:categories/</url>
+    <content><![CDATA[<p>在网上找到了方法，现在搬砖到这里方便后面人查用</p>
+<p>原因：在自己打开next主题下面对应的tags/categories开关后，点击标签/分类报错</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Cannot GET /tags/</span><br></pre></td></tr></table></figure>
+
+<p>解决</p>
+<ol>
+<li><p>生成对应的page（index.md) </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">➜  blog hexo new page <span class="string">"tags"</span></span><br><span class="line">INFO  Created: ~/develop/blog/<span class="built_in">source</span>/tags/index.md</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改步骤1中生成的index.md<br> 生成的文件是这样的</p>
+ <figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-05-07 09:20:24</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p> 修改后的文件是这样的</p>
+ <figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-05-07 09:20:24</span><br><span class="line">type: "tags"</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在对应的主题配置文件中，修改menu：下的配置</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>搬砖文献<br><a href="https://www.zhihu.com/question/29017171" target="_blank" rel="noopener">hexo下的分类和标签无法显示</a></p>
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>blog update</title>
+    <url>/2020/04/28/update_blog/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了记录，自己需要改进自己的博客时，能快速找到各位前辈大能的文章，地址</p>
+<h4 id="主题Next"><a href="#主题Next" class="headerlink" title="主题Next"></a>主题Next</h4><ol>
+<li><a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">github地址</a></li>
+<li><a href="https://github.com/theme-next/awesome-next" target="_blank" rel="noopener">相关插件（搜索，评论等）github地址</a></li>
+</ol>
+<h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><ol>
+<li><a href="https://hexo.io/docs/one-command-deployment" target="_blank" rel="noopener">hexo文档地址</a></li>
+<li>给自己的hexo博客添加评论，使用的是minivaline<ol>
+<li>要使用minvaline需要现在<a href="https://leancloud.cn/dashboard/app.html?appid=uuE0OYy95m5hobJboOUKcMYo-gzGzoHsz#/key" target="_blank" rel="noopener">leancloud</a>上注册一个应用，拿到对应的appkey和appid<br><a href="https://github.com/MiniValine/hexo-next-minivaline" target="_blank" rel="noopener">Hexo Next MiniValine</a></li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
@@ -135,113 +328,11 @@
 </li>
 </ol>
 ]]></content>
+      <categories>
+        <category>shell</category>
+      </categories>
       <tags>
         <tag>shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>blog config comment/visitors plug-in</title>
-    <url>/2020/04/30/blog_comment/</url>
-    <content><![CDATA[<p>写这篇文章的目的旨在，记录自己是如何给自己的hexo博客添加comment的，希望能给到你一些帮助</p>
-<h3 id="Comment"><a href="#Comment" class="headerlink" title="Comment"></a>Comment</h3><h4 id="1-comment插件"><a href="#1-comment插件" class="headerlink" title="1. comment插件"></a>1. comment插件</h4><p>当你使用一种主题的时候，你可以打开对应主题文件目录中的<label style="color:#b77a64">_config.yml</label>文件，你可以看到很多对应的功能或说明；我这里使用的主题是<label style="color:#b77a64">next</label>，对应的文件目录结构是<label style="color:#399ad6"><code>themes/next/_config.yml</code></label></p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Valine.</span></span><br><span class="line"><span class="comment"># You can get your appid and appkey from https://leancloud.cn</span></span><br><span class="line"><span class="comment"># more info please open https://valine.js.org</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">    enable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    appid:</span>  <span class="comment"># your leancloud application appid</span></span><br><span class="line"><span class="attr">    appkey:</span> <span class="comment"># your leancloud application appkey</span></span><br><span class="line"><span class="attr">    notify:</span> <span class="literal">true</span> <span class="comment"># mail notifier , https://github.com/xCss/Valine/wiki</span></span><br><span class="line"><span class="attr">    verify:</span> <span class="literal">false</span> <span class="comment"># Verification code</span></span><br><span class="line"><span class="attr">    placeholder:</span> <span class="string">Just</span> <span class="string">go</span> <span class="string">go</span> <span class="comment"># comment box placeholder</span></span><br><span class="line"><span class="attr">    avatar:</span> <span class="string">mm</span> <span class="comment"># gravatar style</span></span><br><span class="line"><span class="attr">    guest_info:</span> <span class="string">nick,mail,link</span> <span class="comment"># custom comment header</span></span><br><span class="line"><span class="attr">    pageSize:</span> <span class="number">10</span> <span class="comment"># pagination size</span></span><br></pre></td></tr></table></figure>
-
-<p>上面你看到的就是next主题支持的comment插件<label style="color:#b77a64">valine</label>；你也可以搜索你的主题可以支持的comment插件；</p>
-<h4 id="2-valine"><a href="#2-valine" class="headerlink" title="2. valine"></a>2. <a href="https://valine.js.org/" target="_blank" rel="noopener">valine</a></h4><blockquote>
-<p>valine是一款基于LeanCloud的快速、简洁且高效的无后端评论系统。<br>valine评论功能是依赖<a href="https://www.leancloud.cn/" target="_blank" rel="noopener">LeanCloud</a>的，需要你在leanCloud注册一个自己的产品，拿到对应的appid和appkey；</p>
-</blockquote>
-<ol>
-<li><p>配置leanCloud</p>
-<p> 在你创建好自己的产品后，（[如何创建自己的产品])，配置邮件模板路径<em><code>设置 =&gt; 邮件模板</code></em>，将其中用于重置密码的邮件主题更改内容（这是因为Valine官方提供的邮件提醒功能是基于Leancloud的密码重置邮件提醒）</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Hi, &#123;&#123;username&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">你在 &#123;&#123;appname&#125;&#125; 的评论收到了新的回复，请点击查看：</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"你的网址首页链接"</span> <span class="attr">style</span>=<span class="string">"display: inline-block; padding: 10px 20px; border-radius: 4px; background-color: #3090e4; color: #fff; text-decoration: none;"</span>&gt;</span>马上查看<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p> 上面代码中记得将<label style="color:#b77a64">“你的网址首页链接”</label>更换为自己的博客地址</p>
-</li>
-<li><p>修改_config.yml文件配置信息</p>
-<p> 修改next主题中对应的key-value，就是上面提到的_config.yml文件，将appid,appkey替换为你在leancloud中对应产品的appid,appkey<label style="color:#b77a64">(路径：设置 =&gt; 应用key)</label>，enable设置为true</p>
-<p> 至此，你就可以看到评论系统了，尝试评论后，在leanCloud网站上查看自己应用的数据库消息，你将看到评论信息<label style="color:#b77a64">(路径：存储 =&gt; 结构化数据 =&gt; Comment)</label></p>
-</li>
-<li><p><a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin</a>实现邮件提醒功能</p>
-<p> 进入<a href="https://www.leancloud.cn/" target="_blank" rel="noopener">leancloud</a>中，自己应用目录下，点击云引擎 =&gt; 设置，填写valine-admin的代码库并保存<code>https://github.com/zhaojun1998/Valine-Admin</code></p>
-<p> 切换到部署标签，<label style="color:#b77a64">（路径：云引擎 =&gt; 部署）</label>，分支选择master，点击部署</p>
-<p> 设置云引擎的环境变量，<label style="color:#b77a64">（记得在保存后，需要重启云引擎，路径：云引擎 =&gt; 部署）</label></p>
-<blockquote>
-<p><label style="color:#399ad6"><strong>SITE_NAME</strong></label> : 网站名称。<br> <label style="color:#399ad6"><strong>SITE_URL</strong></label> : 网站地址, 最后不要加 / 。<br> <label style="color:#399ad6"><strong>SMTP_USER</strong></label> : SMTP 服务用户名，一般为邮箱地址。<br> <label style="color:#399ad6"><strong>SMTP_PASS</strong></label> : SMTP 密码，一般为授权码，而不是邮箱的登陆密码，请自行查询对应邮件服务商的获取方式<br> <label style="color:#399ad6"><strong>SMTP_SERVICE</strong></label> : 邮件服务提供商，支持 QQ、163、126、Gmail、”Yahoo”、…… ，全部支持请参考 : <a href="https://nodemailer.com/smtp/well-known/#supported-services" target="_blank" rel="noopener">Nodemailer Supported services</a>。 — 如这里没有你使用的邮件提供商，请查看<a href="https://www.nhtzj.com/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8" target="_blank" rel="noopener">自定义邮件服务器</a><br> <label style="color:#399ad6"><strong>SENDER_NAME</strong></label> : 寄件人名称。</p>
-</blockquote>
-<p> 如果这里你需要使用到自己的邮箱，或者SMTP_SERVICE中不支持，那么你需要额外设置以下三个环境变量，否则不用哈</p>
-<blockquote>
-<p><label style="color:#399ad6"><strong>SMTP_HOST</strong></label> : 邮件服务提供商 SMTP 地址，如 qq : smtp.qq.com，此项需要自行查询或询问其服务商。<br> <label style="color:#399ad6"><strong>SMTP_PORT</strong></label> : 邮件服务提供商 SMTP 端口, 此项需要自行查询或询问其服务商。<br> <label style="color:#399ad6"><strong>SMTP_SECURE</strong></label> : 是否启用加密, 默认为 true，一般不需要设置，如有特殊请自行配置。 此项需要自行查询或询问其服务商。</p>
-</blockquote>
-<p> 额外的两个参数，可加可不加</p>
-<blockquote>
-<p><label style="color:#399ad6"><strong>TO_EMAIL</strong></label>：这个是填收邮件提醒的邮箱地址，若没有这个字段，则将邮件发到SMTP_USER。<br> <label style="color:#399ad6"><strong>TEMPLATE_NAME</strong></label>：设置提醒邮件的主题，目前内置了两款主题，分别为 default 与 rainbow。默认为 default 。</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="visitors"><a href="#visitors" class="headerlink" title="visitors"></a>visitors</h3><p>配置主题中的<label style="color:#b77a64">_config.yml</label>文件，对应的目录结构：<label style="color:#399ad6"><code>themes/next/_config.yml</code></label></p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Show number of visitors to each article.</span></span><br><span class="line"><span class="comment"># You can visit https://leancloud.cn get AppID and AppKey.</span></span><br><span class="line"><span class="attr">leancloud_visitors:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  app_id:</span> <span class="comment"># your leancloud appid</span></span><br><span class="line"><span class="attr">  app_key:</span> <span class="comment"># your leancloud appkey</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><ol>
-<li><p>因为免费版的LeanCloud容器，是有强制性休眠策略的，不能24小时运行；每天必须休眠6个小时；30分钟内没有外部请求，则休眠；休眠后如果有新的外部请求实例则马上启动（但激活时此次发送邮件会失败）；所以，如果你要解决此问题，可参考<label style="color:#b77a64"><a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></label></p>
-</li>
-<li><p>关于SMTP_PASS，SMTP密码，SMTP授权码，如何获取，可以参看<a href="https://service.mail.qq.com/cgi-bin/help?subtype=1&id=28&no=1001256" target="_blank" rel="noopener">SMTP授权码</a></p>
-</li>
-</ol>
-<p>因为是根据大神博客来操作的，所以很多图片说明在大神文章中都有，在此就不再添加了</p>
-<h3 id="文献参考："><a href="#文献参考：" class="headerlink" title="文献参考："></a>文献参考：</h3><p>  <a href="https://www.nhtzj.com/3315416634/" target="_blank" rel="noopener">NexT主题设置Valine评论系统邮件提醒</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin仓库地址</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></p>
-]]></content>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>blog update</title>
-    <url>/2020/04/28/update_blog/</url>
-    <content><![CDATA[<p>写这篇文章的目的是为了记录，自己需要改进自己的博客时，能快速找到各位前辈大能的文章，地址</p>
-<h4 id="主题Next"><a href="#主题Next" class="headerlink" title="主题Next"></a>主题Next</h4><ol>
-<li><a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">github地址</a></li>
-<li><a href="https://github.com/theme-next/awesome-next" target="_blank" rel="noopener">相关插件（搜索，评论等）github地址</a></li>
-</ol>
-<h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><ol>
-<li><a href="https://hexo.io/docs/one-command-deployment" target="_blank" rel="noopener">hexo文档地址</a></li>
-<li>给自己的hexo博客添加评论，使用的是minivaline<ol>
-<li>要使用minvaline需要现在<a href="https://leancloud.cn/dashboard/app.html?appid=uuE0OYy95m5hobJboOUKcMYo-gzGzoHsz#/key" target="_blank" rel="noopener">leancloud</a>上注册一个应用，拿到对应的appkey和appid<br><a href="https://github.com/MiniValine/hexo-next-minivaline" target="_blank" rel="noopener">Hexo Next MiniValine</a></li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>DNS</title>
-    <url>/2019/07/06/%E5%9F%9F%E5%90%8D%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p>域名解析，</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">st=&gt;start: Start: www.baidu.com</span><br><span class="line">op1=&gt;operation: 本地路由,</span><br><span class="line">(192.168.0.1:53)dns域名解析缓存拿到ip</span><br><span class="line">cond1=&gt;condition: Yes or No?:</span><br><span class="line">op2=&gt;operation: 网络商，</span><br><span class="line">(222.45.3.1:53)dns域名解析拿到ip</span><br><span class="line">cond2=&gt;condition: Yes or No?:</span><br><span class="line">op3=&gt;operation: 其他网路服务商，</span><br><span class="line">dns域名解析拿到ip...</span><br><span class="line">cond3=&gt;condition: Yes or No?:</span><br><span class="line">op4=&gt;operation: 13台根服务器，</span><br><span class="line">dns域名解析拿到ip</span><br><span class="line">cond4=&gt;condition: Yes or No?:</span><br><span class="line">para=&gt;parallel: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">para1=&gt;parallel: 未知域名，无法解析</span><br><span class="line">e=&gt;end: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">st-&gt;op1-&gt;cond1</span><br><span class="line">cond1(yes)-&gt;e</span><br><span class="line">cond1(no,b)-&gt;op2-&gt;cond2</span><br><span class="line">cond2(yes)-&gt;e</span><br><span class="line">cond2(no,b)-&gt;op3-&gt;cond3</span><br><span class="line">cond3(yes)-&gt;e</span><br><span class="line">cond3(no,b)-&gt;op4-&gt;cond4</span><br><span class="line">cond4(yes)-&gt;e</span><br><span class="line">cond4(no,b)-&gt;para1</span><br><span class="line">e(path1, bottom)-&gt;cond4(right)</span><br></pre></td></tr></table></figure>
-
-<p>#####dns劫持</p>
-<p>网路运行商，有时会根据你的域名来返回他的广告地址ip;</p>
-<p>Eg: <code>访问www.baidu.com，运营商会从他的域名解析服务器中给你返回一个广告ip地址，xx.xx.xx.xx</code></p>
-<p>早起的gfw就是dns劫持，从域名中判断关键字(eg:google)，包含就返回一个无效ip；现金翻墙，将udp包(dns域名请求解析包)加密，跳过gfw，到达vps；</p>
-<p><strong>预防dns劫持</strong></p>
-<p>电脑上配置dns服务器，网路-&gt;高级-&gt;DNS</p>
-<p>路由器上配置dns服务器；</p>
-<h5 id="常用的公共域名解析服务dns"><a href="#常用的公共域名解析服务dns" class="headerlink" title="常用的公共域名解析服务dns"></a>常用的公共域名解析服务dns</h5><ul>
-<li>8.8.4.4</li>
-<li>8.8.8.8</li>
-<li>114.114.114.114</li>
-<li>114.114.115.115</li>
-<li>223.5.5.5</li>
-<li>223.6.6.6</li>
-</ul>
-<h5 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h5><p><em>nslookup</em></p>
-<p>查询本地使用的dns；输入server，可以设置域名解析服务dns</p>
-<p><em>dig</em></p>
-<p>展示递归的dns解析</p>
-<h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>]]></content>
-      <tags>
-        <tag>dns</tag>
       </tags>
   </entry>
   <entry>
@@ -286,73 +377,54 @@
 
 </li>
 </ol>
-<p>搬砖文献：<br>    <a href="https://www.jianshu.com/p/e3ec9a8bec97" target="_blank" rel="noopener">如何将自己的组件库使用cocoapods管理</a></p>
-]]></content>
-      <tags>
-        <tag>ios</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IOS</title>
-    <url>/2019/10/19/ios%E5%AE%89%E5%85%A8/</url>
-    <content><![CDATA[<p>IOS安全是我看书的一些笔记；</p>
-<p>####第2章</p>
-<p>#####关键的几个类库</p>
-<p>Cocoa    :    部分框架和Objective-c gui编程APi的总称</p>
-<p>Cocoa Touch    :    Cocoa的一个超集</p>
-<p>Core Foundation    :    基于C的类库</p>
-]]></content>
-      <tags>
-        <tag>ios</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git increase</title>
-    <url>/2020/04/24/git_increase/</url>
-    <content><![CDATA[<p>写这篇文章的目的是为了缓存自己在git上的提示/升级路程，在平时使用过程的记录等；在文章不断增长的过程中，会把部分内容提取出来单独作为一个新的篇章记录说明；</p>
-<h4 id="git-stash"><a href="#git-stash" class="headerlink" title="git stash"></a>git stash</h4><p>缓存处处理，当自己有调试代码穿插在项目中时，而这时由于自己或项目其他的人的观念不一致，不允许自己将调试代码上传到仓库时；当当当，你就可以使用这个来管理了，so easy</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">usage: git stash list [&lt;options&gt;]</span><br><span class="line">   or: git stash show [&lt;stash&gt;]</span><br><span class="line">   or: git stash drop [-q|--quiet] [&lt;stash&gt;]</span><br><span class="line">   or: git stash ( pop | apply ) [--index] [-q|--quiet] [&lt;stash&gt;]</span><br><span class="line">   or: git stash branch &lt;branchname&gt; [&lt;stash&gt;]</span><br><span class="line">   or: git stash save [--patch] [-k|--[no-]keep-index] [-q|--quiet]</span><br><span class="line">		      [-u|--include-untracked] [-a|--all] [&lt;message&gt;]</span><br><span class="line">   or: git stash [push [--patch] [-k|--[no-]keep-index] [-q|--quiet]</span><br><span class="line">		       [-u|--include-untracked] [-a|--all] [-m &lt;message&gt;]</span><br><span class="line">		       [-- &lt;pathspec&gt;...]]</span><br><span class="line">   or: git stash clear</span><br></pre></td></tr></table></figure>
+<h3 id="如果不想推送到trunk"><a href="#如果不想推送到trunk" class="headerlink" title="如果不想推送到trunk"></a>如果不想推送到trunk</h3><ol>
+<li><p>参考上面的<a href="#podspec文件的说明">podspec文件的说明</a>，在仓库中创建好.podspec文件</p>
+</li>
+<li><p>在需要添加的工程里，更改podfile文件，添加自己的仓库，样式如下</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 你自己的仓库地址</span><br><span class="line">source &apos;https://github.com/tpctt/Specs.git&apos; </span><br><span class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</span><br><span class="line">platform :ios, &quot;8.0&quot;</span><br><span class="line">target:XX  do</span><br><span class="line">pod &apos;仓库名&apos; , &apos;~&gt; 1.4.0&apos;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 
-<p>那上面就是他的一些用法了，我就拿几个叨叨</p>
-<ol>
-<li><p><label style="color:#b77a64">git stash [message]</label></p>
-<p>等同于<code>git stash save</code>创建缓存，message是你缓存的说明；</p>
-</li>
-<li><p><label style="color:#b77a64">git stash list</label></p>
-<p>查看缓存列表</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">stash@&#123;0&#125;: On release.1100:xxx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><label style="color:#b77a64">git stash pop stash@{num}</label></p>
-<p>应用缓存后将缓存删除，有点类似栈的操作，num代表你要操作的缓存序列号</p>
-</li>
-<li><p><label style="color:#b77a64">git stash drop stash@{num}</label></p>
-<p>删除缓存</p>
-</li>
-<li><p><label style="color:#b77a64">git stash apply stash@{num}</label></p>
-<p>应用缓存，但是不会删除缓存</p>
-</li>
-</ol>
-<h4 id="git-tag"><a href="#git-tag" class="headerlink" title="git tag"></a>git tag</h4><p>给自己的分支打tag/标签，</p>
-<ol>
-<li><p><label style="color:#b77a64">git tag</label></p>
-<p>罗列出来已经创建的tag</p>
-</li>
-<li><p><label style="color:#b77a64">git tag -a [xxx] -m [message]</label></p>
-<p>创建tag，<em>xxx</em>代表tag的值，版本号啊啥的，<em>message</em>代表说明</p>
-</li>
-<li><p><label style="color:#b77a64">git push origin [xxx]</label></p>
-<p>推送指定的tag到远程仓库</p>
-</li>
-<li><p><label style="color:#b77a64">git tag -d [xxx]</label></p>
-<p>删除指定的tag分支</p>
-</li>
-<li><p><label style="color:#b77a64">git push origin –delete [xxx]</label></p>
-<p>删除远程仓库的标签/tag</p>
-</li>
-</ol>
+<h3 id="搬砖文献："><a href="#搬砖文献：" class="headerlink" title="搬砖文献："></a>搬砖文献：</h3><p><a href="https://www.jianshu.com/p/e3ec9a8bec97" target="_blank" rel="noopener">如何将自己的组件库使用cocoapods管理</a><br><a href="https://www.jianshu.com/p/310c1d09ab31" target="_blank" rel="noopener">在github创建自己的pod仓库</a></p>
 ]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
       <tags>
-        <tag>git</tag>
+        <tag>ios</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DNS</title>
+    <url>/2019/07/06/%E5%9F%9F%E5%90%8D%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p>域名解析，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">st=&gt;start: Start: www.baidu.com</span><br><span class="line">op1=&gt;operation: 本地路由,</span><br><span class="line">(192.168.0.1:53)dns域名解析缓存拿到ip</span><br><span class="line">cond1=&gt;condition: Yes or No?:</span><br><span class="line">op2=&gt;operation: 网络商，</span><br><span class="line">(222.45.3.1:53)dns域名解析拿到ip</span><br><span class="line">cond2=&gt;condition: Yes or No?:</span><br><span class="line">op3=&gt;operation: 其他网路服务商，</span><br><span class="line">dns域名解析拿到ip...</span><br><span class="line">cond3=&gt;condition: Yes or No?:</span><br><span class="line">op4=&gt;operation: 13台根服务器，</span><br><span class="line">dns域名解析拿到ip</span><br><span class="line">cond4=&gt;condition: Yes or No?:</span><br><span class="line">para=&gt;parallel: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">para1=&gt;parallel: 未知域名，无法解析</span><br><span class="line">e=&gt;end: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">st-&gt;op1-&gt;cond1</span><br><span class="line">cond1(yes)-&gt;e</span><br><span class="line">cond1(no,b)-&gt;op2-&gt;cond2</span><br><span class="line">cond2(yes)-&gt;e</span><br><span class="line">cond2(no,b)-&gt;op3-&gt;cond3</span><br><span class="line">cond3(yes)-&gt;e</span><br><span class="line">cond3(no,b)-&gt;op4-&gt;cond4</span><br><span class="line">cond4(yes)-&gt;e</span><br><span class="line">cond4(no,b)-&gt;para1</span><br><span class="line">e(path1, bottom)-&gt;cond4(right)</span><br></pre></td></tr></table></figure>
+
+<p>#####dns劫持</p>
+<p>网路运行商，有时会根据你的域名来返回他的广告地址ip;</p>
+<p>Eg: <code>访问www.baidu.com，运营商会从他的域名解析服务器中给你返回一个广告ip地址，xx.xx.xx.xx</code></p>
+<p>早起的gfw就是dns劫持，从域名中判断关键字(eg:google)，包含就返回一个无效ip；现金翻墙，将udp包(dns域名请求解析包)加密，跳过gfw，到达vps；</p>
+<p><strong>预防dns劫持</strong></p>
+<p>电脑上配置dns服务器，网路-&gt;高级-&gt;DNS</p>
+<p>路由器上配置dns服务器；</p>
+<h5 id="常用的公共域名解析服务dns"><a href="#常用的公共域名解析服务dns" class="headerlink" title="常用的公共域名解析服务dns"></a>常用的公共域名解析服务dns</h5><ul>
+<li>8.8.4.4</li>
+<li>8.8.8.8</li>
+<li>114.114.114.114</li>
+<li>114.114.115.115</li>
+<li>223.5.5.5</li>
+<li>223.6.6.6</li>
+</ul>
+<h5 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h5><p><em>nslookup</em></p>
+<p>查询本地使用的dns；输入server，可以设置域名解析服务dns</p>
+<p><em>dig</em></p>
+<p>展示递归的dns解析</p>
+<h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>]]></content>
+      <categories>
+        <category>dns</category>
+      </categories>
+      <tags>
+        <tag>dns</tag>
       </tags>
   </entry>
 </search>
