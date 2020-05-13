@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="ios,">
 
 
 
@@ -79,13 +79,24 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="hexo-xuelangwang">
-<meta property="og:url" content="http://yoursite.com/tags/app/index.html">
+<meta name="description" content="解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，最终关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题； 思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发； github仓库地址 流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂">
+<meta name="keywords" content="ios">
+<meta property="og:type" content="article">
+<meta property="og:title" content="debug_file">
+<meta property="og:url" content="http://yoursite.com/2020/05/11/debug-file/index.html">
 <meta property="og:site_name" content="hexo-xuelangwang">
+<meta property="og:description" content="解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，最终关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题； 思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发； github仓库地址 流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/05/11/debug-file/button.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/11/debug-file/btn.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/11/debug-file/function.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/11/debug-file/share1.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/11/debug-file/share2.png">
+<meta property="og:updated_time" content="2020-05-11T13:12:48.772Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo-xuelangwang">
+<meta name="twitter:title" content="debug_file">
+<meta name="twitter:description" content="解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，最终关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题； 思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发； github仓库地址 流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂">
+<meta name="twitter:image" content="http://yoursite.com/2020/05/11/debug-file/button.png">
 
 
 
@@ -115,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/app/">
+  <link rel="canonical" href="http://yoursite.com/2020/05/11/debug-file/">
 
 
 
 
 
-  <title>标签: app | hexo-xuelangwang</title>
+  <title>debug_file | hexo-xuelangwang</title>
   
 
 
@@ -140,7 +151,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -266,52 +277,239 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>app<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/11/debug-file/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/06/19/app性能分析/" itemprop="url">
-              
-                <span itemprop="name">app性能分析</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">debug_file</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-19T10:47:29+08:00" content="2019-06-19">
-          06-19
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-11T18:47:29+08:00">
+                2020-05-11
+              </time>
+            
 
-    </header>
-  </article>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ios/" itemprop="url" rel="index">
+                    <span itemprop="name">ios</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/11/debug-file/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/11/debug-file/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/05/11/debug-file/" class="leancloud_visitors" data-flag-title="debug_file">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，最终关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题；</p>
+<p>思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发；</p>
+<p><label style="color:#399ad6"><a href="https://github.com/YYXuelangwang/debugFile" target="_blank" rel="noopener">github仓库地址</a></label></p>
+<p>流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂）</p>
+<p>调试按钮的实现</p>
+<img src="/2020/05/11/debug-file/button.png" title="debug按钮">
+
+<p>按钮，我是用一个悬浮按钮来实现；点击按钮后，会显示隐藏的子按钮，对应的就是上图功能按钮（呈现原型散开），你也可以通过键值对<code>&lt;key:NSString, value:block&gt;</code>来添加更多的子按钮事件，样式如下：</p>
+<img src="/2020/05/11/debug-file/btn.png" title="btn">
+
+<p>展示调试信息或分享调试文件</p>
+<img src="/2020/05/11/debug-file/function.png" title="实现思路">
+
+<p>点击展示debug文件后，会弹出一个tableview的视图，显示了所有在’document/debug’下的文件，当然你也可以自己定义你指定的文件夹来显示文件夹下的文件，点击cell后，你可以选择直接预览或者分享给其他人，</p>
+<img src="/2020/05/11/debug-file/share1.png" title="shareFile1">
+
+<img src="/2020/05/11/debug-file/share2.png" title="shareFile2">
 
 
       
     </div>
+    
+    
+    
 
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat.png" alt="xuelangwang wechat" style="width: 200px; max-width: 100%;">
+    <div>扫描二维码，添加我为好友</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果觉得赞，可以给作者打赏一下</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_pay.png" alt="xuelangwang 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ios/" rel="tag"># ios</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/07/给hexo配置tag:categories/" rel="next" title="blog config tags/categories">
+                <i class="fa fa-chevron-left"></i> blog config tags/categories
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -319,6 +517,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -552,6 +757,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
