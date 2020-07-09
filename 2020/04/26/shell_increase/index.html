@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="hexo-xuelangwang">
 <meta property="og:description" content="写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T） grepgrep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令man grep来查看grep的更多信息，这里列举一些常见用法：  grep [message]  过滤每一行包含">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-07T01:31:28.453Z">
+<meta property="og:updated_time" content="2020-06-01T06:22:34.858Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shell increase">
 <meta name="twitter:description" content="写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T） grepgrep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令man grep来查看grep的更多信息，这里列举一些常见用法：  grep [message]  过滤每一行包含">
@@ -420,6 +420,25 @@
 <p> 过滤日志信息，结合sed的使用来过滤某一段时间的信息；</p>
 </li>
 </ol>
+<h4 id="dirs-pushd-popd"><a href="#dirs-pushd-popd" class="headerlink" title="dirs pushd popd"></a>dirs pushd popd</h4><p>dirs:   显示当前目录栈中的所有记录</p>
+<blockquote>
+</blockquote>
+<pre><code>-c 删除目录栈中的所有记录
+-l 以完整格式显示
+-p 一个目录一行的方式显示
+-v 每行一个目录来显示目录栈的内容，每个目录前加上编号
++N 显示从左到右的第n个目录，数字从0开始
+-N 显示从右到左的第n个目录，数字从0开始</code></pre><p>pushd:  将目录拉入栈中，并切换到该目录下；不加参数时，会将栈最上面两个目录对换位置；</p>
+<blockquote>
+</blockquote>
+<pre><code>+N  将第n个目录移动到栈顶，（从左往右数，第n个）
+-N  将第n个目录移动到栈顶，（从右往左数，第n个）
+-n  将目录入栈时，不切换目录</code></pre><p>popd:   删除目录栈中的记录；不加参数时，会先删除目录栈上最上面的记录，然后切换到目录栈中最上面的目录下</p>
+<blockquote>
+</blockquote>
+<pre><code>+N  将第n个目录删除，（从左往右数，第n个）
+-N  将第n个目录删除，（从右往左数，第n个）
+-n  将目录出栈时，不切换目录</code></pre><h4 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h4><p>eval:   将所有的参数拼接成一个字符串，然后作为一条命令来执行；结果就是命令执行后的status</p>
 
       
     </div>
@@ -576,7 +595,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -587,7 +606,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -598,7 +617,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -641,7 +660,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#grep"><span class="nav-number">1.</span> <span class="nav-text">grep</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#grep"><span class="nav-number">1.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dirs-pushd-popd"><span class="nav-number">2.</span> <span class="nav-text">dirs pushd popd</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#eval"><span class="nav-number">3.</span> <span class="nav-text">eval</span></a></li></ol></div>
             
 
           </div>

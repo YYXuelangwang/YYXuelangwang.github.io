@@ -281,6 +281,772 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/24/git_increase/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/24/git_increase/" itemprop="url">git increase</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-24T09:35:00+08:00">
+                2020-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/24/git_increase/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/24/git_increase/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/24/git_increase/" class="leancloud_visitors" data-flag-title="git increase">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>写这篇文章的目的是为了缓存自己在git上的提示/升级路程，在平时使用过程的记录等；在文章不断增长的过程中，会把部分内容提取出来单独作为一个新的篇章记录说明；</p>
+<h4 id="git-stash"><a href="#git-stash" class="headerlink" title="git stash"></a>git stash</h4><p>缓存处处理，当自己有调试代码穿插在项目中时，而这时由于自己或项目其他的人的观念不一致，不允许自己将调试代码上传到仓库时；当当当，你就可以使用这个来管理了，so easy</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">usage: git stash list [&lt;options&gt;]</span><br><span class="line">   or: git stash show [&lt;stash&gt;]</span><br><span class="line">   or: git stash drop [-q|--quiet] [&lt;stash&gt;]</span><br><span class="line">   or: git stash ( pop | apply ) [--index] [-q|--quiet] [&lt;stash&gt;]</span><br><span class="line">   or: git stash branch &lt;branchname&gt; [&lt;stash&gt;]</span><br><span class="line">   or: git stash save [--patch] [-k|--[no-]keep-index] [-q|--quiet]</span><br><span class="line">		      [-u|--include-untracked] [-a|--all] [&lt;message&gt;]</span><br><span class="line">   or: git stash [push [--patch] [-k|--[no-]keep-index] [-q|--quiet]</span><br><span class="line">		       [-u|--include-untracked] [-a|--all] [-m &lt;message&gt;]</span><br><span class="line">		       [-- &lt;pathspec&gt;...]]</span><br><span class="line">   or: git stash clear</span><br></pre></td></tr></table></figure>
+
+<p>那上面就是他的一些用法了，我就拿几个叨叨</p>
+<ol>
+<li><p><label style="color:#b77a64">git stash [message]</label></p>
+<p>等同于<code>git stash save</code>创建缓存，message是你缓存的说明；</p>
+</li>
+<li><p><label style="color:#b77a64">git stash list</label></p>
+<p>查看缓存列表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stash@&#123;0&#125;: On release.1100:xxx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><label style="color:#b77a64">git stash pop stash@{num}</label></p>
+<p>应用缓存后将缓存删除，有点类似栈的操作，num代表你要操作的缓存序列号</p>
+</li>
+<li><p><label style="color:#b77a64">git stash drop stash@{num}</label></p>
+<p>删除缓存</p>
+</li>
+<li><p><label style="color:#b77a64">git stash apply stash@{num}</label></p>
+<p>应用缓存，但是不会删除缓存</p>
+</li>
+</ol>
+<h4 id="git-tag"><a href="#git-tag" class="headerlink" title="git tag"></a>git tag</h4><p>给自己的分支打tag/标签，</p>
+<ol>
+<li><p><label style="color:#b77a64">git tag</label></p>
+<p>罗列出来已经创建的tag</p>
+</li>
+<li><p><label style="color:#b77a64">git tag -a [xxx] -m [message]</label></p>
+<p>创建tag，<em>xxx</em>代表tag的值，版本号啊啥的，<em>message</em>代表说明</p>
+</li>
+<li><p><label style="color:#b77a64">git push origin [xxx]</label></p>
+<p>推送指定的tag到远程仓库</p>
+</li>
+<li><p><label style="color:#b77a64">git tag -d [xxx]</label></p>
+<p>删除指定的tag分支</p>
+</li>
+<li><p><label style="color:#b77a64">git push origin –delete [xxx]</label></p>
+<p>删除远程仓库的标签/tag</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/23/ios测试实践1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/23/ios测试实践1/" itemprop="url">ios简介</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-23T12:57:29+08:00">
+                2019-10-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ios/" itemprop="url" rel="index">
+                    <span itemprop="name">ios</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/23/ios测试实践1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/23/ios测试实践1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/10/23/ios测试实践1/" class="leancloud_visitors" data-flag-title="ios简介">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="IOS简介"><a href="#IOS简介" class="headerlink" title="IOS简介"></a>IOS简介</h4><p>#####ios平台的特殊性</p>
+<p>开发者账号有四种类型：个人账号和公司账号为99美元/年，企业账号是299美元/年，教育账号是0美元/年；</p>
+<p>#####证书类型</p>
+<table>
+<thead>
+<tr>
+<th>证书名称</th>
+<th>AppStore</th>
+<th>Adhoc</th>
+<th>In House</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>安装范围</td>
+<td>只能通过AppStore安装</td>
+<td>设置UDID添加到证书才可以安装，一年限定100台</td>
+<td>任何ios设置均可以安装</td>
+</tr>
+<tr>
+<td>开发者类型</td>
+<td>个人/公司/教育账号</td>
+<td>个人/公司/企业/教育账号</td>
+<td>企业账号</td>
+</tr>
+</tbody></table>
+<p>In House ：企业签名方式，可以不通过AppStore下载，也不限定安装的设备数。但苹果公司严禁企业签名的包流入用户手中，只允许公司内部小范围内安装体验，一旦发现违规，就会做永久下架处理；</p>
+<h5 id="越狱"><a href="#越狱" class="headerlink" title="越狱"></a>越狱</h5><p>就是获取ios设备的root权限；越狱后，可以用到，如测试性能用到的远程连接工具openssh、用于录屏的display recorder，以及启动app和抓取数据包等操作要用到的命令行工具等；</p>
+<h5 id="灰度"><a href="#灰度" class="headerlink" title="灰度"></a>灰度</h5><p>产品在正式发布之前，都会发布一个beta灰度版本，也就是对所有用户公开的测试版本，又称公测；可以说，灰度版本是软件生命周期的必经阶段；虽然在ios8上，苹果提供了一种新的灰度渠道，将TestFlight整合进了iTunes Connect，开发人员可以通过电子邮件邀请用户通过TestFlight下载应用一起来参与测试。要用TestFlight有以下几个条件；</p>
+<ol>
+<li>开发者自己收集总数不超过2000个的邮箱账号提交TestFlight.</li>
+<li>提交的App版本要审核三天；</li>
+<li>用户需要下载TestFlight客户端到手机，登录自己的Apple ID并填写邮件里的邀请码；</li>
+<li>一个邀请码只能在一个Apple ID使用；</li>
+<li>第二次发布体验版的时候，用户需要手工去TestFlight里面点击更新；</li>
+</ol>
+<p>实际上遇到的问题还有：</p>
+<ol>
+<li>通过各种论坛收集的用户邮箱账号提交后，有三分之一的用户收不到邀请码；</li>
+<li>剩下三分之二的用户里又有二分之一的用户不会去下载灰度体验版本；</li>
+<li>仅剩的下载了体验版本的用户使用不活跃，也没有什么反馈提交；</li>
+<li>反馈的信息不足，联系用户困难，基本联系不上，复现问题的概率很低；</li>
+</ol>
+<p>建议：可以采用企鹅众测（tesly.qq.com）作为灰度发布的主要渠道，企鹅众测又称为Tesly；通过这种方式可以有效调起TestFlight上灰度版本的下载和体验率，获取项目组需要的质量信息；</p>
+<h5 id="自动化测试"><a href="#自动化测试" class="headerlink" title="自动化测试"></a>自动化测试</h5><p>ios平台上自动化测试工具比较少，虽然ios平台的自动化测试工具有UITest、XCTest、KIF、Cabalsh、Appium等，但距离运用到每日迭代持续集成还有很长的距离；</p>
+<ol>
+<li>框架稳定性不高；随着用例数的增多，框架可能要连续运行多个小时，这时大部分框架就会暴露出稳定性不高的问题，频繁出现闪退，只能重新启动项目，增加了人为干预的时间，目前只有XCTest在这方面比较有优势。</li>
+<li>无法获取底层接口；由于ios系统的封闭性，导致无法获取系统root权限和系统状态等，给自动化的运行带来了难处；</li>
+<li>无自动分析运行结果的日志系统；脚本运行不是目的，最重要的是要看到运行的结果，对异常问题能够快速定位问题。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/19/ios安全/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/19/ios安全/" itemprop="url">IOS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-19T10:47:29+08:00">
+                2019-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ios/" itemprop="url" rel="index">
+                    <span itemprop="name">ios</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/19/ios安全/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/10/19/ios安全/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/10/19/ios安全/" class="leancloud_visitors" data-flag-title="IOS">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>IOS安全是我看书的一些笔记；</p>
+<p>####第2章</p>
+<p>#####关键的几个类库</p>
+<p>Cocoa    :    部分框架和Objective-c gui编程APi的总称</p>
+<p>Cocoa Touch    :    Cocoa的一个超集</p>
+<p>Core Foundation    :    基于C的类库</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/06/域名搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/06/域名搭建/" itemprop="url">DNS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-06T09:20:29+08:00">
+                2019-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dns/" itemprop="url" rel="index">
+                    <span itemprop="name">dns</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/06/域名搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/07/06/域名搭建/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/07/06/域名搭建/" class="leancloud_visitors" data-flag-title="DNS">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p>域名解析，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;start: Start: www.baidu.com</span><br><span class="line">op1=&gt;operation: 本地路由,</span><br><span class="line">(192.168.0.1:53)dns域名解析缓存拿到ip</span><br><span class="line">cond1=&gt;condition: Yes or No?:</span><br><span class="line">op2=&gt;operation: 网络商，</span><br><span class="line">(222.45.3.1:53)dns域名解析拿到ip</span><br><span class="line">cond2=&gt;condition: Yes or No?:</span><br><span class="line">op3=&gt;operation: 其他网路服务商，</span><br><span class="line">dns域名解析拿到ip...</span><br><span class="line">cond3=&gt;condition: Yes or No?:</span><br><span class="line">op4=&gt;operation: 13台根服务器，</span><br><span class="line">dns域名解析拿到ip</span><br><span class="line">cond4=&gt;condition: Yes or No?:</span><br><span class="line">para=&gt;parallel: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">para1=&gt;parallel: 未知域名，无法解析</span><br><span class="line">e=&gt;end: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">st-&gt;op1-&gt;cond1</span><br><span class="line">cond1(yes)-&gt;e</span><br><span class="line">cond1(no,b)-&gt;op2-&gt;cond2</span><br><span class="line">cond2(yes)-&gt;e</span><br><span class="line">cond2(no,b)-&gt;op3-&gt;cond3</span><br><span class="line">cond3(yes)-&gt;e</span><br><span class="line">cond3(no,b)-&gt;op4-&gt;cond4</span><br><span class="line">cond4(yes)-&gt;e</span><br><span class="line">cond4(no,b)-&gt;para1</span><br><span class="line">e(path1, bottom)-&gt;cond4(right)</span><br></pre></td></tr></table></figure>
+
+<p>#####dns劫持</p>
+<p>网路运行商，有时会根据你的域名来返回他的广告地址ip;</p>
+<p>Eg: <code>访问www.baidu.com，运营商会从他的域名解析服务器中给你返回一个广告ip地址，xx.xx.xx.xx</code></p>
+<p>早起的gfw就是dns劫持，从域名中判断关键字(eg:google)，包含就返回一个无效ip；现金翻墙，将udp包(dns域名请求解析包)加密，跳过gfw，到达vps；</p>
+<p><strong>预防dns劫持</strong></p>
+<p>电脑上配置dns服务器，网路-&gt;高级-&gt;DNS</p>
+<p>路由器上配置dns服务器；</p>
+<h5 id="常用的公共域名解析服务dns"><a href="#常用的公共域名解析服务dns" class="headerlink" title="常用的公共域名解析服务dns"></a>常用的公共域名解析服务dns</h5><ul>
+<li>8.8.4.4</li>
+<li>8.8.8.8</li>
+<li>114.114.114.114</li>
+<li>114.114.115.115</li>
+<li>223.5.5.5</li>
+<li>223.6.6.6</li>
+</ul>
+<h5 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h5><p><em>nslookup</em></p>
+<p>查询本地使用的dns；输入server，可以设置域名解析服务dns</p>
+<p><em>dig</em></p>
+<p>展示递归的dns解析</p>
+<h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/19/app性能分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -812,7 +1578,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -823,7 +1589,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -834,7 +1600,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

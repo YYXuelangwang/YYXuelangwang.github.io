@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>debug_file</title>
-    <url>/2020/05/11/debug-file/</url>
-    <content><![CDATA[<p>解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，最终关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题；</p>
-<p>思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发；</p>
-<p><label style="color:#399ad6"><a href="https://github.com/YYXuelangwang/debugFile" target="_blank" rel="noopener">github仓库地址</a></label></p>
-<p>流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂）</p>
-<p>调试按钮的实现</p>
-<img src="/2020/05/11/debug-file/button.png" title="debug按钮">
-
-<p>按钮，我是用一个悬浮按钮来实现；点击按钮后，会显示隐藏的子按钮，对应的就是上图功能按钮（呈现原型散开），你也可以通过键值对<code>&lt;key:NSString, value:block&gt;</code>来添加更多的子按钮事件，样式如下：</p>
-<img src="/2020/05/11/debug-file/btn.png" title="btn">
-
-<p>展示调试信息或分享调试文件</p>
-<img src="/2020/05/11/debug-file/function.png" title="实现思路">
-
-<p>点击展示debug文件后，会弹出一个tableview的视图，显示了所有在’document/debug’下的文件，当然你也可以自己定义你指定的文件夹来显示文件夹下的文件，点击cell后，你可以选择直接预览或者分享给其他人，</p>
-<img src="/2020/05/11/debug-file/share1.png" title="shareFile1">
-
-<img src="/2020/05/11/debug-file/share2.png" title="shareFile2">
-
+    <title>app性能分析</title>
+    <url>/2019/06/19/app%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h4 id="app性能分析图"><a href="#app性能分析图" class="headerlink" title="app性能分析图"></a>app性能分析图</h4><ul>
+<li>app通过调用<em>CPU</em>来计算；</li>
+<li>app通过<em>MEM</em>来读取/存储数据；</li>
+<li>app通过<em>NET</em>来请求数据通信；</li>
+</ul>
+<p>检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检测工具，network的优化可以通过减少请求次数（合并请求次数），和压缩请求的数据(例如gzip)；</p>
 ]]></content>
       <categories>
-        <category>ios</category>
+        <category>app</category>
       </categories>
       <tags>
-        <tag>ios</tag>
+        <tag>app</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>c_increase</title>
+    <url>/2020/05/22/c_increase/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引</p>
+<ol>
+<li><p>操作二进制某一位的值</p>
+ <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// x为对应的数据，y为位移值</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">123</span>, y = <span class="number">2</span></span><br><span class="line">x |= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数置1</span></span><br><span class="line">x &amp;= ~(<span class="number">1</span>&lt;&lt;y)   <span class="comment">// 指定的某一位数置0</span></span><br><span class="line">x ^= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数取反</span></span><br><span class="line">((x) &gt;&gt; (y)&amp;<span class="number">1</span>) <span class="comment">// 获取的某一位的值</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>c</category>
+      </categories>
+      <tags>
+        <tag>c</tag>
       </tags>
   </entry>
   <entry>
@@ -88,6 +94,169 @@
       </tags>
   </entry>
   <entry>
+    <title>binary-tree</title>
+    <url>/2020/07/09/binary-tree/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了记录自己对二叉树的理解，方便以后自己的追忆</p>
+<p>二叉树(Binary Tree)是n个结点的有限集合，该集合或者为空集（称为空二叉树），或者由一个根结点和两颗互不相交的、分别称为根结点的左子树和右子树的二叉树组成。</p>
+<h3 id="二叉树的特点："><a href="#二叉树的特点：" class="headerlink" title="二叉树的特点："></a>二叉树的特点：</h3><ul>
+<li>每个结点最多有两颗子树，</li>
+<li>左子树和右子树是有序的</li>
+<li>即使树中某结点只有一颗子树，也要区分是左子树还是右子树；</li>
+</ul>
+<h3 id="常见几种特殊的二叉树："><a href="#常见几种特殊的二叉树：" class="headerlink" title="常见几种特殊的二叉树："></a>常见几种特殊的二叉树：</h3><ol>
+<li><p>斜树</p>
+<p> 所有的结点都只有左子树的二叉树叫左斜树。所有结点都是只有右子树的二叉树叫右斜树。这两者统称为斜树。</p>
+</li>
+<li><p>满二叉树</p>
+<p> 在一颗二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上，这样的二叉树称为满二叉树；所有的叶子都在同一层上；</p>
+</li>
+<li><p>完全二叉树</p>
+<p> 对一颗具有n个结点的二叉树按层序编号，如果编号为i（1&lt;=i&lt;=n）的结点与同样深度的满二叉树中编号为i的结点在二叉树中位置完全相同，则这颗二叉树称为完全二叉树。</p>
+</li>
+</ol>
+<h3 id="二叉树的性质："><a href="#二叉树的性质：" class="headerlink" title="二叉树的性质："></a>二叉树的性质：</h3><ol>
+<li><p>在二叉树的第i层上至多有2^(i-1)^个结点（i&gt;=1)</p>
+</li>
+<li><p>深度为k的二叉树至多有2^k^-1个结点（k&gt;=1)</p>
+</li>
+<li><p>对任何一颗二叉树T，如果其终端结点数为n0，度为2的结点数为n2，则n0=n2+1</p>
+<p> 终端结点数其实就是叶子结点数，而一颗二叉树，除了叶子结点外，剩下的就是度为1或2的结点数了；树T结点总数是n=n0+n1+n2；用代数表达分支总线有等式成立：n-1 = n1 + 2n2；两个等式计算后就可以拿到：n0=n2 + 1;</p>
+</li>
+<li><p>具有n个结点的完全二叉树的深度为[log<del>2</del>n] + 1 ([x]表示不大于x的最大整数)</p>
+<p> 有兴趣的话可以研究下这个问题，满二叉树的话存在等式：n=2^k^ -1；对于完全二叉树就存在着不等式: 2^(k-1)^ - 1 &lt; n &lt;= 2^k^ - 1;</p>
+</li>
+<li><p>如果对一颗有n个结点的完全二叉树（其深度为[log<del>2</del>n]+1）的结点按层序编号（从第1层到第[log<del>2</del>n] + 1层，每层从左到右），对任一结点i (1 &lt;= i &lt;= n) 有：</p>
+<ol>
+<li>如果i==1，则结点i是二叉树的根，无双亲；如果i&gt;1，则其双亲是结点[1/2]</li>
+<li>如果2i&gt;n，则结点i无左孩子（结点i为叶子结点）；否则其左孩子是结点2i；</li>
+<li>如果2i+1&gt;n，则结点i无右孩子；否则其右孩子是结点2i+1;</li>
+</ol>
+</li>
+</ol>
+<h3 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h3><ol>
+<li><p>前序遍历</p>
+<p> 规则是若二叉树为空，则空操作返回，否则先访问根结点，然后前序遍历左子树，再前序遍历右子树。</p>
+ <!-- <img src="/2020/07/09/binary-tree/DLR.png" title="前序遍历(DLR)"> -->
+</li>
+<li><p>中序遍历</p>
+<p> 规则是若树为空，则空操作返回，否则从根结点开始（注意并不是先访问根结点），中序遍历根结点的左子树，然后是访问根结点，最后中序遍历右子树。</p>
+ <!-- <img src="/2020/07/09/binary-tree/LDR.png" title="中序遍历(LDR)"> -->
+</li>
+<li><p>后序遍历</p>
+<p> 规则是若树为空，则空操作返回，否则从左到右先叶子后结点的方式遍历访问左右子树，最后是访问根结点。</p>
+ <!-- <img src="/2020/07/09/binary-tree/LRD.png" title="后序遍历(LRD)"> -->
+</li>
+<li><p>层序遍历</p>
+<p> 规则是若树为空，则空操作返回，否则从树的第一层，也就是根结点开始访问，从上而下逐层遍历，在同一层中，按从左到右的顺序对结点逐个访问。</p>
+ <!-- <img src="/2020/07/09/binary-tree/level_order.png" title="层序遍历"> -->
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>c</category>
+      </categories>
+      <tags>
+        <tag>c</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>study-cmake</title>
+    <url>/2020/05/26/cmake_study/</url>
+    <content><![CDATA[<h4 id="在开始了解cmake时，先简单了解下下面的几种文件："><a href="#在开始了解cmake时，先简单了解下下面的几种文件：" class="headerlink" title="在开始了解cmake时，先简单了解下下面的几种文件："></a>在开始了解cmake时，先简单了解下下面的几种文件：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">*.o文件     =&gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件</span><br><span class="line">*.a文件     =&gt;      静态库文件</span><br><span class="line">*.so文件    =&gt;      动态链接库</span><br></pre></td></tr></table></figure>
+
+<h4 id="cmake能为我们做些什么"><a href="#cmake能为我们做些什么" class="headerlink" title="cmake能为我们做些什么"></a>cmake能为我们做些什么</h4><p>CMake 可以编译源代码、制作程序库、产生适配器（wrapper）、还可以用任意的顺序建构执行档。CMake 支持 in-place 建构（二进档和源代码在同一个目录树中）和 out-of-place 建构（二进档在别的目录里），因此可以很容易从同一个源代码目录树中建构出多个二进档。CMake 也支持静态与动态程式库的建构。                 – 来自百科</p>
+<h4 id="cmake-tutorial"><a href="#cmake-tutorial" class="headerlink" title="cmake-tutorial"></a>cmake-tutorial</h4><h5 id="step1"><a href="#step1" class="headerlink" title="step1"></a>step1</h5><h6 id="1-简单的创建一个可执行程序"><a href="#1-简单的创建一个可执行程序" class="headerlink" title="1.简单的创建一个可执行程序"></a>1.简单的创建一个可执行程序</h6><ol>
+<li><p>在你的<code>source code directory</code>里，添加CmakeLists.txt</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># 设置你的工程名，在后面相关api中，工程名用的比较多，</span><br><span class="line"># 可以将project和target来对比了解</span><br><span class="line">project(Tutorial)</span><br><span class="line"></span><br><span class="line"># 给工程添加可执行文件，你的执行源码</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>建议在<code>source code directory</code>中新建一个文件夹<code>build</code><br>然后进入build文件夹下执行以下命令</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cmake ../</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行命令</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cmake --build .</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这时候你会看到在同级目录下存在着Tutorial的Unix可执行文件</p>
+ <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./Tutorial 5</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h6 id="2-添加版本号和配置头文件"><a href="#2-添加版本号和配置头文件" class="headerlink" title="2.添加版本号和配置头文件"></a>2.添加版本号和配置头文件</h6><ol>
+<li><p>在CmakeLists.txt中设置版本号和配置头文件</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># 设置工程名和工程版本号，</span><br><span class="line"># 可以通过如下方式拿到</span><br><span class="line"># PROJECT_VERSION, &lt;PROJECT-NAME&gt;_VERSION</span><br><span class="line"># PROJECT_VERSION_MAJOR, &lt;PROJECT-NAME&gt;_VERSION_MAJOR</span><br><span class="line"># PROJECT_VERSION_MINOR, &lt;PROJECT-NAME&gt;_VERSION_MINOR</span><br><span class="line"># PROJECT_VERSION_PATCH, &lt;PROJECT-NAME&gt;_VERSION_PATCH</span><br><span class="line"># PROJECT_VERSION_TWEAK, &lt;PROJECT-NAME&gt;_VERSION_TWEAK.</span><br><span class="line">project(Tutorial VERSION 1.0)</span><br><span class="line"></span><br><span class="line"># 配置TutrialConfig.h.in，之后会生成TutorialConfig.h文件，</span><br><span class="line"># *.h.in文件中，可以执行cmake相关的一些api</span><br><span class="line">configure_file(TutorialConfig.h.in TutorialConfig.h)</span><br><span class="line"></span><br><span class="line"># 由于上面的*.h文件会写入到binary对应的文件夹下，所以这里需要告知需要索引的目录</span><br><span class="line"># PROJECT_BINARY_DIR 可以理解为全局变量，字义中的意思 </span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                       &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                       )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>填写好对应的*.h.in文件</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 配置好要使用到的宏定义，</span><br><span class="line">// @Tutorial_VERSION_MAJOR@ 拿到项目的版本号的第一个值，上面的1，格式上需要加上两个@</span><br><span class="line">#define Tutorial_VERSION_MAJOR @Tutorial_VERSION_MAJOR@</span><br><span class="line">#define Tutorial_VERSION_MINOR @Tutorial_VERSION_MINOR@</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在对应的<em>.cxx中导入头文件</em>.h，添加上对应的代码（注意这里是.h，而不是.h.in，这是因为最终会生成.h来给我们使用)</p>
+ <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="comment">// report version</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; argv[<span class="number">0</span>] &lt;&lt; <span class="string">" Version "</span> &lt;&lt; Tutorial_VERSION_MAJOR &lt;&lt; <span class="string">"."</span></span><br><span class="line">            &lt;&lt; Tutorial_VERSION_MINOR &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Usage: "</span> &lt;&lt; argv[<span class="number">0</span>] &lt;&lt; <span class="string">" number"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译执行的命令同<a href="#1.简单的创建一个可执行程序">step1</a></p>
+</li>
+</ol>
+<h6 id="3-指定C-标注库"><a href="#3-指定C-标注库" class="headerlink" title="3.指定C++标注库"></a>3.指定C++标注库</h6><p>由于C++11有一些新特性，需要指定对应的C++标准库，给的教程上就拿<code>std::stod()</code>和<code>atof()</code>比较</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># set the project name and version</span><br><span class="line">project(Tutorial VERSION 1.0)</span><br><span class="line"></span><br><span class="line"># specify the C++ standard</span><br><span class="line">set(CMAKE_CXX_STANDARD 11)</span><br><span class="line">set(CMAKE_CXX_STANDARD_REQUIRED True)</span><br></pre></td></tr></table></figure></code></pre><h6 id="4-构建和测试"><a href="#4-构建和测试" class="headerlink" title="4.构建和测试"></a>4.构建和测试</h6><p>教程中的命令如下</p>
+<pre><code>build:
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir Step1_build</span><br><span class="line"><span class="built_in">cd</span> Step1_build</span><br><span class="line">cmake ../Step1</span><br><span class="line">cmake --build .</span><br></pre></td></tr></table></figure>
+
+test:
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Tutorial 4294967296</span><br><span class="line">Tutorial 10</span><br><span class="line">Tutorial</span><br></pre></td></tr></table></figure></code></pre><h5 id="step2-添加library"><a href="#step2-添加library" class="headerlink" title="step2 添加library"></a>step2 添加library</h5><p>给工程添加一个静态库，范例中的意图是将<em>.cpp和对应的</em>.h打包成一个静态库<em>.a，供我们主函数调用;<br>*.cpp和对应的</em>.h放在MathFunctions文件夹下</p>
+<ol>
+<li><p>在MathFunctions文件夹下创建一个CMakeLists.txt文件</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 将mysqrt.cxx最终打包成*.a文件</span><br><span class="line">add_library(MathFunctions mysqrt.cxx)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为了能使用到对应的程序库，我们需要在源文件夹下的CMakeLists.txt中添加路径，以便能够构建，源文件夹下的CMakeLists.txt如下：</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 添加路径</span><br><span class="line">add_subdirectory(MathFunctions)</span><br><span class="line"></span><br><span class="line"># add the executable</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">target_link_libraries(Tutorial PUBLIC MathFunctions)</span><br><span class="line"></span><br><span class="line"># add the binary tree to the search path for include files</span><br><span class="line"># so that we will find TutorialConfig.h</span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                        &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                        &quot;$&#123;PROJECT_SOURCE_DIR&#125;/MathFunctions&quot;</span><br><span class="line">                        )</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>上面是给我们工程添加了library，如果我们想调整为可选配置的时候，这时候就可以像这样操作</p>
+<ol start="3">
+<li><p>使用option来配置一些环境变量来，执行指定的流程</p>
+<p> 在源文件夹下的CMakeLists.txt就可以改变成如下这样</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">option(USE_MYMATH &quot;Use tutorial provided math implementation&quot; ON)</span><br><span class="line"></span><br><span class="line"># configure a header file to pass some of the CMake settings</span><br><span class="line"># to the source code</span><br><span class="line">configure_file(TutorialConfig.h.in TutorialConfig.h)</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if(USE_MYMATH)</span><br><span class="line">    add_subdirectory(MathFunctions)</span><br><span class="line">    list(APPEND EXTRA_LIBS MathFunctions)</span><br><span class="line">    list(APPEND EXTRA_INCLUDES &quot;$&#123;PROJECT_SOURCE_DIR&#125;/MathFunctions&quot;)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"># add the executable</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br><span class="line"></span><br><span class="line">target_link_libraries(Tutorial PUBLIC $&#123;EXTRA_LIBS&#125;)</span><br><span class="line"></span><br><span class="line"># add the binary tree to the search path for include files</span><br><span class="line"># so that we will find TutorialConfig.h</span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                        &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                        $&#123;EXTRA_INCLUDES&#125;</span><br><span class="line">                        )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在你的源代码（tutorial.cxx）中添加如下code</p>
+ <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> USE_MYMATH</span></span><br><span class="line"><span class="meta">#  <span class="meta-keyword">include</span> <span class="meta-string">"MathFunctions.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> USE_MYMATH</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> outputValue = mysqrt(inputValue);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> outputValue = <span class="built_in">sqrt</span>(inputValue);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最后在*.h.in文件下添加宏定义USE_MYMATH</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#cmakedefine USE_MYMATH</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译命令执行，参考<a href="#step1">step1</a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cmake</category>
+      </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>first stage hexo</title>
+    <url>/2019/06/17/first-stage-hexo/</url>
+    <content><![CDATA[<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
+<li><code>$ hexo init [folder]</code> 新建一个网站</li>
+<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
+<li><code>$ hexo generate</code> 生成静态文件</li>
+<li><code>$ hexo server</code> 启动服务器</li>
+<li><code>$ hexo deploy</code> 部署网站</li>
+<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
+<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
+</ol>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git increase</title>
     <url>/2020/04/24/git_increase/</url>
     <content><![CDATA[<p>写这篇文章的目的是为了缓存自己在git上的提示/升级路程，在平时使用过程的记录等；在文章不断增长的过程中，会把部分内容提取出来单独作为一个新的篇章记录说明；</p>
@@ -140,26 +309,6 @@
       </tags>
   </entry>
   <entry>
-    <title>first stage hexo</title>
-    <url>/2019/06/17/first-stage-hexo/</url>
-    <content><![CDATA[<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ol>
-<li><code>$ hexo init [folder]</code> 新建一个网站</li>
-<li><code>$ hexo new [layout] &lt;title&gt;</code>  新建一篇文章</li>
-<li><code>$ hexo generate</code> 生成静态文件</li>
-<li><code>$ hexo server</code> 启动服务器</li>
-<li><code>$ hexo deploy</code> 部署网站</li>
-<li><code>$ hexo clean</code> 清除缓存(db.json 和 public中的静态文件)</li>
-<li><code>$ hexo list &lt;type&gt;</code> 列出网站资料</li>
-</ol>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2019/06/17/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
@@ -176,6 +325,35 @@
 
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>debug_file</title>
+    <url>/2020/05/11/debug-file/</url>
+    <content><![CDATA[<p>解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题；</p>
+<p>思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发；</p>
+<p><label style="color:#399ad6"><a href="https://github.com/YYXuelangwang/debugFile" target="_blank" rel="noopener">github仓库地址</a></label></p>
+<p>流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂）</p>
+<p>调试按钮的实现</p>
+<img src="/2020/05/11/debug-file/button.png" title="debug按钮">
+
+<p>按钮，我是用一个悬浮按钮来实现；点击按钮后，会显示隐藏的子按钮，对应的就是上图功能按钮（呈现原型散开），你也可以通过键值对<code>&lt;key:NSString, value:block&gt;</code>来添加更多的子按钮事件，样式如下：</p>
+<img src="/2020/05/11/debug-file/btn.png" title="btn">
+
+<p>展示调试信息或分享调试文件</p>
+<img src="/2020/05/11/debug-file/function.png" title="实现思路">
+
+<p>点击展示debug文件后，会弹出一个tableview的视图，显示了所有在’document/debug’下的文件，当然你也可以自己定义你指定的文件夹来显示文件夹下的文件，点击cell后，你可以选择直接预览或者分享给其他人，</p>
+<img src="/2020/05/11/debug-file/share1.png" title="shareFile1">
+
+<img src="/2020/05/11/debug-file/share2.png" title="shareFile2">
+
+]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
+      <tags>
+        <tag>ios</tag>
+      </tags>
   </entry>
   <entry>
     <title>IOS</title>
@@ -195,56 +373,36 @@
       </tags>
   </entry>
   <entry>
-    <title>app性能分析</title>
-    <url>/2019/06/19/app%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<h4 id="app性能分析图"><a href="#app性能分析图" class="headerlink" title="app性能分析图"></a>app性能分析图</h4><ul>
-<li>app通过调用<em>CPU</em>来计算；</li>
-<li>app通过<em>MEM</em>来读取/存储数据；</li>
-<li>app通过<em>NET</em>来请求数据通信；</li>
+    <title>DNS</title>
+    <url>/2019/07/06/%E5%9F%9F%E5%90%8D%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p>域名解析，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">st=&gt;start: Start: www.baidu.com</span><br><span class="line">op1=&gt;operation: 本地路由,</span><br><span class="line">(192.168.0.1:53)dns域名解析缓存拿到ip</span><br><span class="line">cond1=&gt;condition: Yes or No?:</span><br><span class="line">op2=&gt;operation: 网络商，</span><br><span class="line">(222.45.3.1:53)dns域名解析拿到ip</span><br><span class="line">cond2=&gt;condition: Yes or No?:</span><br><span class="line">op3=&gt;operation: 其他网路服务商，</span><br><span class="line">dns域名解析拿到ip...</span><br><span class="line">cond3=&gt;condition: Yes or No?:</span><br><span class="line">op4=&gt;operation: 13台根服务器，</span><br><span class="line">dns域名解析拿到ip</span><br><span class="line">cond4=&gt;condition: Yes or No?:</span><br><span class="line">para=&gt;parallel: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">para1=&gt;parallel: 未知域名，无法解析</span><br><span class="line">e=&gt;end: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">st-&gt;op1-&gt;cond1</span><br><span class="line">cond1(yes)-&gt;e</span><br><span class="line">cond1(no,b)-&gt;op2-&gt;cond2</span><br><span class="line">cond2(yes)-&gt;e</span><br><span class="line">cond2(no,b)-&gt;op3-&gt;cond3</span><br><span class="line">cond3(yes)-&gt;e</span><br><span class="line">cond3(no,b)-&gt;op4-&gt;cond4</span><br><span class="line">cond4(yes)-&gt;e</span><br><span class="line">cond4(no,b)-&gt;para1</span><br><span class="line">e(path1, bottom)-&gt;cond4(right)</span><br></pre></td></tr></table></figure>
+
+<p>#####dns劫持</p>
+<p>网路运行商，有时会根据你的域名来返回他的广告地址ip;</p>
+<p>Eg: <code>访问www.baidu.com，运营商会从他的域名解析服务器中给你返回一个广告ip地址，xx.xx.xx.xx</code></p>
+<p>早起的gfw就是dns劫持，从域名中判断关键字(eg:google)，包含就返回一个无效ip；现金翻墙，将udp包(dns域名请求解析包)加密，跳过gfw，到达vps；</p>
+<p><strong>预防dns劫持</strong></p>
+<p>电脑上配置dns服务器，网路-&gt;高级-&gt;DNS</p>
+<p>路由器上配置dns服务器；</p>
+<h5 id="常用的公共域名解析服务dns"><a href="#常用的公共域名解析服务dns" class="headerlink" title="常用的公共域名解析服务dns"></a>常用的公共域名解析服务dns</h5><ul>
+<li>8.8.4.4</li>
+<li>8.8.8.8</li>
+<li>114.114.114.114</li>
+<li>114.114.115.115</li>
+<li>223.5.5.5</li>
+<li>223.6.6.6</li>
 </ul>
-<p>检测的话，一般都是围绕上面三点来展开的；大部分的编辑器都有着profile/memory工具来进行检测；使用profile可以定位到哪些方法占用cpu资源多，占用的时间长；使用memory则可以来检测到不同的object引用计数，和占用内存的大小；同样，network也有对应的检测工具，network的优化可以通过减少请求次数（合并请求次数），和压缩请求的数据(例如gzip)；</p>
-]]></content>
+<h5 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h5><p><em>nslookup</em></p>
+<p>查询本地使用的dns；输入server，可以设置域名解析服务dns</p>
+<p><em>dig</em></p>
+<p>展示递归的dns解析</p>
+<h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>]]></content>
       <categories>
-        <category>app</category>
+        <category>dns</category>
       </categories>
       <tags>
-        <tag>app</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>shell increase</title>
-    <url>/2020/04/26/shell_increase/</url>
-    <content><![CDATA[<p>写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T）</p>
-<h4 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h4><p>grep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令<label style="color:#b77a64"><code>man grep</code></label>来查看grep的更多信息，这里列举一些常见用法：</p>
-<ol>
-<li><p><label style="color:#b77a64">grep [message]</label></p>
-<p> 过滤每一行包含<em>message</em>的内容，并输出在控制台里</p>
-</li>
-<li><p><label style="color:#b77a64">grep ‘reg’</label></p>
-<p> 过滤每一行中符合正则表达式的内容，并输出在控制台里；如果你有考虑多个正则表达式，那么你可能会用到下面的命令来执行<label style="color:#b77a64"><code>grep -e &#39;regA&#39; -e &#39;regB&#39;</code> </label>（这个命令的意思是’或‘，内容只要符合其中任何一个正则表达式，就会被输出/拿到）、<label style="color:#b77a64"><code>grep &#39;regA&#39; | grep &#39;regB&#39;</code></label>(这个命令的意思是’与‘，相当于执行了两遍grep命令，如果是少数内容（几个文件）还好，多的话（上万个文件）还得找下grep对应的指令集了)</p>
-</li>
-<li><p><label style="color:#b77a64">grep -v ‘reg/message’</label></p>
-<p> 取反，不包含指定的正则表达式<em>reg</em>或者<em>message</em></p>
-</li>
-<li><p><label style="color:#b77a64">grep –color ‘message’</label></p>
-<p> 给<em>message</em>添加颜色，方便自己阅读</p>
-</li>
-</ol>
-<p>一些组合命令：</p>
-<ol>
-<li><p><label style="color:#b77a64">find [dir] -name ‘*.txt’ | xargs grep ‘message’&lt;</label>&gt;</p>
-<p> 前半段的意思是在<em>dir</em>中找到以后缀以.txt结尾的文件列表，后半段的意思就是过滤出来每个文件中包含message内容的行；grep后的命令你可以参考上面的内容来改动；</p>
-</li>
-<li><p><label style="color:#b77a64">grep ‘xxx’ | sed -n ‘/2020-04-20 16:00:00/,/2020-04-20 19:00:00/p’ test.log</label></p>
-<p> 过滤日志信息，结合sed的使用来过滤某一段时间的信息；</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>shell</category>
-      </categories>
-      <tags>
-        <tag>shell</tag>
+        <tag>dns</tag>
       </tags>
   </entry>
   <entry>
@@ -308,62 +466,6 @@
       </tags>
   </entry>
   <entry>
-    <title>blog update</title>
-    <url>/2020/04/28/update_blog/</url>
-    <content><![CDATA[<p>写这篇文章的目的是为了记录，自己需要改进自己的博客时，能快速找到各位前辈大能的文章，地址</p>
-<h4 id="主题Next"><a href="#主题Next" class="headerlink" title="主题Next"></a>主题Next</h4><ol>
-<li><a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">github地址</a></li>
-<li><a href="https://github.com/theme-next/awesome-next" target="_blank" rel="noopener">相关插件（搜索，评论等）github地址</a></li>
-</ol>
-<h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><ol>
-<li><a href="https://hexo.io/docs/one-command-deployment" target="_blank" rel="noopener">hexo文档地址</a></li>
-<li>给自己的hexo博客添加评论，使用的是minivaline<ol>
-<li>要使用minvaline需要现在<a href="https://leancloud.cn/dashboard/app.html?appid=uuE0OYy95m5hobJboOUKcMYo-gzGzoHsz#/key" target="_blank" rel="noopener">leancloud</a>上注册一个应用，拿到对应的appkey和appid<br><a href="https://github.com/MiniValine/hexo-next-minivaline" target="_blank" rel="noopener">Hexo Next MiniValine</a></li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>blog</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>DNS</title>
-    <url>/2019/07/06/%E5%9F%9F%E5%90%8D%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p>域名解析，</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">st=&gt;start: Start: www.baidu.com</span><br><span class="line">op1=&gt;operation: 本地路由,</span><br><span class="line">(192.168.0.1:53)dns域名解析缓存拿到ip</span><br><span class="line">cond1=&gt;condition: Yes or No?:</span><br><span class="line">op2=&gt;operation: 网络商，</span><br><span class="line">(222.45.3.1:53)dns域名解析拿到ip</span><br><span class="line">cond2=&gt;condition: Yes or No?:</span><br><span class="line">op3=&gt;operation: 其他网路服务商，</span><br><span class="line">dns域名解析拿到ip...</span><br><span class="line">cond3=&gt;condition: Yes or No?:</span><br><span class="line">op4=&gt;operation: 13台根服务器，</span><br><span class="line">dns域名解析拿到ip</span><br><span class="line">cond4=&gt;condition: Yes or No?:</span><br><span class="line">para=&gt;parallel: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">para1=&gt;parallel: 未知域名，无法解析</span><br><span class="line">e=&gt;end: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">st-&gt;op1-&gt;cond1</span><br><span class="line">cond1(yes)-&gt;e</span><br><span class="line">cond1(no,b)-&gt;op2-&gt;cond2</span><br><span class="line">cond2(yes)-&gt;e</span><br><span class="line">cond2(no,b)-&gt;op3-&gt;cond3</span><br><span class="line">cond3(yes)-&gt;e</span><br><span class="line">cond3(no,b)-&gt;op4-&gt;cond4</span><br><span class="line">cond4(yes)-&gt;e</span><br><span class="line">cond4(no,b)-&gt;para1</span><br><span class="line">e(path1, bottom)-&gt;cond4(right)</span><br></pre></td></tr></table></figure>
-
-<p>#####dns劫持</p>
-<p>网路运行商，有时会根据你的域名来返回他的广告地址ip;</p>
-<p>Eg: <code>访问www.baidu.com，运营商会从他的域名解析服务器中给你返回一个广告ip地址，xx.xx.xx.xx</code></p>
-<p>早起的gfw就是dns劫持，从域名中判断关键字(eg:google)，包含就返回一个无效ip；现金翻墙，将udp包(dns域名请求解析包)加密，跳过gfw，到达vps；</p>
-<p><strong>预防dns劫持</strong></p>
-<p>电脑上配置dns服务器，网路-&gt;高级-&gt;DNS</p>
-<p>路由器上配置dns服务器；</p>
-<h5 id="常用的公共域名解析服务dns"><a href="#常用的公共域名解析服务dns" class="headerlink" title="常用的公共域名解析服务dns"></a>常用的公共域名解析服务dns</h5><ul>
-<li>8.8.4.4</li>
-<li>8.8.8.8</li>
-<li>114.114.114.114</li>
-<li>114.114.115.115</li>
-<li>223.5.5.5</li>
-<li>223.6.6.6</li>
-</ul>
-<h5 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h5><p><em>nslookup</em></p>
-<p>查询本地使用的dns；输入server，可以设置域名解析服务dns</p>
-<p><em>dig</em></p>
-<p>展示递归的dns解析</p>
-<h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>]]></content>
-      <categories>
-        <category>dns</category>
-      </categories>
-      <tags>
-        <tag>dns</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>blog config tags/categories</title>
     <url>/2020/05/07/%E7%BB%99hexo%E9%85%8D%E7%BD%AEtag:categories/</url>
     <content><![CDATA[<p>在网上找到了方法，现在搬砖到这里方便后面人查用</p>
@@ -395,6 +497,84 @@
       </categories>
       <tags>
         <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>blog update</title>
+    <url>/2020/04/28/update_blog/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了记录，自己需要改进自己的博客时，能快速找到各位前辈大能的文章，地址</p>
+<h4 id="主题Next"><a href="#主题Next" class="headerlink" title="主题Next"></a>主题Next</h4><ol>
+<li><a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">github地址</a></li>
+<li><a href="https://github.com/theme-next/awesome-next" target="_blank" rel="noopener">相关插件（搜索，评论等）github地址</a></li>
+</ol>
+<h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><ol>
+<li><a href="https://hexo.io/docs/one-command-deployment" target="_blank" rel="noopener">hexo文档地址</a></li>
+<li>给自己的hexo博客添加评论，使用的是minivaline<ol>
+<li>要使用minvaline需要现在<a href="https://leancloud.cn/dashboard/app.html?appid=uuE0OYy95m5hobJboOUKcMYo-gzGzoHsz#/key" target="_blank" rel="noopener">leancloud</a>上注册一个应用，拿到对应的appkey和appid<br><a href="https://github.com/MiniValine/hexo-next-minivaline" target="_blank" rel="noopener">Hexo Next MiniValine</a></li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>shell increase</title>
+    <url>/2020/04/26/shell_increase/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T）</p>
+<h4 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h4><p>grep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令<label style="color:#b77a64"><code>man grep</code></label>来查看grep的更多信息，这里列举一些常见用法：</p>
+<ol>
+<li><p><label style="color:#b77a64">grep [message]</label></p>
+<p> 过滤每一行包含<em>message</em>的内容，并输出在控制台里</p>
+</li>
+<li><p><label style="color:#b77a64">grep ‘reg’</label></p>
+<p> 过滤每一行中符合正则表达式的内容，并输出在控制台里；如果你有考虑多个正则表达式，那么你可能会用到下面的命令来执行<label style="color:#b77a64"><code>grep -e &#39;regA&#39; -e &#39;regB&#39;</code> </label>（这个命令的意思是’或‘，内容只要符合其中任何一个正则表达式，就会被输出/拿到）、<label style="color:#b77a64"><code>grep &#39;regA&#39; | grep &#39;regB&#39;</code></label>(这个命令的意思是’与‘，相当于执行了两遍grep命令，如果是少数内容（几个文件）还好，多的话（上万个文件）还得找下grep对应的指令集了)</p>
+</li>
+<li><p><label style="color:#b77a64">grep -v ‘reg/message’</label></p>
+<p> 取反，不包含指定的正则表达式<em>reg</em>或者<em>message</em></p>
+</li>
+<li><p><label style="color:#b77a64">grep –color ‘message’</label></p>
+<p> 给<em>message</em>添加颜色，方便自己阅读</p>
+</li>
+</ol>
+<p>一些组合命令：</p>
+<ol>
+<li><p><label style="color:#b77a64">find [dir] -name ‘*.txt’ | xargs grep ‘message’&lt;</label>&gt;</p>
+<p> 前半段的意思是在<em>dir</em>中找到以后缀以.txt结尾的文件列表，后半段的意思就是过滤出来每个文件中包含message内容的行；grep后的命令你可以参考上面的内容来改动；</p>
+</li>
+<li><p><label style="color:#b77a64">grep ‘xxx’ | sed -n ‘/2020-04-20 16:00:00/,/2020-04-20 19:00:00/p’ test.log</label></p>
+<p> 过滤日志信息，结合sed的使用来过滤某一段时间的信息；</p>
+</li>
+</ol>
+<h4 id="dirs-pushd-popd"><a href="#dirs-pushd-popd" class="headerlink" title="dirs pushd popd"></a>dirs pushd popd</h4><p>dirs:   显示当前目录栈中的所有记录</p>
+<blockquote>
+</blockquote>
+<pre><code>-c 删除目录栈中的所有记录
+-l 以完整格式显示
+-p 一个目录一行的方式显示
+-v 每行一个目录来显示目录栈的内容，每个目录前加上编号
++N 显示从左到右的第n个目录，数字从0开始
+-N 显示从右到左的第n个目录，数字从0开始</code></pre><p>pushd:  将目录拉入栈中，并切换到该目录下；不加参数时，会将栈最上面两个目录对换位置；</p>
+<blockquote>
+</blockquote>
+<pre><code>+N  将第n个目录移动到栈顶，（从左往右数，第n个）
+-N  将第n个目录移动到栈顶，（从右往左数，第n个）
+-n  将目录入栈时，不切换目录</code></pre><p>popd:   删除目录栈中的记录；不加参数时，会先删除目录栈上最上面的记录，然后切换到目录栈中最上面的目录下</p>
+<blockquote>
+</blockquote>
+<pre><code>+N  将第n个目录删除，（从左往右数，第n个）
+-N  将第n个目录删除，（从右往左数，第n个）
+-n  将目录出栈时，不切换目录</code></pre><h4 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h4><p>eval:   将所有的参数拼接成一个字符串，然后作为一条命令来执行；结果就是命令执行后的status</p>
+]]></content>
+      <categories>
+        <category>shell</category>
+      </categories>
+      <tags>
+        <tag>shell</tag>
       </tags>
   </entry>
   <entry>
@@ -448,6 +628,36 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 你自己的仓库地址</span><br><span class="line">source &apos;https://github.com/tpctt/Specs.git&apos; </span><br><span class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</span><br><span class="line">platform :ios, &quot;8.0&quot;</span><br><span class="line">target:XX  do</span><br><span class="line">pod &apos;仓库名&apos; , &apos;~&gt; 1.4.0&apos;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 
 <h3 id="搬砖文献："><a href="#搬砖文献：" class="headerlink" title="搬砖文献："></a>搬砖文献：</h3><p><a href="https://www.jianshu.com/p/e3ec9a8bec97" target="_blank" rel="noopener">如何将自己的组件库使用cocoapods管理</a><br><a href="https://www.jianshu.com/p/310c1d09ab31" target="_blank" rel="noopener">在github创建自己的pod仓库</a><br><a href="http://guides.cocoapods.org/making/specs-and-specs-repo.html" target="_blank" rel="noopener">官方介绍specs</a><br><a href="http://guides.cocoapods.org/making/getting-setup-with-trunk.html" target="_blank" rel="noopener">官方配置trunk网址</a><br><a href="http://guides.cocoapods.org/syntax/podfile.html#pod" target="_blank" rel="noopener">官方podfile文件说明</a></p>
+]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
+      <tags>
+        <tag>ios</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解读FBRetainCycleDetector</title>
+    <url>/2020/05/26/%E8%A7%A3%E8%AF%BBFBRetainCycleDetector/</url>
+    <content><![CDATA[<p><a href="https://github.com/facebook/FBRetainCycleDetector" target="_blank" rel="noopener">facebook提供检测在runtime期间循环引用的工具类</a></p>
+<p>这里面存在着三个比较重要的class：</p>
+<ol>
+<li><p><label style="color:#399ad6">FBRetainCycleDetector</label>    </p>
+<p> 这个类是起始，调用的方法是；<code>-findRetainCyclesWithMaxCycleLength  =&gt;  -_findRetainCyclesInObject:stackDepth:</code></p>
+</li>
+<li><p><label style="color:#399ad6">FBObjectiveCGraphElement</label></p>
+<p> 这个类是对所有可能导致内存泄漏持有对象的描述基类，有三个子类<br> FBObjectiveCObject        FBObjectiveCBlock        FBObjectiveCNSCFTimer</p>
+<p> 这个类提供了一个方法 -allRetainedObjects 可以拿到他所持有的类（属性）</p>
+</li>
+<li><p><label style="color:#399ad6">FBNodeEnumerator</label></p>
+<p> 这个对象就是一个遍历对象，来遍历所有引用是否持有，导致内存泄漏，遍历属性啥的，看下地址，就是不大明白好多地方都用到了排序，是不是和堆里的内存是连续地址有关；</p>
+<p> 排序1，拿到所有对象地址最小值，然后将该对象及对象后的所有对象，都移动到数组最前面；<br> 排序2，拿到所有对象类名最小值，然后将该对象及对象后的所有对象，都移动到数组最前面；</p>
+</li>
+<li><p><label style="color:#399ad6">FBAssociationManager</label></p>
+<p> 这个类就是拿到对象引用相关联的对象；类是用c++来写的；关键方法：<code>+associationsForObject</code></p>
+</li>
+</ol>
+<p>(未完待续)</p>
 ]]></content>
       <categories>
         <category>ios</category>
