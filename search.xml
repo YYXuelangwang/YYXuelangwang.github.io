@@ -1,6 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>binary-tree</title>
+    <url>/2020/07/09/binary-tree/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了记录自己对二叉树的理解，方便以后自己的追忆</p>
+<p>二叉树(Binary Tree)是n个结点的有限集合，该集合或者为空集（称为空二叉树），或者由一个根结点和两颗互不相交的、分别称为根结点的左子树和右子树的二叉树组成。</p>
+<h3 id="二叉树的特点："><a href="#二叉树的特点：" class="headerlink" title="二叉树的特点："></a>二叉树的特点：</h3><ul>
+<li>每个结点最多有两颗子树，</li>
+<li>左子树和右子树是有序的</li>
+<li>即使树中某结点只有一颗子树，也要区分是左子树还是右子树；</li>
+</ul>
+<h3 id="常见几种特殊的二叉树："><a href="#常见几种特殊的二叉树：" class="headerlink" title="常见几种特殊的二叉树："></a>常见几种特殊的二叉树：</h3><ol>
+<li><p>斜树</p>
+<p> 所有的结点都只有左子树的二叉树叫左斜树。所有结点都是只有右子树的二叉树叫右斜树。这两者统称为斜树。</p>
+</li>
+<li><p>满二叉树</p>
+<p> 在一颗二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上，这样的二叉树称为满二叉树；所有的叶子都在同一层上；</p>
+</li>
+<li><p>完全二叉树</p>
+<p> 对一颗具有n个结点的二叉树按层序编号，如果编号为i（1&lt;=i&lt;=n）的结点与同样深度的满二叉树中编号为i的结点在二叉树中位置完全相同，则这颗二叉树称为完全二叉树。</p>
+</li>
+</ol>
+<h3 id="二叉树的性质："><a href="#二叉树的性质：" class="headerlink" title="二叉树的性质："></a>二叉树的性质：</h3><ol>
+<li><p>在二叉树的第i层上至多有2^(i-1)^个结点（i&gt;=1)</p>
+</li>
+<li><p>深度为k的二叉树至多有2^k^-1个结点（k&gt;=1)</p>
+</li>
+<li><p>对任何一颗二叉树T，如果其终端结点数为n0，度为2的结点数为n2，则n0=n2+1</p>
+<p> 终端结点数其实就是叶子结点数，而一颗二叉树，除了叶子结点外，剩下的就是度为1或2的结点数了；树T结点总数是n=n0+n1+n2；用代数表达分支总线有等式成立：n-1 = n1 + 2n2；两个等式计算后就可以拿到：n0=n2 + 1;</p>
+</li>
+<li><p>具有n个结点的完全二叉树的深度为[log<del>2</del>n] + 1 ([x]表示不大于x的最大整数)</p>
+<p> 有兴趣的话可以研究下这个问题，满二叉树的话存在等式：n=2^k^ -1；对于完全二叉树就存在着不等式: 2^(k-1)^ - 1 &lt; n &lt;= 2^k^ - 1;</p>
+</li>
+<li><p>如果对一颗有n个结点的完全二叉树（其深度为[log<del>2</del>n]+1）的结点按层序编号（从第1层到第[log<del>2</del>n] + 1层，每层从左到右），对任一结点i (1 &lt;= i &lt;= n) 有：</p>
+<ol>
+<li>如果i==1，则结点i是二叉树的根，无双亲；如果i&gt;1，则其双亲是结点[1/2]</li>
+<li>如果2i&gt;n，则结点i无左孩子（结点i为叶子结点）；否则其左孩子是结点2i；</li>
+<li>如果2i+1&gt;n，则结点i无右孩子；否则其右孩子是结点2i+1;</li>
+</ol>
+</li>
+</ol>
+<h3 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h3><p>这里以swift来做说明</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">var</span> val: <span class="type">Int</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">var</span> ch: <span class="type">Character?</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">var</span> <span class="keyword">left</span>: <span class="type">TreeNode?</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">var</span> <span class="keyword">right</span>: <span class="type">TreeNode?</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> val: <span class="type">Int</span>) &#123;</span><br><span class="line">         <span class="keyword">self</span>.val = val</span><br><span class="line">         <span class="keyword">self</span>.<span class="keyword">left</span> = <span class="literal">nil</span></span><br><span class="line">         <span class="keyword">self</span>.<span class="keyword">right</span> = <span class="literal">nil</span></span><br><span class="line">        <span class="keyword">self</span>.ch = <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>前序遍历</p>
+<p> 规则是若二叉树为空，则空操作返回，否则先访问根结点，然后前序遍历左子树，再前序遍历右子树。</p>
+ <!-- <img src="/2020/07/09/binary-tree/DLR.png" title="前序遍历(DLR)"> -->
+ <center>
+ <img src="https://i.loli.net/2020/07/11/iXtTrxmAB98sSb7.png" width="40%">
+ 前序遍历(DLR)
+ </center>
+
+<p> code:</p>
+ <figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">traverseTree_first</span><span class="params">(<span class="number">_</span> biTree:TreeNode?)</span></span>  &#123;</span><br><span class="line">    <span class="keyword">if</span> biTree == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">debugPrint</span>(biTree?.ch <span class="keyword">as</span> <span class="type">Any</span>)</span><br><span class="line">    traverseTree_first(biTree?.<span class="keyword">left</span>)</span><br><span class="line">    traverseTree_first(biTree?.<span class="keyword">right</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>中序遍历</p>
+<p> 规则是若树为空，则空操作返回，否则从根结点开始（注意并不是先访问根结点），中序遍历根结点的左子树，然后是访问根结点，最后中序遍历右子树。</p>
+ <!-- <img src="/2020/07/09/binary-tree/LDR.png" title="中序遍历(LDR)"> -->
+ <center>
+ <img src="https://i.loli.net/2020/07/11/9nR2M8FIPa7bhoN.png" width="40%">
+ 中序遍历(LDR)
+ </center>
+
+ <figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">traverseTree_middle</span><span class="params">(<span class="number">_</span> biTree:TreeNode?)</span></span>  &#123;</span><br><span class="line">    <span class="keyword">if</span> biTree == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    traverseTree_middle(biTree?.<span class="keyword">left</span>)</span><br><span class="line">    <span class="built_in">debugPrint</span>(biTree?.ch <span class="keyword">as</span> <span class="type">Any</span>)</span><br><span class="line">    traverseTree_middle(biTree?.<span class="keyword">right</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>后序遍历</p>
+<p> 规则是若树为空，则空操作返回，否则从左到右先叶子后结点的方式遍历访问左右子树，最后是访问根结点。</p>
+ <!-- <img src="/2020/07/09/binary-tree/LRD.png" title="后序遍历(LRD)"> -->
+ <center>
+ <img src="https://i.loli.net/2020/07/11/t6hlRMLQWv85D2J.png" width="40%">
+ 后序遍历(LRD) 
+ </center>
+
+ <figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">traverseTree_behind</span><span class="params">(<span class="number">_</span> biTree:TreeNode?)</span></span>  &#123;</span><br><span class="line">    <span class="keyword">if</span> biTree == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    traverseTree_behind(biTree?.<span class="keyword">left</span>)</span><br><span class="line">    traverseTree_behind(biTree?.<span class="keyword">right</span>)</span><br><span class="line">    <span class="built_in">debugPrint</span>(biTree?.ch <span class="keyword">as</span> <span class="type">Any</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>层序遍历</p>
+<p> 规则是若树为空，则空操作返回，否则从树的第一层，也就是根结点开始访问，从上而下逐层遍历，在同一层中，按从左到右的顺序对结点逐个访问。</p>
+ <!-- <img src="/2020/07/09/binary-tree/level_order.png" title="层序遍历"> -->
+ <center>
+ <img src="https://i.loli.net/2020/07/11/i9fXApJCVIdSgzF.png" width="40%">
+ 层序遍历
+ </center>
+ <figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>思考：已知一颗二叉树的前序遍历是ABCDEF，中序遍历是CBAEDF，那么它的后序遍历是什么；</p>
+<h3 id="二叉树的创建"><a href="#二叉树的创建" class="headerlink" title="二叉树的创建"></a>二叉树的创建</h3><p>这里我们假设二叉树的结点用一个字母表示，#表示空结点，这样我们来创建一个前序遍历为<code>AB#D##C##</code>的二叉树看看</p>
+<p>实现的代码如下：</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> strArr = <span class="type">Array</span>(<span class="string">"AB#D##C##"</span>)</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">createBiTree</span><span class="params">(<span class="number">_</span> biTree:<span class="keyword">inout</span> TreeNode?)</span></span>&#123;</span><br><span class="line">    index += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> strArr[index] == <span class="string">"#"</span> &#123;</span><br><span class="line">        biTree = <span class="literal">nil</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">let</span> val = <span class="type">Int</span>((strArr[index] <span class="keyword">as</span> <span class="type">Character</span>).asciiValue!)</span><br><span class="line">        biTree = <span class="type">TreeNode</span>(val)</span><br><span class="line">        biTree?.ch = strArr[index] <span class="keyword">as</span> <span class="type">Character</span></span><br><span class="line">        createBiTree(&amp;(biTree!.<span class="keyword">left</span>))</span><br><span class="line">        createBiTree(&amp;(biTree!.<span class="keyword">right</span>))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="线索二叉树的原理"><a href="#线索二叉树的原理" class="headerlink" title="线索二叉树的原理"></a>线索二叉树的原理</h3><p>先来分析一下，对于一个有n个结点的二叉链表，每个结点有指向左右孩子的两个指针域，所以一共是2n个指针域。而n个结点的二叉树一共有n-1条分支线数，也就是说，其实是存在2n-(n-1)=n+1个空指针域；</p>
+]]></content>
+      <categories>
+        <category>c</category>
+      </categories>
+      <tags>
+        <tag>c</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>app性能分析</title>
     <url>/2019/06/19/app%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h4 id="app性能分析图"><a href="#app性能分析图" class="headerlink" title="app性能分析图"></a>app性能分析图</h4><ul>
@@ -15,24 +115,6 @@
       </categories>
       <tags>
         <tag>app</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>c_increase</title>
-    <url>/2020/05/22/c_increase/</url>
-    <content><![CDATA[<p>写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引</p>
-<ol>
-<li><p>操作二进制某一位的值</p>
- <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// x为对应的数据，y为位移值</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">123</span>, y = <span class="number">2</span></span><br><span class="line">x |= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数置1</span></span><br><span class="line">x &amp;= ~(<span class="number">1</span>&lt;&lt;y)   <span class="comment">// 指定的某一位数置0</span></span><br><span class="line">x ^= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数取反</span></span><br><span class="line">((x) &gt;&gt; (y)&amp;<span class="number">1</span>) <span class="comment">// 获取的某一位的值</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>c</category>
-      </categories>
-      <tags>
-        <tag>c</tag>
       </tags>
   </entry>
   <entry>
@@ -94,61 +176,13 @@
       </tags>
   </entry>
   <entry>
-    <title>binary-tree</title>
-    <url>/2020/07/09/binary-tree/</url>
-    <content><![CDATA[<p>写这篇文章的目的是为了记录自己对二叉树的理解，方便以后自己的追忆</p>
-<p>二叉树(Binary Tree)是n个结点的有限集合，该集合或者为空集（称为空二叉树），或者由一个根结点和两颗互不相交的、分别称为根结点的左子树和右子树的二叉树组成。</p>
-<h3 id="二叉树的特点："><a href="#二叉树的特点：" class="headerlink" title="二叉树的特点："></a>二叉树的特点：</h3><ul>
-<li>每个结点最多有两颗子树，</li>
-<li>左子树和右子树是有序的</li>
-<li>即使树中某结点只有一颗子树，也要区分是左子树还是右子树；</li>
-</ul>
-<h3 id="常见几种特殊的二叉树："><a href="#常见几种特殊的二叉树：" class="headerlink" title="常见几种特殊的二叉树："></a>常见几种特殊的二叉树：</h3><ol>
-<li><p>斜树</p>
-<p> 所有的结点都只有左子树的二叉树叫左斜树。所有结点都是只有右子树的二叉树叫右斜树。这两者统称为斜树。</p>
-</li>
-<li><p>满二叉树</p>
-<p> 在一颗二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上，这样的二叉树称为满二叉树；所有的叶子都在同一层上；</p>
-</li>
-<li><p>完全二叉树</p>
-<p> 对一颗具有n个结点的二叉树按层序编号，如果编号为i（1&lt;=i&lt;=n）的结点与同样深度的满二叉树中编号为i的结点在二叉树中位置完全相同，则这颗二叉树称为完全二叉树。</p>
-</li>
-</ol>
-<h3 id="二叉树的性质："><a href="#二叉树的性质：" class="headerlink" title="二叉树的性质："></a>二叉树的性质：</h3><ol>
-<li><p>在二叉树的第i层上至多有2^(i-1)^个结点（i&gt;=1)</p>
-</li>
-<li><p>深度为k的二叉树至多有2^k^-1个结点（k&gt;=1)</p>
-</li>
-<li><p>对任何一颗二叉树T，如果其终端结点数为n0，度为2的结点数为n2，则n0=n2+1</p>
-<p> 终端结点数其实就是叶子结点数，而一颗二叉树，除了叶子结点外，剩下的就是度为1或2的结点数了；树T结点总数是n=n0+n1+n2；用代数表达分支总线有等式成立：n-1 = n1 + 2n2；两个等式计算后就可以拿到：n0=n2 + 1;</p>
-</li>
-<li><p>具有n个结点的完全二叉树的深度为[log<del>2</del>n] + 1 ([x]表示不大于x的最大整数)</p>
-<p> 有兴趣的话可以研究下这个问题，满二叉树的话存在等式：n=2^k^ -1；对于完全二叉树就存在着不等式: 2^(k-1)^ - 1 &lt; n &lt;= 2^k^ - 1;</p>
-</li>
-<li><p>如果对一颗有n个结点的完全二叉树（其深度为[log<del>2</del>n]+1）的结点按层序编号（从第1层到第[log<del>2</del>n] + 1层，每层从左到右），对任一结点i (1 &lt;= i &lt;= n) 有：</p>
+    <title>c_increase</title>
+    <url>/2020/05/22/c_increase/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引</p>
 <ol>
-<li>如果i==1，则结点i是二叉树的根，无双亲；如果i&gt;1，则其双亲是结点[1/2]</li>
-<li>如果2i&gt;n，则结点i无左孩子（结点i为叶子结点）；否则其左孩子是结点2i；</li>
-<li>如果2i+1&gt;n，则结点i无右孩子；否则其右孩子是结点2i+1;</li>
-</ol>
-</li>
-</ol>
-<h3 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h3><ol>
-<li><p>前序遍历</p>
-<p> 规则是若二叉树为空，则空操作返回，否则先访问根结点，然后前序遍历左子树，再前序遍历右子树。</p>
- <!-- <img src="/2020/07/09/binary-tree/DLR.png" title="前序遍历(DLR)"> -->
-</li>
-<li><p>中序遍历</p>
-<p> 规则是若树为空，则空操作返回，否则从根结点开始（注意并不是先访问根结点），中序遍历根结点的左子树，然后是访问根结点，最后中序遍历右子树。</p>
- <!-- <img src="/2020/07/09/binary-tree/LDR.png" title="中序遍历(LDR)"> -->
-</li>
-<li><p>后序遍历</p>
-<p> 规则是若树为空，则空操作返回，否则从左到右先叶子后结点的方式遍历访问左右子树，最后是访问根结点。</p>
- <!-- <img src="/2020/07/09/binary-tree/LRD.png" title="后序遍历(LRD)"> -->
-</li>
-<li><p>层序遍历</p>
-<p> 规则是若树为空，则空操作返回，否则从树的第一层，也就是根结点开始访问，从上而下逐层遍历，在同一层中，按从左到右的顺序对结点逐个访问。</p>
- <!-- <img src="/2020/07/09/binary-tree/level_order.png" title="层序遍历"> -->
+<li><p>操作二进制某一位的值</p>
+ <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// x为对应的数据，y为位移值</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">123</span>, y = <span class="number">2</span></span><br><span class="line">x |= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数置1</span></span><br><span class="line">x &amp;= ~(<span class="number">1</span>&lt;&lt;y)   <span class="comment">// 指定的某一位数置0</span></span><br><span class="line">x ^= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数取反</span></span><br><span class="line">((x) &gt;&gt; (y)&amp;<span class="number">1</span>) <span class="comment">// 获取的某一位的值</span></span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 ]]></content>
@@ -234,6 +268,35 @@ test:
       </categories>
       <tags>
         <tag>cmake</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>debug_file</title>
+    <url>/2020/05/11/debug-file/</url>
+    <content><![CDATA[<p>解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题；</p>
+<p>思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发；</p>
+<p><label style="color:#399ad6"><a href="https://github.com/YYXuelangwang/debugFile" target="_blank" rel="noopener">github仓库地址</a></label></p>
+<p>流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂）</p>
+<p>调试按钮的实现</p>
+<img src="/2020/05/11/debug-file/button.png" title="debug按钮">
+
+<p>按钮，我是用一个悬浮按钮来实现；点击按钮后，会显示隐藏的子按钮，对应的就是上图功能按钮（呈现原型散开），你也可以通过键值对<code>&lt;key:NSString, value:block&gt;</code>来添加更多的子按钮事件，样式如下：</p>
+<img src="/2020/05/11/debug-file/btn.png" title="btn">
+
+<p>展示调试信息或分享调试文件</p>
+<img src="/2020/05/11/debug-file/function.png" title="实现思路">
+
+<p>点击展示debug文件后，会弹出一个tableview的视图，显示了所有在’document/debug’下的文件，当然你也可以自己定义你指定的文件夹来显示文件夹下的文件，点击cell后，你可以选择直接预览或者分享给其他人，</p>
+<img src="/2020/05/11/debug-file/share1.png" title="shareFile1">
+
+<img src="/2020/05/11/debug-file/share2.png" title="shareFile2">
+
+]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
+      <tags>
+        <tag>ios</tag>
       </tags>
   </entry>
   <entry>
@@ -327,35 +390,6 @@ test:
 ]]></content>
   </entry>
   <entry>
-    <title>debug_file</title>
-    <url>/2020/05/11/debug-file/</url>
-    <content><![CDATA[<p>解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题；</p>
-<p>思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发；</p>
-<p><label style="color:#399ad6"><a href="https://github.com/YYXuelangwang/debugFile" target="_blank" rel="noopener">github仓库地址</a></label></p>
-<p>流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂）</p>
-<p>调试按钮的实现</p>
-<img src="/2020/05/11/debug-file/button.png" title="debug按钮">
-
-<p>按钮，我是用一个悬浮按钮来实现；点击按钮后，会显示隐藏的子按钮，对应的就是上图功能按钮（呈现原型散开），你也可以通过键值对<code>&lt;key:NSString, value:block&gt;</code>来添加更多的子按钮事件，样式如下：</p>
-<img src="/2020/05/11/debug-file/btn.png" title="btn">
-
-<p>展示调试信息或分享调试文件</p>
-<img src="/2020/05/11/debug-file/function.png" title="实现思路">
-
-<p>点击展示debug文件后，会弹出一个tableview的视图，显示了所有在’document/debug’下的文件，当然你也可以自己定义你指定的文件夹来显示文件夹下的文件，点击cell后，你可以选择直接预览或者分享给其他人，</p>
-<img src="/2020/05/11/debug-file/share1.png" title="shareFile1">
-
-<img src="/2020/05/11/debug-file/share2.png" title="shareFile2">
-
-]]></content>
-      <categories>
-        <category>ios</category>
-      </categories>
-      <tags>
-        <tag>ios</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>IOS</title>
     <url>/2019/10/19/ios%E5%AE%89%E5%85%A8/</url>
     <content><![CDATA[<p>IOS安全是我看书的一些笔记；</p>
@@ -370,39 +404,6 @@ test:
       </categories>
       <tags>
         <tag>ios</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>DNS</title>
-    <url>/2019/07/06/%E5%9F%9F%E5%90%8D%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p>域名解析，</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">st=&gt;start: Start: www.baidu.com</span><br><span class="line">op1=&gt;operation: 本地路由,</span><br><span class="line">(192.168.0.1:53)dns域名解析缓存拿到ip</span><br><span class="line">cond1=&gt;condition: Yes or No?:</span><br><span class="line">op2=&gt;operation: 网络商，</span><br><span class="line">(222.45.3.1:53)dns域名解析拿到ip</span><br><span class="line">cond2=&gt;condition: Yes or No?:</span><br><span class="line">op3=&gt;operation: 其他网路服务商，</span><br><span class="line">dns域名解析拿到ip...</span><br><span class="line">cond3=&gt;condition: Yes or No?:</span><br><span class="line">op4=&gt;operation: 13台根服务器，</span><br><span class="line">dns域名解析拿到ip</span><br><span class="line">cond4=&gt;condition: Yes or No?:</span><br><span class="line">para=&gt;parallel: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">para1=&gt;parallel: 未知域名，无法解析</span><br><span class="line">e=&gt;end: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">st-&gt;op1-&gt;cond1</span><br><span class="line">cond1(yes)-&gt;e</span><br><span class="line">cond1(no,b)-&gt;op2-&gt;cond2</span><br><span class="line">cond2(yes)-&gt;e</span><br><span class="line">cond2(no,b)-&gt;op3-&gt;cond3</span><br><span class="line">cond3(yes)-&gt;e</span><br><span class="line">cond3(no,b)-&gt;op4-&gt;cond4</span><br><span class="line">cond4(yes)-&gt;e</span><br><span class="line">cond4(no,b)-&gt;para1</span><br><span class="line">e(path1, bottom)-&gt;cond4(right)</span><br></pre></td></tr></table></figure>
-
-<p>#####dns劫持</p>
-<p>网路运行商，有时会根据你的域名来返回他的广告地址ip;</p>
-<p>Eg: <code>访问www.baidu.com，运营商会从他的域名解析服务器中给你返回一个广告ip地址，xx.xx.xx.xx</code></p>
-<p>早起的gfw就是dns劫持，从域名中判断关键字(eg:google)，包含就返回一个无效ip；现金翻墙，将udp包(dns域名请求解析包)加密，跳过gfw，到达vps；</p>
-<p><strong>预防dns劫持</strong></p>
-<p>电脑上配置dns服务器，网路-&gt;高级-&gt;DNS</p>
-<p>路由器上配置dns服务器；</p>
-<h5 id="常用的公共域名解析服务dns"><a href="#常用的公共域名解析服务dns" class="headerlink" title="常用的公共域名解析服务dns"></a>常用的公共域名解析服务dns</h5><ul>
-<li>8.8.4.4</li>
-<li>8.8.8.8</li>
-<li>114.114.114.114</li>
-<li>114.114.115.115</li>
-<li>223.5.5.5</li>
-<li>223.6.6.6</li>
-</ul>
-<h5 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h5><p><em>nslookup</em></p>
-<p>查询本地使用的dns；输入server，可以设置域名解析服务dns</p>
-<p><em>dig</em></p>
-<p>展示递归的dns解析</p>
-<h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>]]></content>
-      <categories>
-        <category>dns</category>
-      </categories>
-      <tags>
-        <tag>dns</tag>
       </tags>
   </entry>
   <entry>
@@ -466,63 +467,6 @@ test:
       </tags>
   </entry>
   <entry>
-    <title>blog config tags/categories</title>
-    <url>/2020/05/07/%E7%BB%99hexo%E9%85%8D%E7%BD%AEtag:categories/</url>
-    <content><![CDATA[<p>在网上找到了方法，现在搬砖到这里方便后面人查用</p>
-<p>原因：在自己打开next主题下面对应的tags/categories开关后，点击标签/分类报错</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Cannot GET /tags/</span><br></pre></td></tr></table></figure>
-
-<p>解决</p>
-<ol>
-<li><p>生成对应的page（index.md) </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">➜  blog hexo new page <span class="string">"tags"</span></span><br><span class="line">INFO  Created: ~/develop/blog/<span class="built_in">source</span>/tags/index.md</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改步骤1中生成的index.md<br> 生成的文件是这样的</p>
- <figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-05-07 09:20:24</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p> 修改后的文件是这样的</p>
- <figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-05-07 09:20:24</span><br><span class="line">type: "tags"</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在对应的主题配置文件中，修改menu：下的配置</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>搬砖文献<br><a href="https://www.zhihu.com/question/29017171" target="_blank" rel="noopener">hexo下的分类和标签无法显示</a></p>
-]]></content>
-      <categories>
-        <category>blog</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>blog update</title>
-    <url>/2020/04/28/update_blog/</url>
-    <content><![CDATA[<p>写这篇文章的目的是为了记录，自己需要改进自己的博客时，能快速找到各位前辈大能的文章，地址</p>
-<h4 id="主题Next"><a href="#主题Next" class="headerlink" title="主题Next"></a>主题Next</h4><ol>
-<li><a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">github地址</a></li>
-<li><a href="https://github.com/theme-next/awesome-next" target="_blank" rel="noopener">相关插件（搜索，评论等）github地址</a></li>
-</ol>
-<h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><ol>
-<li><a href="https://hexo.io/docs/one-command-deployment" target="_blank" rel="noopener">hexo文档地址</a></li>
-<li>给自己的hexo博客添加评论，使用的是minivaline<ol>
-<li>要使用minvaline需要现在<a href="https://leancloud.cn/dashboard/app.html?appid=uuE0OYy95m5hobJboOUKcMYo-gzGzoHsz#/key" target="_blank" rel="noopener">leancloud</a>上注册一个应用，拿到对应的appkey和appid<br><a href="https://github.com/MiniValine/hexo-next-minivaline" target="_blank" rel="noopener">Hexo Next MiniValine</a></li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>blog</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>shell increase</title>
     <url>/2020/04/26/shell_increase/</url>
     <content><![CDATA[<p>写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T）</p>
@@ -575,6 +519,96 @@ test:
       </categories>
       <tags>
         <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>blog update</title>
+    <url>/2020/04/28/update_blog/</url>
+    <content><![CDATA[<p>写这篇文章的目的是为了记录，自己需要改进自己的博客时，能快速找到各位前辈大能的文章，地址</p>
+<h4 id="主题Next"><a href="#主题Next" class="headerlink" title="主题Next"></a>主题Next</h4><ol>
+<li><a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">github地址</a></li>
+<li><a href="https://github.com/theme-next/awesome-next" target="_blank" rel="noopener">相关插件（搜索，评论等）github地址</a></li>
+</ol>
+<h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><ol>
+<li><a href="https://hexo.io/docs/one-command-deployment" target="_blank" rel="noopener">hexo文档地址</a></li>
+<li>给自己的hexo博客添加评论，使用的是minivaline<ol>
+<li>要使用minvaline需要现在<a href="https://leancloud.cn/dashboard/app.html?appid=uuE0OYy95m5hobJboOUKcMYo-gzGzoHsz#/key" target="_blank" rel="noopener">leancloud</a>上注册一个应用，拿到对应的appkey和appid<br><a href="https://github.com/MiniValine/hexo-next-minivaline" target="_blank" rel="noopener">Hexo Next MiniValine</a></li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DNS</title>
+    <url>/2019/07/06/%E5%9F%9F%E5%90%8D%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p>域名解析，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">st=&gt;start: Start: www.baidu.com</span><br><span class="line">op1=&gt;operation: 本地路由,</span><br><span class="line">(192.168.0.1:53)dns域名解析缓存拿到ip</span><br><span class="line">cond1=&gt;condition: Yes or No?:</span><br><span class="line">op2=&gt;operation: 网络商，</span><br><span class="line">(222.45.3.1:53)dns域名解析拿到ip</span><br><span class="line">cond2=&gt;condition: Yes or No?:</span><br><span class="line">op3=&gt;operation: 其他网路服务商，</span><br><span class="line">dns域名解析拿到ip...</span><br><span class="line">cond3=&gt;condition: Yes or No?:</span><br><span class="line">op4=&gt;operation: 13台根服务器，</span><br><span class="line">dns域名解析拿到ip</span><br><span class="line">cond4=&gt;condition: Yes or No?:</span><br><span class="line">para=&gt;parallel: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">para1=&gt;parallel: 未知域名，无法解析</span><br><span class="line">e=&gt;end: 拿到ip,可能和上次不一样，</span><br><span class="line">拥有多个ip(不同dns解析的ip可能不同)</span><br><span class="line">st-&gt;op1-&gt;cond1</span><br><span class="line">cond1(yes)-&gt;e</span><br><span class="line">cond1(no,b)-&gt;op2-&gt;cond2</span><br><span class="line">cond2(yes)-&gt;e</span><br><span class="line">cond2(no,b)-&gt;op3-&gt;cond3</span><br><span class="line">cond3(yes)-&gt;e</span><br><span class="line">cond3(no,b)-&gt;op4-&gt;cond4</span><br><span class="line">cond4(yes)-&gt;e</span><br><span class="line">cond4(no,b)-&gt;para1</span><br><span class="line">e(path1, bottom)-&gt;cond4(right)</span><br></pre></td></tr></table></figure>
+
+<p>#####dns劫持</p>
+<p>网路运行商，有时会根据你的域名来返回他的广告地址ip;</p>
+<p>Eg: <code>访问www.baidu.com，运营商会从他的域名解析服务器中给你返回一个广告ip地址，xx.xx.xx.xx</code></p>
+<p>早起的gfw就是dns劫持，从域名中判断关键字(eg:google)，包含就返回一个无效ip；现金翻墙，将udp包(dns域名请求解析包)加密，跳过gfw，到达vps；</p>
+<p><strong>预防dns劫持</strong></p>
+<p>电脑上配置dns服务器，网路-&gt;高级-&gt;DNS</p>
+<p>路由器上配置dns服务器；</p>
+<h5 id="常用的公共域名解析服务dns"><a href="#常用的公共域名解析服务dns" class="headerlink" title="常用的公共域名解析服务dns"></a>常用的公共域名解析服务dns</h5><ul>
+<li>8.8.4.4</li>
+<li>8.8.8.8</li>
+<li>114.114.114.114</li>
+<li>114.114.115.115</li>
+<li>223.5.5.5</li>
+<li>223.6.6.6</li>
+</ul>
+<h5 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h5><p><em>nslookup</em></p>
+<p>查询本地使用的dns；输入server，可以设置域名解析服务dns</p>
+<p><em>dig</em></p>
+<p>展示递归的dns解析</p>
+<h4 id="cdn"><a href="#cdn" class="headerlink" title="cdn"></a>cdn</h4>]]></content>
+      <categories>
+        <category>dns</category>
+      </categories>
+      <tags>
+        <tag>dns</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>blog config tags/categories</title>
+    <url>/2020/05/07/%E7%BB%99hexo%E9%85%8D%E7%BD%AEtag:categories/</url>
+    <content><![CDATA[<p>在网上找到了方法，现在搬砖到这里方便后面人查用</p>
+<p>原因：在自己打开next主题下面对应的tags/categories开关后，点击标签/分类报错</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Cannot GET /tags/</span><br></pre></td></tr></table></figure>
+
+<p>解决</p>
+<ol>
+<li><p>生成对应的page（index.md) </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">➜  blog hexo new page <span class="string">"tags"</span></span><br><span class="line">INFO  Created: ~/develop/blog/<span class="built_in">source</span>/tags/index.md</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改步骤1中生成的index.md<br> 生成的文件是这样的</p>
+ <figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-05-07 09:20:24</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p> 修改后的文件是这样的</p>
+ <figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-05-07 09:20:24</span><br><span class="line">type: "tags"</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在对应的主题配置文件中，修改menu：下的配置</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>搬砖文献<br><a href="https://www.zhihu.com/question/29017171" target="_blank" rel="noopener">hexo下的分类和标签无法显示</a></p>
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
