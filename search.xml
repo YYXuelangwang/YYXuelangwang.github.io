@@ -181,7 +181,7 @@
     <content><![CDATA[<p>写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引</p>
 <ol>
 <li><p>操作二进制某一位的值</p>
- <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// x为对应的数据，y为位移值</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">123</span>, y = <span class="number">2</span></span><br><span class="line">x |= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数置1</span></span><br><span class="line">x &amp;= ~(<span class="number">1</span>&lt;&lt;y)   <span class="comment">// 指定的某一位数置0</span></span><br><span class="line">x ^= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数取反</span></span><br><span class="line">((x) &gt;&gt; (y)&amp;<span class="number">1</span>) <span class="comment">// 获取的某一位的值</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// x为对应的数据，y为位移值</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">123</span>, y = <span class="number">2</span></span><br><span class="line">x |= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数置1</span></span><br><span class="line">x &amp;= ~(<span class="number">1</span>&lt;&lt;y)   <span class="comment">// 指定的某一位数置0</span></span><br><span class="line">x ^= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数取反</span></span><br><span class="line">((x) &gt;&gt; (y)&amp;<span class="number">1</span>) <span class="comment">// 获取的某一位的值 </span></span><br><span class="line">x = x&gt;&gt;<span class="number">1</span>       <span class="comment">// 取某个值的一半，向下取整</span></span><br></pre></td></tr></table></figure>
 
 </li>
 </ol>
@@ -196,7 +196,7 @@
   <entry>
     <title>study-cmake</title>
     <url>/2020/05/26/cmake_study/</url>
-    <content><![CDATA[<h4 id="在开始了解cmake时，先简单了解下下面的几种文件："><a href="#在开始了解cmake时，先简单了解下下面的几种文件：" class="headerlink" title="在开始了解cmake时，先简单了解下下面的几种文件："></a>在开始了解cmake时，先简单了解下下面的几种文件：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">*.o文件     =&gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件</span><br><span class="line">*.a文件     =&gt;      静态库文件</span><br><span class="line">*.so文件    =&gt;      动态链接库</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h4 id="在开始了解cmake时，先简单了解下下面的几种文件："><a href="#在开始了解cmake时，先简单了解下下面的几种文件：" class="headerlink" title="在开始了解cmake时，先简单了解下下面的几种文件："></a>在开始了解cmake时，先简单了解下下面的几种文件：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">*.o文件     =&gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件</span><br><span class="line">*.a文件     =&gt;      静态库文件，.a是.o文件通过某种方式打包在一起的静态库文件</span><br><span class="line">*.so文件    =&gt;      动态链接库，动态库文件</span><br></pre></td></tr></table></figure>
 
 <h4 id="cmake能为我们做些什么"><a href="#cmake能为我们做些什么" class="headerlink" title="cmake能为我们做些什么"></a>cmake能为我们做些什么</h4><p>CMake 可以编译源代码、制作程序库、产生适配器（wrapper）、还可以用任意的顺序建构执行档。CMake 支持 in-place 建构（二进档和源代码在同一个目录树中）和 out-of-place 建构（二进档在别的目录里），因此可以很容易从同一个源代码目录树中建构出多个二进档。CMake 也支持静态与动态程式库的建构。                 – 来自百科</p>
 <h4 id="cmake-tutorial"><a href="#cmake-tutorial" class="headerlink" title="cmake-tutorial"></a>cmake-tutorial</h4><h5 id="step1"><a href="#step1" class="headerlink" title="step1"></a>step1</h5><h6 id="1-简单的创建一个可执行程序"><a href="#1-简单的创建一个可执行程序" class="headerlink" title="1.简单的创建一个可执行程序"></a>1.简单的创建一个可执行程序</h6><ol>
@@ -262,6 +262,9 @@ test:
 <li><p>编译命令执行，参考<a href="#step1">step1</a></p>
 </li>
 </ol>
+<p>参考资料和文献地址：<br>CMake 官网: <a href="https://cmake.org/" target="_blank" rel="noopener">cmake.org</a></p>
+<p>CMake 文档: <a href="https://cmake.org/documentation/" target="_blank" rel="noopener">cmake.org/documentation</a></p>
+<p>CMake FAQ: <a href="https://cmake.org/Wiki/CMake_FAQ" target="_blank" rel="noopener">Wiki/CMake_FAQ</a></p>
 ]]></content>
       <categories>
         <category>cmake</category>
@@ -693,6 +696,299 @@ test:
 </ol>
 <p>(未完待续)</p>
 ]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
+      <tags>
+        <tag>ios</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++</title>
+    <url>/2020/10/13/cplus_increase/</url>
+    <content><![CDATA[<p>记录一些C++使用中的笔记；</p>
+<h4 id="使用过得api"><a href="#使用过得api" class="headerlink" title="使用过得api"></a>使用过得api</h4><h5 id="string-substr-pos-n"><a href="#string-substr-pos-n" class="headerlink" title="string.substr(pos, n)"></a>string.substr(pos, n)</h5><p>s.substr(pos, n)<br>返回一个string，包含s中从pos开始的n个字符的拷贝（pos默认值是0，n默认值是s.size()-pos，即不加参数会默认拷贝整个s</p>
+<p>attention: 若pos的值超过了string的大小，则substr函数会抛出一个out_of_range异常；若pos+n的值超过了string的大小，则substr会调整n的值，只拷贝到string的末尾</p>
+<h5 id="string-npos"><a href="#string-npos" class="headerlink" title="string::npos"></a>string::npos</h5><p>如果查找失败会返回string::npos</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(s.find(<span class="string">"substring"</span>) == <span class="built_in">std</span>::<span class="built_in">string</span>::npos)&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>javascript中的prototype</title>
+    <url>/2023/08/27/javascript%E4%B8%AD%E7%9A%84prototype/</url>
+    <content><![CDATA[<h3 id="prototype-原型"><a href="#prototype-原型" class="headerlink" title="prototype 原型"></a>prototype 原型</h3><p>prototype可以理解为一个继承，指向父类；prototype，原型，当我们调用一个对象的属性时，如果对象没有该属性，JavaScript解释器就会从对象的原型对象上去找该属性，如果原型上也没有该属性，那就去找原型的原型，直到最后返回null为止，这种属性查找的方式被称为原型链(prototype chain)</p>
+<p>javascript中的每个对象都有一个隐藏的属性<code>[[Protype]]</code>，可以通过<code>__proto__</code>来获取</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> TP = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.propA = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">this</span>.methodA = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.propA;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">TP.prototype = &#123;</span><br><span class="line">    methodB: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.propA;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> objA = <span class="keyword">new</span> TP();</span><br><span class="line">objA.methodA(); <span class="comment">// 1</span></span><br><span class="line">objA.methodB(); <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<p>控制台中可以看到objA的结构<br><img src="javascript_pt/js02.jpeg" alt="img"></p>
+<p>如果这时再执行</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> objB = <span class="keyword">new</span> TP();</span><br></pre></td></tr></table></figure>
+
+<p>在控制台中可以看到objA和objB是不相等的<br><img src="javascript_pt/js03.jpeg" alt="objA的proto和objB的proto指向同一个对象"></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> ShapeC = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> ShapeD = &#123;</span><br><span class="line">    a() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"A"</span>);</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> shapeC = <span class="keyword">new</span> ShapeC();</span><br><span class="line">shapeC.__proto__ = ShapeD;</span><br><span class="line">shapeC.a(); <span class="comment">// a</span></span><br><span class="line"><span class="built_in">console</span>.log(ShapeC.prototype === shapeC.__proto__); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// shapeC的完整原型链是</span></span><br><span class="line"><span class="comment">// &#123;&#125; ---&gt; &#123;a:Function&#125; ---&gt; Object.prototype ---&gt; null</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="prototype在类构造函数中的实现剖析"><a href="#prototype在类构造函数中的实现剖析" class="headerlink" title="prototype在类构造函数中的实现剖析"></a>prototype在类构造函数中的实现剖析</h3><ol>
+<li>下面是类和构造函数使用原型的例子：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Box</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(value) &#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 在Box.prototype上创建方法</span></span><br><span class="line">    getValue() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 类是构造函数的语法糖，这意味着你仍然可以修改Box.prototype 来改变所有实例的行为。</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 一个构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Box</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用Box() 构造函数创建的所有盒子都将具有的属性</span></span><br><span class="line">Box.prototype.getValue = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.value;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> boxes = [<span class="keyword">new</span> Box(<span class="number">1</span>), <span class="keyword">new</span> Box(<span class="number">2</span>)];</span><br></pre></td></tr></table></figure>
+
+<p>通过构造函数创建的每一个实例都会自动将构造函数的<code>prototype</code>属性作为其<code>[[Prototype]]</code>。即，<code>Object.getPrototypeOf(new Box()) === Box.prototype</code>。
+<code>Constructor.prototype</code>默认具有一个自有属性：<code>constructor</code>，它引用了构造函数本身。即，<code>Box.prototype.constructor === Box</code>。这允许我们在任何实例中访问原始构造函数。</p>
+<p>这里拿cocosCreator来举例:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="keyword">new</span> cc.Node();</span><br><span class="line">m.__proto__.constructor === cc.Node; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">var</span> n = <span class="keyword">new</span> m.constructor(); <span class="comment">// cc.Node</span></span><br><span class="line">m.__proto__ === cc.Node.prototype; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>这里看下ts和js中类的实现代码如下，注意static静态方法和实例方法，在js中的赋值；</li>
+</ol>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> Greeter &#123;</span><br><span class="line">    greeting: <span class="built_in">string</span>;</span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params">message: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>()</span><br><span class="line">        <span class="keyword">this</span>.greeting = message;</span><br><span class="line">    &#125;</span><br><span class="line">    greet() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> sayhi() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hi"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> greeter = <span class="keyword">new</span> Greeter(<span class="string">"world"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>等价于：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> Greeter = <span class="comment">/** @class */</span> (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Greeter</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">        _this = _super.call(<span class="keyword">this</span>) || <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">this</span>.greeting = message;</span><br><span class="line">    &#125;</span><br><span class="line">    Greeter.prototype.greet = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;</span><br><span class="line">    &#125;;</span><br><span class="line">    Greeter.sayhi = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hi"</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> Greeter;</span><br><span class="line">&#125;());</span><br><span class="line"><span class="keyword">var</span> greeter = <span class="keyword">new</span> Greeter(<span class="string">"world"</span>);</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>extends继承</li>
+</ol>
+<p>比如</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> A &#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> B <span class="keyword">extends</span> A &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>javascript解释器会把<code>B.prototype</code>设为<code>A.prototype</code>，
+即，<code>B.prototype.__proto__ = A.prototype</code>。</p>
+<p>使用extends语法，会自动建立下列两种prototype的继承关系：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">* B.prototype.__proto__ === A.prototype; <span class="comment">// true</span></span><br><span class="line">* B.__proto__ === A; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>关于继承的原理，可以看下下面的代码：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> b &#123;</span><br><span class="line">    test() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> d <span class="keyword">extends</span> b &#123; &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> __extends = (<span class="keyword">this</span> &amp;&amp; <span class="keyword">this</span>.__extends) || (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> extendStatics = <span class="function"><span class="keyword">function</span> (<span class="params">d, b</span>) </span>&#123;</span><br><span class="line">        extendStatics = <span class="built_in">Object</span>.setPrototypeOf ||</span><br><span class="line">            (&#123; <span class="attr">__proto__</span>: [] &#125; <span class="keyword">instanceof</span> <span class="built_in">Array</span> &amp;&amp; <span class="function"><span class="keyword">function</span> (<span class="params">d, b</span>) </span>&#123; d.__proto__ = b; &#125;) ||</span><br><span class="line">            <span class="function"><span class="keyword">function</span> (<span class="params">d, b</span>) </span>&#123; <span class="keyword">for</span> (<span class="keyword">var</span> p <span class="keyword">in</span> b) <span class="keyword">if</span> (b.hasOwnProperty(p)) d[p] = b[p]; &#125;;</span><br><span class="line">        <span class="keyword">return</span> extendStatics(d, b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">d, b</span>) </span>&#123;</span><br><span class="line">        extendStatics(d, b);</span><br><span class="line">        <span class="function"><span class="keyword">function</span> __(<span class="params"></span>) </span>&#123; <span class="keyword">this</span>.constructor = d; &#125;</span><br><span class="line">        d.prototype = b === <span class="literal">null</span> ? <span class="built_in">Object</span>.create(b) : (__.prototype = b.prototype, <span class="keyword">new</span> __());</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">var</span> b = <span class="comment">/** @class */</span> (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    b.prototype.test = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;());</span><br><span class="line"><span class="keyword">var</span> d = <span class="comment">/** @class */</span> (<span class="function"><span class="keyword">function</span> (<span class="params">_super</span>) </span>&#123;</span><br><span class="line">    __extends(d, _super);</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">d</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _super !== <span class="literal">null</span> &amp;&amp; _super.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>) || <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> d;</span><br><span class="line">&#125;(b));</span><br></pre></td></tr></table></figure>
+
+<p>参考文献：<br><a href="https://shubo.io/javascript-class/" target="_blank" rel="noopener">JavaScript ES6 Class：深入淺出類別概念與應用</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">继承与原型链</a></p>
+]]></content>
+      <categories>
+        <category>game</category>
+      </categories>
+      <tags>
+        <tag>game</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>multi_lang多语言实现方案</title>
+    <url>/2020/05/26/multi_lang/</url>
+    <content><![CDATA[<p>记录自己在多语言实现中遇到的问题和采用的解决方案，供大家参考和阅读；</p>
+<p>多语言实现方案小结：</p>
+<p>调研：</p>
+<p>ios多语言方案参考：<br>方案一：生成.xliff文件，给到翻译让其翻译成指定的语言；<br>生成.xliff文件的步骤如下，</p>
+<ol>
+<li>选中当前项目目录结构下的工程文件，</li>
+<li>点击 Editor  -&gt;  Export For Locatization.</li>
+</ol>
+<p>android多语言方案参考：<br>直接向他们提供xml文件来修改；</p>
+<h5 id="前期："><a href="#前期：" class="headerlink" title="前期："></a>前期：</h5><p>产品自己来实现中文翻译，发现问题：</p>
+<ol>
+<li>相同的英文，两端翻译不一致，由于是不同的文件，不同的人来翻译会存在差异；</li>
+<li>部分转义字符，比如安卓中的&quot;被直接转义过去了；</li>
+<li>存在部分符号被替换/修改了;</li>
+<li>英文里前面是名字（可变，ios中用%@代替），后面是金币（可变，ios中用%@代替），但是在翻译成中文后，金币在前面，名字在后面；</li>
+<li>部分富文本被裁剪了，不利于翻译；</li>
+</ol>
+<h6 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h6><ol>
+<li>考虑到如果将两端的相同部分的英文合并到一起的话，是不是就可以减少一些这样的误差；摆在面前的就是如何将两端合并成一个文件，并便于后期维护管理；<br>很自然的想到excel，但是excel并不能很好管理，不支持版本控制，退而求其次，使用csv来试试；于是就需要实现两个方向；<ol>
+<li>将.string文件转换成csv；</li>
+<li>将.xml文件转换成csv；</li>
+</ol>
+</li>
+</ol>
+<p>基于自己目前的实力，选用了python来完成，并且python也提供了csv和xml对应的api，至于.string文件中的键值对就使用正则来扣取出来；</p>
+<ol start="2">
+<li><p>通过将xml转换成csv的时候，这种特殊符号被转义就已经体现出来了；关于这点，查看了python中的相关api，没有找到解决的办法；<br>于是考虑通过将整个xml文件读取出来，然后通过正则来扣取出相关带有特殊符号的键值对，最后将具有特殊符号的键值对替换到csv文件中；</p>
+</li>
+<li><p>这种不是由于研发操作导致的，在提供给翻译处理的时候，就提供一份清单，告知他们那些字符具有特殊含义，不要随意改动；</p>
+</li>
+<li><p>android端，比较好处理通过<code>%1$s，%2$s</code>来区分，ios这边，我考虑的是通过<code>%1@,%2@</code>来区分，然后针对不同的结果进行处理；<br>这是我的处理方式，代码如下：</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 其实将%1@，%2@替换成对应的参数；</span></span><br><span class="line">+ (<span class="built_in">NSString</span> *)formatUnsteadyParams:(<span class="built_in">NSString</span> *)format, ...&#123;</span><br><span class="line">    va_list p;</span><br><span class="line">    <span class="built_in">NSMutableArray</span> *array = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">    va_start(p, format);</span><br><span class="line">    <span class="keyword">id</span> arg;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">YES</span>)&#123;</span><br><span class="line">        arg = va_arg(p, <span class="keyword">id</span>);</span><br><span class="line">        <span class="keyword">if</span> (!arg) &#123;<span class="keyword">break</span>;&#125;</span><br><span class="line">        [array addObject:arg];</span><br><span class="line">    &#125;</span><br><span class="line">    va_end(p);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= array.count; i++) &#123;</span><br><span class="line">        <span class="built_in">NSString</span> *key = [[<span class="string">@"%"</span> stringByAppendingFormat:<span class="string">@"%d"</span>, i] stringByAppendingString:<span class="string">@"@"</span>];</span><br><span class="line">        <span class="keyword">id</span> v = array[i<span class="number">-1</span>];</span><br><span class="line">        format = [format stringByReplacingOccurrencesOfString:key withString:[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>, v]];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> format;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>至于富文本，我考虑的是通过html文本来实现，这样就可以避免因为裁剪而导致的文本不好翻译；</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">+ (<span class="built_in">NSMutableAttributedString</span> *)htmlString:(<span class="built_in">NSString</span> *)htmlString&#123;</span><br><span class="line">    <span class="keyword">return</span> [[<span class="built_in">NSMutableAttributedString</span> alloc] initWithData:[htmlString dataUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>] options:@&#123;<span class="built_in">NSDocumentTypeDocumentAttribute</span>:<span class="built_in">NSHTMLTextDocumentType</span>,<span class="built_in">NSCharacterEncodingDocumentAttribute</span>:@(<span class="built_in">NSUTF8StringEncoding</span>)&#125; documentAttributes:<span class="literal">nil</span> error:<span class="literal">nil</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>至于html如下；</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;html&gt;&lt;head&gt;&lt;style&gt; .span-light&#123;color: #7ba1aa; font-size: 14px;&#125;&lt;/style&gt;&lt;/head&gt;&lt;body style=\&quot;color: #557479; font-size: 14px; font-family:Helvetica\&quot;&gt;You will now receive a verification email from us. If it&apos;s not in your inbox, please check your&lt;span class=\&quot;span-light\&quot;&quot;&gt; junk mail&lt;/span&gt; or&lt;span class=\&quot;span-light\&quot;&gt; spam folder&lt;/span&gt; or&lt;span class=\&quot;span-light\&quot;&gt; whitelist Pokio&apos;s email address.&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="中期"><a href="#中期" class="headerlink" title="中期"></a>中期</h5><p>前期问题都有办法解决了，版本比对也能够做到了，接下来就是考虑后期维护的问题了；</p>
+<p>如何做到增量更新，我们不可能在开发的时候就去修改csv，那么就是我们一边在开发需求，在开发完需求后再处理csv了；<br>于是，我考虑将迭代后的xml和迭代后的.string文件，和我们已经在版本管理中的csv做个对比，如果csv中没有对应的键值对，<br>就将新的键值对添加进来，或者输出给到产品来翻译；</p>
+<h5 id="后期"><a href="#后期" class="headerlink" title="后期"></a>后期</h5><p>随着支持语言的版本越来越多，脚本已经不再能满足单个的语言了，很多逻辑都需要持续维护了，<br>比如脚本之前将ios，android端相同键值对合并的处理方式，<br>因为之前只存在，英文，中文，俄文，那么我可以以英文和中文为参考点，来判断是否能够将ios，android相同的键值对合并到一起；<br>但是增加新的语言，比如西班牙语后，有些相同的地方（相同英文，相同中文），对应的西班牙语，会存在<code>&quot;</code>号，这个对android是没有影响的，<br>转换成xml即可，但是对ios来说是需要添加<code>\&quot;</code>，那么这种就不能合并到一起了；<br>关于这点，我确实没有想到什么合适的方法，暂时就每种语言提供一份csv；</p>
+<p>维护的话，就变成了维护多份不同语言的csv，只是不需要区分ios和android；</p>
+]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
+      <tags>
+        <tag>ios</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>once事件监听剖析</title>
+    <url>/2023/09/05/once%E6%97%B6%E9%97%B4%E7%9B%91%E5%90%AC%E5%89%96%E6%9E%90/</url>
+    <content><![CDATA[<p>对于once绑定的监听事件，cocos会将其进行封装，封装为CallbackInfo对象，然后放入CallbackList中的列表属性里，最终在CallbacksInvoker中的emit方法中进行调用；接下来我将依次解释这几个对象；</p>
+<h3 id="CallbackInfo"><a href="#CallbackInfo" class="headerlink" title="CallbackInfo"></a>CallbackInfo</h3><p>CallbackInfo，可以理解为对绑定事件的封装，封装了一个事件的三个参数：</p>
+<ul>
+<li>target，事件执行者，</li>
+<li>callback，事件，</li>
+<li>once，是否是一次事件；<br>callbackInfoPool对象缓存池，用来缓存CallbackInfo对象，提供了取和存的作用；</li>
+</ul>
+<h3 id="CallbackList"><a href="#CallbackList" class="headerlink" title="CallbackList"></a>CallbackList</h3><p>CallbackList对象，单个事件名（type）指定要执行的所有的事件：</p>
+<ul>
+<li>callbackInfos，列表，里面存储了CallbackInfo对象，</li>
+<li>isInvoking，当发生emit，callbackInfos中的事件遍历执行时为true，遍历完后为false；</li>
+<li>containCanceled，<strong>对于数组callbackInfos在遍历时，为了不影响遍历，会将once事件执行完后，数组对应下标置空，此时containCanceled就为true，在遍历执行完后，会执行purgeCanceled，将数组中的null对象清空掉；</strong><br>CallbackList提供了一些方法：<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** * 从列表中移除与指定目标相同回调函数的事件。 */</span></span><br><span class="line">proto.removeByCallback = <span class="function"><span class="keyword">function</span> (<span class="params">cb</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * !#zh * 从列表中移除与指定目标相同调用者的事件。 * @param target */</span></span><br><span class="line">proto.removeByTarget = <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * 移除指定编号事件。 * */</span></span><br><span class="line">proto.cancel = <span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * !#zh * 注销所有事件。 */</span></span><br><span class="line">proto.cancelAll = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">// filter all removed callbacks and compact array</span></span><br><span class="line">proto.purgeCanceled = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** 清空所有的事件 */</span></span><br><span class="line">proto.clear = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>cocos提供了自己定义的对象缓存池，创建的时候可以传入清空对象属性的方法，上面提到的callbackInfoPool和callbackListPool都是基于此创建的缓存池；</p>
+<p>js.Pool，长度固定的对象缓存池，可以用来缓存各种对象类型。使用示例</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> js = <span class="built_in">require</span>(<span class="string">'./js'</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Detail</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.uuidList = [];</span><br><span class="line">&#125;;</span><br><span class="line">Detail.prototype.reset = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.uuidList.length = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">/** 创建对象缓存池，</span></span><br><span class="line"><span class="comment"> * 第一个参数是在pool执行put时调用的方法，可以理解为清空对象本身的数据</span></span><br><span class="line"><span class="comment"> * 第二个参数是指定对象缓存池数组的长度 */</span></span><br><span class="line">Detail.pool = <span class="keyword">new</span> js.Pool(<span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    obj.reset();</span><br><span class="line">&#125;, <span class="number">5</span>);</span><br><span class="line"><span class="comment">/** 从对象缓存池中获取对象，方法中的this指代Detail.pool，如果没有就新建*/</span></span><br><span class="line">Detail.pool.get = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._get() || <span class="keyword">new</span> Detail();</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> detail = Detail.pool.get();</span><br><span class="line">...</span><br><span class="line">Detail.pool.put(detail);</span><br></pre></td></tr></table></figure>
+
+<h3 id="CallbacksInvoker，核心类"><a href="#CallbacksInvoker，核心类" class="headerlink" title="CallbacksInvoker，核心类"></a>CallbacksInvoker，核心类</h3><p>CallbacksInvoker对象，_callbackTable，map对象，存储着每个事件名key对应绑定的所有事件；</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CallbacksInvoker</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._callbackTable = js.createMap(<span class="literal">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>核心方法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** * !#zh * 事件添加管理，在此方法中将事件封装，并存储在callbackList的属性列表中 */</span></span><br><span class="line">proto.on = <span class="function"><span class="keyword">function</span> (<span class="params">key, callback, target, once</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * * !#zh * 检查指定事件是否已注册回调。 */</span></span><br><span class="line">proto.hasEventListener = <span class="function"><span class="keyword">function</span> (<span class="params">key, callback, target</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * !#zh * 移除在特定事件类型中注册的所有回调或在某个目标中注册的所有回调。</span></span><br><span class="line"><span class="comment"> * @param &#123;String|Object&#125; keyOrTarget - The event key to be removed or the target to be removed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">proto.removeAll = <span class="function"><span class="keyword">function</span> (<span class="params">keyOrTarget</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * !#zh * 删除之前与同类型，回调，目标注册的回调。 */</span></span><br><span class="line">proto.off = <span class="function"><span class="keyword">function</span> (<span class="params">key, callback, target</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * !#zh * 通过事件名发送自定义事件</span></span><br><span class="line"><span class="comment"> * eventTarget.emit('fire', event);</span></span><br><span class="line"><span class="comment"> * eventTarget.emit('fire', message, emitter);</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">proto.emit = <span class="function"><span class="keyword">function</span> (<span class="params">key, arg1, arg2, arg3, arg4, arg5</span>) </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="EventTarget"><a href="#EventTarget" class="headerlink" title="EventTarget"></a>EventTarget</h3><p>继承自CallbacksInvoker，重写了on，off，等方法，主要是在父类方法的基础上扩展功能</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** * 注册事件目标的特定事件类型回调。这种类型的事件应该被 `emit` 触发。</span></span><br><span class="line"><span class="comment"> * 这里将父类的on方法赋值给__on，在方法内部通过__on方法来调用父类的方法；</span></span><br><span class="line"><span class="comment"> * 内部实现了防止重复添加监听事件；</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">proto.__on = proto.on;</span><br><span class="line">proto.on = <span class="function"><span class="keyword">function</span> (<span class="params">type, callback, target, once</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * 删除之前用同类型，回调，目标或 useCapture 注册的事件监听器，如果只传递 type，将会删除 type 类型的所有事件监听器。</span></span><br><span class="line"><span class="comment"> * 内部实现了如果callback为null，将清空type注册的所有事件；</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">proto.__off = proto.off;</span><br><span class="line">proto.off = <span class="function"><span class="keyword">function</span> (<span class="params">type, callback, target</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/* * 通过事件对象派发事件，给方法换个名 */</span></span><br><span class="line">proto.dispatchEvent = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.emit(event.type, event);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>game</category>
+      </categories>
+      <tags>
+        <tag>game</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gradle</title>
+    <url>/2020/08/17/gradle-study/</url>
+    <content><![CDATA[<h4 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h4><p>Gradle是一个基于apache ant和apache maven概念的项目自动化构建工具，它使用一种基于groovy的特定领域语言来声明项目设置，而不是传统的xml。gradle就是工程的管理，帮我们做了依赖，打包，部署，发布，各种渠道的差异管理等工作。</p>
+<h5 id="gradle优势："><a href="#gradle优势：" class="headerlink" title="gradle优势："></a>gradle优势：</h5><ol>
+<li>一款最新的，功能最强大的构建工具</li>
+<li>使用程序代替传统的xml配置，项目构建更灵活</li>
+<li>丰富的第三方插件，让你随心所欲使用</li>
+<li>maven，ant能做的，gradle都能做，但gradle能做的，maven，ant不一定能做</li>
+</ol>
+<h5 id="dsl"><a href="#dsl" class="headerlink" title="dsl"></a>dsl</h5><p>全称domain specific language，即特定领域语言</p>
+<p>有哪些常见的dsl语言<br>xml，html</p>
+<p>Dsl与通用编程语言的区别<br>求专不求全，解决特定问题</p>
+<h5 id="groovy"><a href="#groovy" class="headerlink" title="groovy"></a>groovy</h5><p>groovy介绍</p>
+<ol>
+<li>一种基于jvm的敏捷开发语言</li>
+<li>结合了python，ruby和smalltalk的许多强大的特性</li>
+<li>groovy可以与java完美结合，而且可以使用java所有的库</li>
+</ol>
+<p>groovy特性</p>
+<ol>
+<li>语法上支持动态类型，闭包等新一代语言特性</li>
+<li>无缝集成所有已经存在的java类库</li>
+<li>既支持面向对象编程也支持面向过程编程</li>
+</ol>
+<p>groovy优势</p>
+<ol>
+<li>一种更加敏捷的编程语言</li>
+<li>入门非常容易，且功能非常强大</li>
+<li>既可以作为编程语言也可以作为脚本语言</li>
+</ol>
+]]></content>
+      <categories>
+        <category>gradle</category>
+      </categories>
+      <tags>
+        <tag>gradle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ios_signin</title>
+    <url>/2020/09/17/ios_signin/</url>
+    <content><![CDATA[<p>情景：现在的app如果接入了第三方登录，那苹果那边，它会要求你接入Sign In With Apple；鉴于此，在实现后，这里做一些总结，方便自己今后来查看；搬砖自<a href="https://juejin.im/post/6844903904820330504" target="_blank" rel="noopener">文献地址</a></p>
+<p>要给自己的app添加支持apple账号登录，大概分为三步骤；</p>
+<h5 id="在开发者账号中添加支持Sign-In-with-Apple的功能；"><a href="#在开发者账号中添加支持Sign-In-with-Apple的功能；" class="headerlink" title="在开发者账号中添加支持Sign In with Apple的功能；"></a>在开发者账号中添加支持Sign In with Apple的功能；</h5><ol>
+<li><p>进入Certificates选项，然后找到Capabilities后，勾选中Sign In With Apple；</p>
+</li>
+<li><p>进入Certificates选项，然后点击Identifiers旁边左上角的+号，创建Services IDs；(单击configure按钮，将显示一个Web Authentication Configuration面板，可以设置使用此服务的域名Web Domain，最后，添加Return URLs，可以添加多个)</p>
+</li>
+<li><p>进入Certificates选项，然后点击keys，创建秘钥，需要勾选中Sign In With Apple；</p>
+</li>
+</ol>
+<h5 id="使用刚下载下来的私钥创建client-secret"><a href="#使用刚下载下来的私钥创建client-secret" class="headerlink" title="使用刚下载下来的私钥创建client_secret"></a>使用刚下载下来的私钥创建client_secret</h5><p>客户端秘钥必须是JWT，根据apple文档，我们需要使用带有 P-256 曲线和 SHA-256 哈希算法的椭圆曲线数字签名算法（ECDSA）来加密令牌。完成这项工作的一个简单方法是使用 <a href="https://github.com/jwt/ruby-jwt" target="_blank" rel="noopener">ruby-jwt</a>。首先检查你是否已经有 Ruby 设置，如果没有，你可以从这里 <a href="https://www.ruby-lang.org/en/downloads/" target="_blank" rel="noopener">Ruby</a> 获得它。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">--Header--</span><br><span class="line">alg - The encryption algorithm used to encrypt the token. This will be ES256.</span><br><span class="line">kid - The 10 charachter Key ID of the private key you create. You can get it from </span><br><span class="line">Certificates, Identifiers &amp; Profiles &gt; Keys &gt; (click on the key you created).</span><br><span class="line">--Payload--</span><br><span class="line">iss - 10 character Team ID give to you. You can find it here https://developer.apple.com/account/#/membership</span><br><span class="line">iat - Indicates the time at which the token was generated, in terms of the number of seconds since Epoch, in UTC.</span><br><span class="line">exp - Indicates the expiry time of the token expiration, in terms of the number of seconds since Epoch, in UTC. Accroding to the docs the value must not be greater than 15777000 (6 months in seconds) from the Current Unix Time on the server.</span><br><span class="line">aud - The value of which identifies the recipient the JWT is intended for. Since this token is meant for Apple, use https://appleid.apple.com.</span><br><span class="line">sub - The value of which identifies the principal that is the subject of the JWT. Use the same value as client_id as this token is meant for your application.</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>设置 Ruby 后运行命令 sudo gem install jwt 来设置 ruby-jwt。添加必要的详细信息并将以下内容保存为 secret_gen.rb</li>
+</ol>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">"jwt"</span></span><br><span class="line"></span><br><span class="line">key_file = <span class="string">"Path to the private key"</span></span><br><span class="line">team_id = <span class="string">"Your Team ID"</span></span><br><span class="line">client_id = <span class="string">"The Service ID of the service you created"</span></span><br><span class="line">key_id = <span class="string">"The Key ID of the private key"</span></span><br><span class="line">validity_period = <span class="number">180</span> <span class="comment"># In days. Max 180 (6 months) according to Apple docs.</span></span><br><span class="line"></span><br><span class="line">private_key = OpenSSL::PKey::EC.new IO.read key_file</span><br><span class="line"></span><br><span class="line">token = JWT.encode(</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="symbol">iss:</span> team_id,</span><br><span class="line">		<span class="symbol">iat:</span> Time.now.to_i,</span><br><span class="line">		<span class="symbol">exp:</span> Time.now.to_i + <span class="number">86400</span> * validity_period,</span><br><span class="line">		<span class="symbol">aud:</span> <span class="string">"https://appleid.apple.com"</span>,</span><br><span class="line">		<span class="symbol">sub:</span> client_id</span><br><span class="line">	&#125;,</span><br><span class="line">	private_key,</span><br><span class="line">	<span class="string">"ES256"</span>,</span><br><span class="line">	header_fields=</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="symbol">kid:</span> key_id </span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line">puts token</span><br></pre></td></tr></table></figure>
+
+
+<ol start="2">
+<li>您可以使用命令 ruby secret_gen.rb 从终端运行 secret_gen.rb 文件。它将为您提供 client_secret。</li>
+</ol>
+<h5 id="验证是否配置成功"><a href="#验证是否配置成功" class="headerlink" title="验证是否配置成功"></a>验证是否配置成功</h5><p>添加return URL和client_id并将其粘贴到浏览器中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https://appleid.apple.com/auth/authorize?response_type=code&amp;redirect_uri=`&lt;redirect_uri&gt;`&amp;client_id=`&lt;client_id&gt;`</span><br></pre></td></tr></table></figure>
+
+<p>在使用上面代码执行所获得的 code，之前使用的 redirect_uri 和 client_id 以及通过运行 secret_gen.rb 获得的 client_secret 替换以下命令的内容，并在终端中运行以下 cURL 命令。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl -X POST https://appleid.apple.com/auth/token -d 'grant_type=authorization_code&amp;code=`&lt;code&gt;`&amp;redirect_uri=`&lt;redirect_uri&gt;`&amp;client_id=`&lt;client_id&gt;`&amp;client_secret=`&lt;client_secret&gt;`'</span><br></pre></td></tr></table></figure>
+
+<p>参考文献：</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/8190f25eaa14" target="_blank" rel="noopener">Sign in with Apple登录详解</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ios</category>
+      </categories>
+      <tags>
+        <tag>ios</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SDWebImage实现原理探究</title>
+    <url>/2020/08/14/%E8%A7%A3%E8%AF%BBSDWebImage/</url>
+    <content><![CDATA[<p>在很早之前已经知道了sdwebImage的实现原理，（第一步从缓存中取图片，第二步从磁盘中取图片，第三步从服务器端获取图片）；但对于里面的细节部分并没有过多了解，于是乘着这段时间对sdwebImage做了一下了解；</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>SDWebImage中的缓存使用了NSCache</p>
+<h4 id="官方说明"><a href="#官方说明" class="headerlink" title="官方说明"></a>官方说明</h4><p>NSCache，一个可变集合，用于临时存储在资源不足时容易被回收的临时键值对；</p>
+<p>缓存对象与其他可变集合有以下几点不同：</p>
+<ul>
+<li>NSCache类合并了各种自动回收策略，以确保缓存不会占用太多的系统内存。如果其他应用程序需要内存，这些策略将从缓存中删除一些项，从而最小化内存占用。</li>
+<li>您可以从不同的线程在缓存中添加、删除和查询项，而不必自己锁定缓存。</li>
+<li>与NSMutableDictionary对象不同，缓存不会复制放入其中的关键对象。</li>
+</ul>
+<p>具有子组件的对象在不使用时可以被丢弃，可以采用NSDiscardableContent协议来改善缓存回收行为。默认情况下，缓存中的nsdiscardableconcontent对象在其内容被丢弃时将被自动删除，尽管这种自动删除策略可以更改。如果NSDiscardableContent对象被放入缓存中，缓存会在它被移除时调用discardcontentpossible。</p>
+<h4 id="SDWebImage中的使用"><a href="#SDWebImage中的使用" class="headerlink" title="SDWebImage中的使用"></a>SDWebImage中的使用</h4><p>在SDWebImage中的使用，首先这里新建一个类AutoPurgeCache继承自NSCache，并在这个类中监听了内存告警的通知(UIApplicationDidReceiveMemoryWarningNotification)，收到通知就移除掉存储的所有对象；</p>
+<p>然后在调用的类SDImageCache中，再次监听了内存告警的通知，收到通知进行移除所有对象；</p>
+<p>足可见，对于NSCache的使用，我们一定是需要注意到内存警告的情况的；至于其他的api都进行了一下封装，比如设置缓存最大数，看官方说明，这个并不是绝对的，就是有可能它存储的对象大于你所设置的缓存最大值，这也就解释了为什么我们需要监听告警的通知了；</p>
+<h3 id="磁盘中数据"><a href="#磁盘中数据" class="headerlink" title="磁盘中数据"></a>磁盘中数据</h3><p>为了保证文件名的唯一性，这里采用了MD5对链接加密；</p>
+<p>在读取文件这个过程中，考虑到了异步操作，SDWebImage中是在自己创建的一个串行队列中执行存取操作，同时为了去掉block的强引用，这里使用了自动释放池（@autoreleasepool）；</p>
+<p>这里可以注意到不同类型图片的数据是如何加载为UIImage的，特别是gif文件；</p>
+<ol>
+<li>首先通过数据的第一个字符来判断当前的类型，</li>
+<li>根据类型来处理拿到的NSData数据；</li>
+</ol>
+<p>判断类型的代码：</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">+ (<span class="built_in">NSString</span> *)sd_contentTypeForImageData:(<span class="built_in">NSData</span> *)data &#123;</span><br><span class="line">    uint8_t c;</span><br><span class="line">    [data getBytes:&amp;c length:<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">switch</span> (c) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0xFF</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">@"image/jpeg"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x89</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">@"image/png"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x47</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">@"image/gif"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x49</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x4D</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">@"image/tiff"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x52</span>:</span><br><span class="line">            <span class="comment">// R as RIFF for WEBP</span></span><br><span class="line">            <span class="keyword">if</span> ([data length] &lt; <span class="number">12</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="built_in">NSString</span> *testString = [[<span class="built_in">NSString</span> alloc] initWithData:[data subdataWithRange:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, <span class="number">12</span>)] encoding:<span class="built_in">NSASCIIStringEncoding</span>];</span><br><span class="line">            <span class="keyword">if</span> ([testString hasPrefix:<span class="string">@"RIFF"</span>] &amp;&amp; [testString hasSuffix:<span class="string">@"WEBP"</span>]) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">@"image/webp"</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据类型来处理对应的数据</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">+ (<span class="built_in">UIImage</span> *)sd_imageWithData:(<span class="built_in">NSData</span> *)data &#123;</span><br><span class="line">    <span class="keyword">if</span> (!data) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIImage</span> *image;</span><br><span class="line">    <span class="built_in">NSString</span> *imageContentType = [<span class="built_in">NSData</span> sd_contentTypeForImageData:data];</span><br><span class="line">    <span class="keyword">if</span> ([imageContentType isEqualToString:<span class="string">@"image/gif"</span>]) &#123;</span><br><span class="line">        image = [<span class="built_in">UIImage</span> sd_animatedGIFWithData:data];</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#ifdef SD_WEBP</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ([imageContentType isEqualToString:<span class="string">@"image/webp"</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        image = [<span class="built_in">UIImage</span> sd_imageWithWebPData:data];</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#endif</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        image = [[<span class="built_in">UIImage</span> alloc] initWithData:data];</span><br><span class="line">        <span class="built_in">UIImageOrientation</span> orientation = [<span class="keyword">self</span> sd_imageOrientationFromImageData:data];</span><br><span class="line">        <span class="keyword">if</span> (orientation != <span class="built_in">UIImageOrientationUp</span>) &#123;</span><br><span class="line">            image = [<span class="built_in">UIImage</span> imageWithCGImage:image.CGImage</span><br><span class="line">                                        scale:image.scale</span><br><span class="line">                                  orientation:orientation];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> image;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在执行异步操作的时候，为了保证逻辑的健全性，需要考虑到在某些时候异步中的操作需要做撤销return处理，比如在SDWebImage中，这里就创建了一个NSOperation，在异步调用的时候，先判断这个operation是否cancelled，如果被取消了则可以直接return，不再执行后面的逻辑；</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="built_in">NSOperation</span> *operation = [<span class="built_in">NSOperation</span> new];</span><br><span class="line"><span class="comment">// 异步从磁盘中拿取到图片资源</span></span><br><span class="line"><span class="built_in">dispatch_async</span>(<span class="keyword">self</span>.ioQueue, ^&#123;</span><br><span class="line">    <span class="keyword">if</span> (operation.isCancelled) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">        <span class="built_in">UIImage</span> *diskImage = [<span class="keyword">self</span> diskImageForKey:key];</span><br><span class="line">        <span class="keyword">if</span> (diskImage &amp;&amp; <span class="keyword">self</span>.shouldCacheImagesInMemory) &#123;</span><br><span class="line">            <span class="built_in">NSUInteger</span> cost = SDCacheCostForImage(diskImage);</span><br><span class="line">            [<span class="keyword">self</span>.memCache setObject:diskImage forKey:key cost:cost];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            doneBlock(diskImage, SDImageCacheTypeDisk);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> operation;</span><br></pre></td></tr></table></figure>
+
+<h3 id="从服务器拉取数据"><a href="#从服务器拉取数据" class="headerlink" title="从服务器拉取数据"></a>从服务器拉取数据</h3>]]></content>
       <categories>
         <category>ios</category>
       </categories>

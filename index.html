@@ -281,6 +281,1149 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/09/05/once时间监听剖析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2023/09/05/once时间监听剖析/" itemprop="url">once事件监听剖析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-09-05T13:17:29+08:00">
+                2023-09-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/game/" itemprop="url" rel="index">
+                    <span itemprop="name">game</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2023/09/05/once时间监听剖析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2023/09/05/once时间监听剖析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2023/09/05/once时间监听剖析/" class="leancloud_visitors" data-flag-title="once事件监听剖析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>对于once绑定的监听事件，cocos会将其进行封装，封装为CallbackInfo对象，然后放入CallbackList中的列表属性里，最终在CallbacksInvoker中的emit方法中进行调用；接下来我将依次解释这几个对象；</p>
+<h3 id="CallbackInfo"><a href="#CallbackInfo" class="headerlink" title="CallbackInfo"></a>CallbackInfo</h3><p>CallbackInfo，可以理解为对绑定事件的封装，封装了一个事件的三个参数：</p>
+<ul>
+<li>target，事件执行者，</li>
+<li>callback，事件，</li>
+<li>once，是否是一次事件；<br>callbackInfoPool对象缓存池，用来缓存CallbackInfo对象，提供了取和存的作用；</li>
+</ul>
+<h3 id="CallbackList"><a href="#CallbackList" class="headerlink" title="CallbackList"></a>CallbackList</h3><p>CallbackList对象，单个事件名（type）指定要执行的所有的事件：</p>
+<ul>
+<li>callbackInfos，列表，里面存储了CallbackInfo对象，</li>
+<li>isInvoking，当发生emit，callbackInfos中的事件遍历执行时为true，遍历完后为false；</li>
+<li>containCanceled，<strong>对于数组callbackInfos在遍历时，为了不影响遍历，会将once事件执行完后，数组对应下标置空，此时containCanceled就为true，在遍历执行完后，会执行purgeCanceled，将数组中的null对象清空掉；</strong><br>CallbackList提供了一些方法：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** * 从列表中移除与指定目标相同回调函数的事件。 */</span></span><br><span class="line">proto.removeByCallback = <span class="function"><span class="keyword">function</span> (<span class="params">cb</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * !#zh * 从列表中移除与指定目标相同调用者的事件。 * @param target */</span></span><br><span class="line">proto.removeByTarget = <span class="function"><span class="keyword">function</span> (<span class="params">target</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * 移除指定编号事件。 * */</span></span><br><span class="line">proto.cancel = <span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * !#zh * 注销所有事件。 */</span></span><br><span class="line">proto.cancelAll = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">// filter all removed callbacks and compact array</span></span><br><span class="line">proto.purgeCanceled = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** 清空所有的事件 */</span></span><br><span class="line">proto.clear = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>cocos提供了自己定义的对象缓存池，创建的时候可以传入清空对象属性的方法，上面提到的callbackInfoPool和callbackListPool都是基于此创建的缓存池；</p>
+<p>js.Pool，长度固定的对象缓存池，可以用来缓存各种对象类型。使用示例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> js = <span class="built_in">require</span>(<span class="string">'./js'</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Detail</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.uuidList = [];</span><br><span class="line">&#125;;</span><br><span class="line">Detail.prototype.reset = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.uuidList.length = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">/** 创建对象缓存池，</span></span><br><span class="line"><span class="comment"> * 第一个参数是在pool执行put时调用的方法，可以理解为清空对象本身的数据</span></span><br><span class="line"><span class="comment"> * 第二个参数是指定对象缓存池数组的长度 */</span></span><br><span class="line">Detail.pool = <span class="keyword">new</span> js.Pool(<span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    obj.reset();</span><br><span class="line">&#125;, <span class="number">5</span>);</span><br><span class="line"><span class="comment">/** 从对象缓存池中获取对象，方法中的this指代Detail.pool，如果没有就新建*/</span></span><br><span class="line">Detail.pool.get = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._get() || <span class="keyword">new</span> Detail();</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> detail = Detail.pool.get();</span><br><span class="line">...</span><br><span class="line">Detail.pool.put(detail);</span><br></pre></td></tr></table></figure>
+
+<h3 id="CallbacksInvoker，核心类"><a href="#CallbacksInvoker，核心类" class="headerlink" title="CallbacksInvoker，核心类"></a>CallbacksInvoker，核心类</h3><p>CallbacksInvoker对象，_callbackTable，map对象，存储着每个事件名key对应绑定的所有事件；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CallbacksInvoker</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._callbackTable = js.createMap(<span class="literal">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>核心方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** * !#zh * 事件添加管理，在此方法中将事件封装，并存储在callbackList的属性列表中 */</span></span><br><span class="line">proto.on = <span class="function"><span class="keyword">function</span> (<span class="params">key, callback, target, once</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * * !#zh * 检查指定事件是否已注册回调。 */</span></span><br><span class="line">proto.hasEventListener = <span class="function"><span class="keyword">function</span> (<span class="params">key, callback, target</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * !#zh * 移除在特定事件类型中注册的所有回调或在某个目标中注册的所有回调。</span></span><br><span class="line"><span class="comment"> * @param &#123;String|Object&#125; keyOrTarget - The event key to be removed or the target to be removed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">proto.removeAll = <span class="function"><span class="keyword">function</span> (<span class="params">keyOrTarget</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * !#zh * 删除之前与同类型，回调，目标注册的回调。 */</span></span><br><span class="line">proto.off = <span class="function"><span class="keyword">function</span> (<span class="params">key, callback, target</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * !#zh * 通过事件名发送自定义事件</span></span><br><span class="line"><span class="comment"> * eventTarget.emit('fire', event);</span></span><br><span class="line"><span class="comment"> * eventTarget.emit('fire', message, emitter);</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">proto.emit = <span class="function"><span class="keyword">function</span> (<span class="params">key, arg1, arg2, arg3, arg4, arg5</span>) </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="EventTarget"><a href="#EventTarget" class="headerlink" title="EventTarget"></a>EventTarget</h3><p>继承自CallbacksInvoker，重写了on，off，等方法，主要是在父类方法的基础上扩展功能</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** * 注册事件目标的特定事件类型回调。这种类型的事件应该被 `emit` 触发。</span></span><br><span class="line"><span class="comment"> * 这里将父类的on方法赋值给__on，在方法内部通过__on方法来调用父类的方法；</span></span><br><span class="line"><span class="comment"> * 内部实现了防止重复添加监听事件；</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">proto.__on = proto.on;</span><br><span class="line">proto.on = <span class="function"><span class="keyword">function</span> (<span class="params">type, callback, target, once</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/** * 删除之前用同类型，回调，目标或 useCapture 注册的事件监听器，如果只传递 type，将会删除 type 类型的所有事件监听器。</span></span><br><span class="line"><span class="comment"> * 内部实现了如果callback为null，将清空type注册的所有事件；</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">proto.__off = proto.off;</span><br><span class="line">proto.off = <span class="function"><span class="keyword">function</span> (<span class="params">type, callback, target</span>) </span>&#123;...&#125;</span><br><span class="line"><span class="comment">/* * 通过事件对象派发事件，给方法换个名 */</span></span><br><span class="line">proto.dispatchEvent = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.emit(event.type, event);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/08/27/javascript中的prototype/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2023/08/27/javascript中的prototype/" itemprop="url">javascript中的prototype</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-08-27T18:02:29+08:00">
+                2023-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/game/" itemprop="url" rel="index">
+                    <span itemprop="name">game</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2023/08/27/javascript中的prototype/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2023/08/27/javascript中的prototype/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2023/08/27/javascript中的prototype/" class="leancloud_visitors" data-flag-title="javascript中的prototype">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="prototype-原型"><a href="#prototype-原型" class="headerlink" title="prototype 原型"></a>prototype 原型</h3><p>prototype可以理解为一个继承，指向父类；prototype，原型，当我们调用一个对象的属性时，如果对象没有该属性，JavaScript解释器就会从对象的原型对象上去找该属性，如果原型上也没有该属性，那就去找原型的原型，直到最后返回null为止，这种属性查找的方式被称为原型链(prototype chain)</p>
+<p>javascript中的每个对象都有一个隐藏的属性<code>[[Protype]]</code>，可以通过<code>__proto__</code>来获取</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> TP = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.propA = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">this</span>.methodA = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.propA;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">TP.prototype = &#123;</span><br><span class="line">    methodB: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.propA;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> objA = <span class="keyword">new</span> TP();</span><br><span class="line">objA.methodA(); <span class="comment">// 1</span></span><br><span class="line">objA.methodB(); <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<p>控制台中可以看到objA的结构<br><img src="javascript_pt/js02.jpeg" alt="img"></p>
+<p>如果这时再执行</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> objB = <span class="keyword">new</span> TP();</span><br></pre></td></tr></table></figure>
+
+<p>在控制台中可以看到objA和objB是不相等的<br><img src="javascript_pt/js03.jpeg" alt="objA的proto和objB的proto指向同一个对象"></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ShapeC = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> ShapeD = &#123;</span><br><span class="line">    a() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"A"</span>);</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> shapeC = <span class="keyword">new</span> ShapeC();</span><br><span class="line">shapeC.__proto__ = ShapeD;</span><br><span class="line">shapeC.a(); <span class="comment">// a</span></span><br><span class="line"><span class="built_in">console</span>.log(ShapeC.prototype === shapeC.__proto__); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// shapeC的完整原型链是</span></span><br><span class="line"><span class="comment">// &#123;&#125; ---&gt; &#123;a:Function&#125; ---&gt; Object.prototype ---&gt; null</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="prototype在类构造函数中的实现剖析"><a href="#prototype在类构造函数中的实现剖析" class="headerlink" title="prototype在类构造函数中的实现剖析"></a>prototype在类构造函数中的实现剖析</h3><ol>
+<li>下面是类和构造函数使用原型的例子：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Box</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(value) &#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 在Box.prototype上创建方法</span></span><br><span class="line">    getValue() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 类是构造函数的语法糖，这意味着你仍然可以修改Box.prototype 来改变所有实例的行为。</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Box</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用Box() 构造函数创建的所有盒子都将具有的属性</span></span><br><span class="line">Box.prototype.getValue = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.value;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> boxes = [<span class="keyword">new</span> Box(<span class="number">1</span>), <span class="keyword">new</span> Box(<span class="number">2</span>)];</span><br></pre></td></tr></table></figure>
+
+<p>通过构造函数创建的每一个实例都会自动将构造函数的<code>prototype</code>属性作为其<code>[[Prototype]]</code>。即，<code>Object.getPrototypeOf(new Box()) === Box.prototype</code>。
+<code>Constructor.prototype</code>默认具有一个自有属性：<code>constructor</code>，它引用了构造函数本身。即，<code>Box.prototype.constructor === Box</code>。这允许我们在任何实例中访问原始构造函数。</p>
+<p>这里拿cocosCreator来举例:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="keyword">new</span> cc.Node();</span><br><span class="line">m.__proto__.constructor === cc.Node; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">var</span> n = <span class="keyword">new</span> m.constructor(); <span class="comment">// cc.Node</span></span><br><span class="line">m.__proto__ === cc.Node.prototype; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>这里看下ts和js中类的实现代码如下，注意static静态方法和实例方法，在js中的赋值；</li>
+</ol>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Greeter &#123;</span><br><span class="line">    greeting: <span class="built_in">string</span>;</span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params">message: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>()</span><br><span class="line">        <span class="keyword">this</span>.greeting = message;</span><br><span class="line">    &#125;</span><br><span class="line">    greet() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> sayhi() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hi"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> greeter = <span class="keyword">new</span> Greeter(<span class="string">"world"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>等价于：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Greeter = <span class="comment">/** @class */</span> (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Greeter</span>(<span class="params">message</span>) </span>&#123;</span><br><span class="line">        _this = _super.call(<span class="keyword">this</span>) || <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">this</span>.greeting = message;</span><br><span class="line">    &#125;</span><br><span class="line">    Greeter.prototype.greet = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;</span><br><span class="line">    &#125;;</span><br><span class="line">    Greeter.sayhi = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hi"</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> Greeter;</span><br><span class="line">&#125;());</span><br><span class="line"><span class="keyword">var</span> greeter = <span class="keyword">new</span> Greeter(<span class="string">"world"</span>);</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>extends继承</li>
+</ol>
+<p>比如</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> A &#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> B <span class="keyword">extends</span> A &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>javascript解释器会把<code>B.prototype</code>设为<code>A.prototype</code>，
+即，<code>B.prototype.__proto__ = A.prototype</code>。</p>
+<p>使用extends语法，会自动建立下列两种prototype的继承关系：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">* B.prototype.__proto__ === A.prototype; <span class="comment">// true</span></span><br><span class="line">* B.__proto__ === A; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>关于继承的原理，可以看下下面的代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> b &#123;</span><br><span class="line">    test() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> d <span class="keyword">extends</span> b &#123; &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> __extends = (<span class="keyword">this</span> &amp;&amp; <span class="keyword">this</span>.__extends) || (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> extendStatics = <span class="function"><span class="keyword">function</span> (<span class="params">d, b</span>) </span>&#123;</span><br><span class="line">        extendStatics = <span class="built_in">Object</span>.setPrototypeOf ||</span><br><span class="line">            (&#123; <span class="attr">__proto__</span>: [] &#125; <span class="keyword">instanceof</span> <span class="built_in">Array</span> &amp;&amp; <span class="function"><span class="keyword">function</span> (<span class="params">d, b</span>) </span>&#123; d.__proto__ = b; &#125;) ||</span><br><span class="line">            <span class="function"><span class="keyword">function</span> (<span class="params">d, b</span>) </span>&#123; <span class="keyword">for</span> (<span class="keyword">var</span> p <span class="keyword">in</span> b) <span class="keyword">if</span> (b.hasOwnProperty(p)) d[p] = b[p]; &#125;;</span><br><span class="line">        <span class="keyword">return</span> extendStatics(d, b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">d, b</span>) </span>&#123;</span><br><span class="line">        extendStatics(d, b);</span><br><span class="line">        <span class="function"><span class="keyword">function</span> __(<span class="params"></span>) </span>&#123; <span class="keyword">this</span>.constructor = d; &#125;</span><br><span class="line">        d.prototype = b === <span class="literal">null</span> ? <span class="built_in">Object</span>.create(b) : (__.prototype = b.prototype, <span class="keyword">new</span> __());</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">var</span> b = <span class="comment">/** @class */</span> (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    b.prototype.test = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;());</span><br><span class="line"><span class="keyword">var</span> d = <span class="comment">/** @class */</span> (<span class="function"><span class="keyword">function</span> (<span class="params">_super</span>) </span>&#123;</span><br><span class="line">    __extends(d, _super);</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">d</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _super !== <span class="literal">null</span> &amp;&amp; _super.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>) || <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> d;</span><br><span class="line">&#125;(b));</span><br></pre></td></tr></table></figure>
+
+<p>参考文献：<br><a href="https://shubo.io/javascript-class/" target="_blank" rel="noopener">JavaScript ES6 Class：深入淺出類別概念與應用</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">继承与原型链</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/13/cplus_increase/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/10/13/cplus_increase/" itemprop="url">C++</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-13T11:47:29+08:00">
+                2020-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/13/cplus_increase/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/10/13/cplus_increase/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/10/13/cplus_increase/" class="leancloud_visitors" data-flag-title="C++">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>记录一些C++使用中的笔记；</p>
+<h4 id="使用过得api"><a href="#使用过得api" class="headerlink" title="使用过得api"></a>使用过得api</h4><h5 id="string-substr-pos-n"><a href="#string-substr-pos-n" class="headerlink" title="string.substr(pos, n)"></a>string.substr(pos, n)</h5><p>s.substr(pos, n)<br>返回一个string，包含s中从pos开始的n个字符的拷贝（pos默认值是0，n默认值是s.size()-pos，即不加参数会默认拷贝整个s</p>
+<p>attention: 若pos的值超过了string的大小，则substr函数会抛出一个out_of_range异常；若pos+n的值超过了string的大小，则substr会调整n的值，只拷贝到string的末尾</p>
+<h5 id="string-npos"><a href="#string-npos" class="headerlink" title="string::npos"></a>string::npos</h5><p>如果查找失败会返回string::npos</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(s.find(<span class="string">"substring"</span>) == <span class="built_in">std</span>::<span class="built_in">string</span>::npos)&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/17/ios_signin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/09/17/ios_signin/" itemprop="url">ios_signin</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-17T14:47:29+08:00">
+                2020-09-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ios/" itemprop="url" rel="index">
+                    <span itemprop="name">ios</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/09/17/ios_signin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/09/17/ios_signin/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/09/17/ios_signin/" class="leancloud_visitors" data-flag-title="ios_signin">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>情景：现在的app如果接入了第三方登录，那苹果那边，它会要求你接入Sign In With Apple；鉴于此，在实现后，这里做一些总结，方便自己今后来查看；搬砖自<a href="https://juejin.im/post/6844903904820330504" target="_blank" rel="noopener">文献地址</a></p>
+<p>要给自己的app添加支持apple账号登录，大概分为三步骤；</p>
+<h5 id="在开发者账号中添加支持Sign-In-with-Apple的功能；"><a href="#在开发者账号中添加支持Sign-In-with-Apple的功能；" class="headerlink" title="在开发者账号中添加支持Sign In with Apple的功能；"></a>在开发者账号中添加支持Sign In with Apple的功能；</h5><ol>
+<li><p>进入Certificates选项，然后找到Capabilities后，勾选中Sign In With Apple；</p>
+</li>
+<li><p>进入Certificates选项，然后点击Identifiers旁边左上角的+号，创建Services IDs；(单击configure按钮，将显示一个Web Authentication Configuration面板，可以设置使用此服务的域名Web Domain，最后，添加Return URLs，可以添加多个)</p>
+</li>
+<li><p>进入Certificates选项，然后点击keys，创建秘钥，需要勾选中Sign In With Apple；</p>
+</li>
+</ol>
+<h5 id="使用刚下载下来的私钥创建client-secret"><a href="#使用刚下载下来的私钥创建client-secret" class="headerlink" title="使用刚下载下来的私钥创建client_secret"></a>使用刚下载下来的私钥创建client_secret</h5><p>客户端秘钥必须是JWT，根据apple文档，我们需要使用带有 P-256 曲线和 SHA-256 哈希算法的椭圆曲线数字签名算法（ECDSA）来加密令牌。完成这项工作的一个简单方法是使用 <a href="https://github.com/jwt/ruby-jwt" target="_blank" rel="noopener">ruby-jwt</a>。首先检查你是否已经有 Ruby 设置，如果没有，你可以从这里 <a href="https://www.ruby-lang.org/en/downloads/" target="_blank" rel="noopener">Ruby</a> 获得它。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">--Header--</span><br><span class="line">alg - The encryption algorithm used to encrypt the token. This will be ES256.</span><br><span class="line">kid - The 10 charachter Key ID of the private key you create. You can get it from </span><br><span class="line">Certificates, Identifiers &amp; Profiles &gt; Keys &gt; (click on the key you created).</span><br><span class="line">--Payload--</span><br><span class="line">iss - 10 character Team ID give to you. You can find it here https://developer.apple.com/account/#/membership</span><br><span class="line">iat - Indicates the time at which the token was generated, in terms of the number of seconds since Epoch, in UTC.</span><br><span class="line">exp - Indicates the expiry time of the token expiration, in terms of the number of seconds since Epoch, in UTC. Accroding to the docs the value must not be greater than 15777000 (6 months in seconds) from the Current Unix Time on the server.</span><br><span class="line">aud - The value of which identifies the recipient the JWT is intended for. Since this token is meant for Apple, use https://appleid.apple.com.</span><br><span class="line">sub - The value of which identifies the principal that is the subject of the JWT. Use the same value as client_id as this token is meant for your application.</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>设置 Ruby 后运行命令 sudo gem install jwt 来设置 ruby-jwt。添加必要的详细信息并将以下内容保存为 secret_gen.rb</li>
+</ol>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">"jwt"</span></span><br><span class="line"></span><br><span class="line">key_file = <span class="string">"Path to the private key"</span></span><br><span class="line">team_id = <span class="string">"Your Team ID"</span></span><br><span class="line">client_id = <span class="string">"The Service ID of the service you created"</span></span><br><span class="line">key_id = <span class="string">"The Key ID of the private key"</span></span><br><span class="line">validity_period = <span class="number">180</span> <span class="comment"># In days. Max 180 (6 months) according to Apple docs.</span></span><br><span class="line"></span><br><span class="line">private_key = OpenSSL::PKey::EC.new IO.read key_file</span><br><span class="line"></span><br><span class="line">token = JWT.encode(</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="symbol">iss:</span> team_id,</span><br><span class="line">		<span class="symbol">iat:</span> Time.now.to_i,</span><br><span class="line">		<span class="symbol">exp:</span> Time.now.to_i + <span class="number">86400</span> * validity_period,</span><br><span class="line">		<span class="symbol">aud:</span> <span class="string">"https://appleid.apple.com"</span>,</span><br><span class="line">		<span class="symbol">sub:</span> client_id</span><br><span class="line">	&#125;,</span><br><span class="line">	private_key,</span><br><span class="line">	<span class="string">"ES256"</span>,</span><br><span class="line">	header_fields=</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="symbol">kid:</span> key_id </span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line">puts token</span><br></pre></td></tr></table></figure>
+
+
+<ol start="2">
+<li>您可以使用命令 ruby secret_gen.rb 从终端运行 secret_gen.rb 文件。它将为您提供 client_secret。</li>
+</ol>
+<h5 id="验证是否配置成功"><a href="#验证是否配置成功" class="headerlink" title="验证是否配置成功"></a>验证是否配置成功</h5><p>添加return URL和client_id并将其粘贴到浏览器中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://appleid.apple.com/auth/authorize?response_type=code&amp;redirect_uri=`&lt;redirect_uri&gt;`&amp;client_id=`&lt;client_id&gt;`</span><br></pre></td></tr></table></figure>
+
+<p>在使用上面代码执行所获得的 code，之前使用的 redirect_uri 和 client_id 以及通过运行 secret_gen.rb 获得的 client_secret 替换以下命令的内容，并在终端中运行以下 cURL 命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST https://appleid.apple.com/auth/token -d 'grant_type=authorization_code&amp;code=`&lt;code&gt;`&amp;redirect_uri=`&lt;redirect_uri&gt;`&amp;client_id=`&lt;client_id&gt;`&amp;client_secret=`&lt;client_secret&gt;`'</span><br></pre></td></tr></table></figure>
+
+<p>参考文献：</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/8190f25eaa14" target="_blank" rel="noopener">Sign in with Apple登录详解</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/17/gradle-study/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/17/gradle-study/" itemprop="url">gradle</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-17T09:35:29+08:00">
+                2020-08-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/gradle/" itemprop="url" rel="index">
+                    <span itemprop="name">gradle</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/08/17/gradle-study/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/08/17/gradle-study/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/08/17/gradle-study/" class="leancloud_visitors" data-flag-title="gradle">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h4><p>Gradle是一个基于apache ant和apache maven概念的项目自动化构建工具，它使用一种基于groovy的特定领域语言来声明项目设置，而不是传统的xml。gradle就是工程的管理，帮我们做了依赖，打包，部署，发布，各种渠道的差异管理等工作。</p>
+<h5 id="gradle优势："><a href="#gradle优势：" class="headerlink" title="gradle优势："></a>gradle优势：</h5><ol>
+<li>一款最新的，功能最强大的构建工具</li>
+<li>使用程序代替传统的xml配置，项目构建更灵活</li>
+<li>丰富的第三方插件，让你随心所欲使用</li>
+<li>maven，ant能做的，gradle都能做，但gradle能做的，maven，ant不一定能做</li>
+</ol>
+<h5 id="dsl"><a href="#dsl" class="headerlink" title="dsl"></a>dsl</h5><p>全称domain specific language，即特定领域语言</p>
+<p>有哪些常见的dsl语言<br>xml，html</p>
+<p>Dsl与通用编程语言的区别<br>求专不求全，解决特定问题</p>
+<h5 id="groovy"><a href="#groovy" class="headerlink" title="groovy"></a>groovy</h5><p>groovy介绍</p>
+<ol>
+<li>一种基于jvm的敏捷开发语言</li>
+<li>结合了python，ruby和smalltalk的许多强大的特性</li>
+<li>groovy可以与java完美结合，而且可以使用java所有的库</li>
+</ol>
+<p>groovy特性</p>
+<ol>
+<li>语法上支持动态类型，闭包等新一代语言特性</li>
+<li>无缝集成所有已经存在的java类库</li>
+<li>既支持面向对象编程也支持面向过程编程</li>
+</ol>
+<p>groovy优势</p>
+<ol>
+<li>一种更加敏捷的编程语言</li>
+<li>入门非常容易，且功能非常强大</li>
+<li>既可以作为编程语言也可以作为脚本语言</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/14/解读SDWebImage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/14/解读SDWebImage/" itemprop="url">SDWebImage实现原理探究</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-14T09:47:29+08:00">
+                2020-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ios/" itemprop="url" rel="index">
+                    <span itemprop="name">ios</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/08/14/解读SDWebImage/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/08/14/解读SDWebImage/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/08/14/解读SDWebImage/" class="leancloud_visitors" data-flag-title="SDWebImage实现原理探究">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在很早之前已经知道了sdwebImage的实现原理，（第一步从缓存中取图片，第二步从磁盘中取图片，第三步从服务器端获取图片）；但对于里面的细节部分并没有过多了解，于是乘着这段时间对sdwebImage做了一下了解；</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>SDWebImage中的缓存使用了NSCache</p>
+<h4 id="官方说明"><a href="#官方说明" class="headerlink" title="官方说明"></a>官方说明</h4><p>NSCache，一个可变集合，用于临时存储在资源不足时容易被回收的临时键值对；</p>
+<p>缓存对象与其他可变集合有以下几点不同：</p>
+<ul>
+<li>NSCache类合并了各种自动回收策略，以确保缓存不会占用太多的系统内存。如果其他应用程序需要内存，这些策略将从缓存中删除一些项，从而最小化内存占用。</li>
+<li>您可以从不同的线程在缓存中添加、删除和查询项，而不必自己锁定缓存。</li>
+<li>与NSMutableDictionary对象不同，缓存不会复制放入其中的关键对象。</li>
+</ul>
+<p>具有子组件的对象在不使用时可以被丢弃，可以采用NSDiscardableContent协议来改善缓存回收行为。默认情况下，缓存中的nsdiscardableconcontent对象在其内容被丢弃时将被自动删除，尽管这种自动删除策略可以更改。如果NSDiscardableContent对象被放入缓存中，缓存会在它被移除时调用discardcontentpossible。</p>
+<h4 id="SDWebImage中的使用"><a href="#SDWebImage中的使用" class="headerlink" title="SDWebImage中的使用"></a>SDWebImage中的使用</h4><p>在SDWebImage中的使用，首先这里新建一个类AutoPurgeCache继承自NSCache，并在这个类中监听了内存告警的通知(UIApplicationDidReceiveMemoryWarningNotification)，收到通知就移除掉存储的所有对象；</p>
+<p>然后在调用的类SDImageCache中，再次监听了内存告警的通知，收到通知进行移除所有对象；</p>
+<p>足可见，对于NSCache的使用，我们一定是需要注意到内存警告的情况的；至于其他的api都进行了一下封装，比如设置缓存最大数，看官方说明，这个并不是绝对的，就是有可能它存储的对象大于你所设置的缓存最大值，这也就解释了为什么我们需要监听告警的通知了；</p>
+<h3 id="磁盘中数据"><a href="#磁盘中数据" class="headerlink" title="磁盘中数据"></a>磁盘中数据</h3><p>为了保证文件名的唯一性，这里采用了MD5对链接加密；</p>
+<p>在读取文件这个过程中，考虑到了异步操作，SDWebImage中是在自己创建的一个串行队列中执行存取操作，同时为了去掉block的强引用，这里使用了自动释放池（@autoreleasepool）；</p>
+<p>这里可以注意到不同类型图片的数据是如何加载为UIImage的，特别是gif文件；</p>
+<ol>
+<li>首先通过数据的第一个字符来判断当前的类型，</li>
+<li>根据类型来处理拿到的NSData数据；</li>
+</ol>
+<p>判断类型的代码：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSString</span> *)sd_contentTypeForImageData:(<span class="built_in">NSData</span> *)data &#123;</span><br><span class="line">    uint8_t c;</span><br><span class="line">    [data getBytes:&amp;c length:<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">switch</span> (c) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0xFF</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">@"image/jpeg"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x89</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">@"image/png"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x47</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">@"image/gif"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x49</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x4D</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">@"image/tiff"</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x52</span>:</span><br><span class="line">            <span class="comment">// R as RIFF for WEBP</span></span><br><span class="line">            <span class="keyword">if</span> ([data length] &lt; <span class="number">12</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="built_in">NSString</span> *testString = [[<span class="built_in">NSString</span> alloc] initWithData:[data subdataWithRange:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, <span class="number">12</span>)] encoding:<span class="built_in">NSASCIIStringEncoding</span>];</span><br><span class="line">            <span class="keyword">if</span> ([testString hasPrefix:<span class="string">@"RIFF"</span>] &amp;&amp; [testString hasSuffix:<span class="string">@"WEBP"</span>]) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">@"image/webp"</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据类型来处理对应的数据</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">UIImage</span> *)sd_imageWithData:(<span class="built_in">NSData</span> *)data &#123;</span><br><span class="line">    <span class="keyword">if</span> (!data) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIImage</span> *image;</span><br><span class="line">    <span class="built_in">NSString</span> *imageContentType = [<span class="built_in">NSData</span> sd_contentTypeForImageData:data];</span><br><span class="line">    <span class="keyword">if</span> ([imageContentType isEqualToString:<span class="string">@"image/gif"</span>]) &#123;</span><br><span class="line">        image = [<span class="built_in">UIImage</span> sd_animatedGIFWithData:data];</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#ifdef SD_WEBP</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ([imageContentType isEqualToString:<span class="string">@"image/webp"</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        image = [<span class="built_in">UIImage</span> sd_imageWithWebPData:data];</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#endif</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        image = [[<span class="built_in">UIImage</span> alloc] initWithData:data];</span><br><span class="line">        <span class="built_in">UIImageOrientation</span> orientation = [<span class="keyword">self</span> sd_imageOrientationFromImageData:data];</span><br><span class="line">        <span class="keyword">if</span> (orientation != <span class="built_in">UIImageOrientationUp</span>) &#123;</span><br><span class="line">            image = [<span class="built_in">UIImage</span> imageWithCGImage:image.CGImage</span><br><span class="line">                                        scale:image.scale</span><br><span class="line">                                  orientation:orientation];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> image;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在执行异步操作的时候，为了保证逻辑的健全性，需要考虑到在某些时候异步中的操作需要做撤销return处理，比如在SDWebImage中，这里就创建了一个NSOperation，在异步调用的时候，先判断这个operation是否cancelled，如果被取消了则可以直接return，不再执行后面的逻辑；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSOperation</span> *operation = [<span class="built_in">NSOperation</span> new];</span><br><span class="line"><span class="comment">// 异步从磁盘中拿取到图片资源</span></span><br><span class="line"><span class="built_in">dispatch_async</span>(<span class="keyword">self</span>.ioQueue, ^&#123;</span><br><span class="line">    <span class="keyword">if</span> (operation.isCancelled) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">        <span class="built_in">UIImage</span> *diskImage = [<span class="keyword">self</span> diskImageForKey:key];</span><br><span class="line">        <span class="keyword">if</span> (diskImage &amp;&amp; <span class="keyword">self</span>.shouldCacheImagesInMemory) &#123;</span><br><span class="line">            <span class="built_in">NSUInteger</span> cost = SDCacheCostForImage(diskImage);</span><br><span class="line">            [<span class="keyword">self</span>.memCache setObject:diskImage forKey:key cost:cost];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            doneBlock(diskImage, SDImageCacheTypeDisk);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> operation;</span><br></pre></td></tr></table></figure>
+
+<h3 id="从服务器拉取数据"><a href="#从服务器拉取数据" class="headerlink" title="从服务器拉取数据"></a>从服务器拉取数据</h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/09/binary-tree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -532,6 +1675,444 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/26/cmake_study/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/26/cmake_study/" itemprop="url">study-cmake</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-26T09:47:29+08:00">
+                2020-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cmake/" itemprop="url" rel="index">
+                    <span itemprop="name">cmake</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/26/cmake_study/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/26/cmake_study/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/05/26/cmake_study/" class="leancloud_visitors" data-flag-title="study-cmake">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="在开始了解cmake时，先简单了解下下面的几种文件："><a href="#在开始了解cmake时，先简单了解下下面的几种文件：" class="headerlink" title="在开始了解cmake时，先简单了解下下面的几种文件："></a>在开始了解cmake时，先简单了解下下面的几种文件：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*.o文件     =&gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件</span><br><span class="line">*.a文件     =&gt;      静态库文件，.a是.o文件通过某种方式打包在一起的静态库文件</span><br><span class="line">*.so文件    =&gt;      动态链接库，动态库文件</span><br></pre></td></tr></table></figure>
+
+<h4 id="cmake能为我们做些什么"><a href="#cmake能为我们做些什么" class="headerlink" title="cmake能为我们做些什么"></a>cmake能为我们做些什么</h4><p>CMake 可以编译源代码、制作程序库、产生适配器（wrapper）、还可以用任意的顺序建构执行档。CMake 支持 in-place 建构（二进档和源代码在同一个目录树中）和 out-of-place 建构（二进档在别的目录里），因此可以很容易从同一个源代码目录树中建构出多个二进档。CMake 也支持静态与动态程式库的建构。                 – 来自百科</p>
+<h4 id="cmake-tutorial"><a href="#cmake-tutorial" class="headerlink" title="cmake-tutorial"></a>cmake-tutorial</h4><h5 id="step1"><a href="#step1" class="headerlink" title="step1"></a>step1</h5><h6 id="1-简单的创建一个可执行程序"><a href="#1-简单的创建一个可执行程序" class="headerlink" title="1.简单的创建一个可执行程序"></a>1.简单的创建一个可执行程序</h6><ol>
+<li><p>在你的<code>source code directory</code>里，添加CmakeLists.txt</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># 设置你的工程名，在后面相关api中，工程名用的比较多，</span><br><span class="line"># 可以将project和target来对比了解</span><br><span class="line">project(Tutorial)</span><br><span class="line"></span><br><span class="line"># 给工程添加可执行文件，你的执行源码</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>建议在<code>source code directory</code>中新建一个文件夹<code>build</code><br>然后进入build文件夹下执行以下命令</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake ../</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行命令</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build .</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这时候你会看到在同级目录下存在着Tutorial的Unix可执行文件</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./Tutorial 5</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h6 id="2-添加版本号和配置头文件"><a href="#2-添加版本号和配置头文件" class="headerlink" title="2.添加版本号和配置头文件"></a>2.添加版本号和配置头文件</h6><ol>
+<li><p>在CmakeLists.txt中设置版本号和配置头文件</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># 设置工程名和工程版本号，</span><br><span class="line"># 可以通过如下方式拿到</span><br><span class="line"># PROJECT_VERSION, &lt;PROJECT-NAME&gt;_VERSION</span><br><span class="line"># PROJECT_VERSION_MAJOR, &lt;PROJECT-NAME&gt;_VERSION_MAJOR</span><br><span class="line"># PROJECT_VERSION_MINOR, &lt;PROJECT-NAME&gt;_VERSION_MINOR</span><br><span class="line"># PROJECT_VERSION_PATCH, &lt;PROJECT-NAME&gt;_VERSION_PATCH</span><br><span class="line"># PROJECT_VERSION_TWEAK, &lt;PROJECT-NAME&gt;_VERSION_TWEAK.</span><br><span class="line">project(Tutorial VERSION 1.0)</span><br><span class="line"></span><br><span class="line"># 配置TutrialConfig.h.in，之后会生成TutorialConfig.h文件，</span><br><span class="line"># *.h.in文件中，可以执行cmake相关的一些api</span><br><span class="line">configure_file(TutorialConfig.h.in TutorialConfig.h)</span><br><span class="line"></span><br><span class="line"># 由于上面的*.h文件会写入到binary对应的文件夹下，所以这里需要告知需要索引的目录</span><br><span class="line"># PROJECT_BINARY_DIR 可以理解为全局变量，字义中的意思 </span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                       &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                       )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>填写好对应的*.h.in文件</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 配置好要使用到的宏定义，</span><br><span class="line">// @Tutorial_VERSION_MAJOR@ 拿到项目的版本号的第一个值，上面的1，格式上需要加上两个@</span><br><span class="line">#define Tutorial_VERSION_MAJOR @Tutorial_VERSION_MAJOR@</span><br><span class="line">#define Tutorial_VERSION_MINOR @Tutorial_VERSION_MINOR@</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在对应的<em>.cxx中导入头文件</em>.h，添加上对应的代码（注意这里是.h，而不是.h.in，这是因为最终会生成.h来给我们使用)</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="comment">// report version</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; argv[<span class="number">0</span>] &lt;&lt; <span class="string">" Version "</span> &lt;&lt; Tutorial_VERSION_MAJOR &lt;&lt; <span class="string">"."</span></span><br><span class="line">            &lt;&lt; Tutorial_VERSION_MINOR &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Usage: "</span> &lt;&lt; argv[<span class="number">0</span>] &lt;&lt; <span class="string">" number"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译执行的命令同<a href="#1.简单的创建一个可执行程序">step1</a></p>
+</li>
+</ol>
+<h6 id="3-指定C-标注库"><a href="#3-指定C-标注库" class="headerlink" title="3.指定C++标注库"></a>3.指定C++标注库</h6><p>由于C++11有一些新特性，需要指定对应的C++标准库，给的教程上就拿<code>std::stod()</code>和<code>atof()</code>比较</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># set the project name and version</span><br><span class="line">project(Tutorial VERSION 1.0)</span><br><span class="line"></span><br><span class="line"># specify the C++ standard</span><br><span class="line">set(CMAKE_CXX_STANDARD 11)</span><br><span class="line">set(CMAKE_CXX_STANDARD_REQUIRED True)</span><br></pre></td></tr></table></figure></code></pre><h6 id="4-构建和测试"><a href="#4-构建和测试" class="headerlink" title="4.构建和测试"></a>4.构建和测试</h6><p>教程中的命令如下</p>
+<pre><code>build:
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir Step1_build</span><br><span class="line"><span class="built_in">cd</span> Step1_build</span><br><span class="line">cmake ../Step1</span><br><span class="line">cmake --build .</span><br></pre></td></tr></table></figure>
+
+test:
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Tutorial 4294967296</span><br><span class="line">Tutorial 10</span><br><span class="line">Tutorial</span><br></pre></td></tr></table></figure></code></pre><h5 id="step2-添加library"><a href="#step2-添加library" class="headerlink" title="step2 添加library"></a>step2 添加library</h5><p>给工程添加一个静态库，范例中的意图是将<em>.cpp和对应的</em>.h打包成一个静态库<em>.a，供我们主函数调用;<br>*.cpp和对应的</em>.h放在MathFunctions文件夹下</p>
+<ol>
+<li><p>在MathFunctions文件夹下创建一个CMakeLists.txt文件</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将mysqrt.cxx最终打包成*.a文件</span><br><span class="line">add_library(MathFunctions mysqrt.cxx)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为了能使用到对应的程序库，我们需要在源文件夹下的CMakeLists.txt中添加路径，以便能够构建，源文件夹下的CMakeLists.txt如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 添加路径</span><br><span class="line">add_subdirectory(MathFunctions)</span><br><span class="line"></span><br><span class="line"># add the executable</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">target_link_libraries(Tutorial PUBLIC MathFunctions)</span><br><span class="line"></span><br><span class="line"># add the binary tree to the search path for include files</span><br><span class="line"># so that we will find TutorialConfig.h</span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                        &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                        &quot;$&#123;PROJECT_SOURCE_DIR&#125;/MathFunctions&quot;</span><br><span class="line">                        )</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>上面是给我们工程添加了library，如果我们想调整为可选配置的时候，这时候就可以像这样操作</p>
+<ol start="3">
+<li><p>使用option来配置一些环境变量来，执行指定的流程</p>
+<p> 在源文件夹下的CMakeLists.txt就可以改变成如下这样</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">option(USE_MYMATH &quot;Use tutorial provided math implementation&quot; ON)</span><br><span class="line"></span><br><span class="line"># configure a header file to pass some of the CMake settings</span><br><span class="line"># to the source code</span><br><span class="line">configure_file(TutorialConfig.h.in TutorialConfig.h)</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">if(USE_MYMATH)</span><br><span class="line">    add_subdirectory(MathFunctions)</span><br><span class="line">    list(APPEND EXTRA_LIBS MathFunctions)</span><br><span class="line">    list(APPEND EXTRA_INCLUDES &quot;$&#123;PROJECT_SOURCE_DIR&#125;/MathFunctions&quot;)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"># add the executable</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br><span class="line"></span><br><span class="line">target_link_libraries(Tutorial PUBLIC $&#123;EXTRA_LIBS&#125;)</span><br><span class="line"></span><br><span class="line"># add the binary tree to the search path for include files</span><br><span class="line"># so that we will find TutorialConfig.h</span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                        &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                        $&#123;EXTRA_INCLUDES&#125;</span><br><span class="line">                        )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在你的源代码（tutorial.cxx）中添加如下code</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> USE_MYMATH</span></span><br><span class="line"><span class="meta">#  <span class="meta-keyword">include</span> <span class="meta-string">"MathFunctions.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> USE_MYMATH</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> outputValue = mysqrt(inputValue);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> outputValue = <span class="built_in">sqrt</span>(inputValue);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最后在*.h.in文件下添加宏定义USE_MYMATH</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#cmakedefine USE_MYMATH</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译命令执行，参考<a href="#step1">step1</a></p>
+</li>
+</ol>
+<p>参考资料和文献地址：<br>CMake 官网: <a href="https://cmake.org/" target="_blank" rel="noopener">cmake.org</a></p>
+<p>CMake 文档: <a href="https://cmake.org/documentation/" target="_blank" rel="noopener">cmake.org/documentation</a></p>
+<p>CMake FAQ: <a href="https://cmake.org/Wiki/CMake_FAQ" target="_blank" rel="noopener">Wiki/CMake_FAQ</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/26/multi_lang/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuelangwang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/me.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="hexo-xuelangwang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/26/multi_lang/" itemprop="url">multi_lang多语言实现方案</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-26T09:47:29+08:00">
+                2020-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ios/" itemprop="url" rel="index">
+                    <span itemprop="name">ios</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/26/multi_lang/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/26/multi_lang/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/05/26/multi_lang/" class="leancloud_visitors" data-flag-title="multi_lang多语言实现方案">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>记录自己在多语言实现中遇到的问题和采用的解决方案，供大家参考和阅读；</p>
+<p>多语言实现方案小结：</p>
+<p>调研：</p>
+<p>ios多语言方案参考：<br>方案一：生成.xliff文件，给到翻译让其翻译成指定的语言；<br>生成.xliff文件的步骤如下，</p>
+<ol>
+<li>选中当前项目目录结构下的工程文件，</li>
+<li>点击 Editor  -&gt;  Export For Locatization.</li>
+</ol>
+<p>android多语言方案参考：<br>直接向他们提供xml文件来修改；</p>
+<h5 id="前期："><a href="#前期：" class="headerlink" title="前期："></a>前期：</h5><p>产品自己来实现中文翻译，发现问题：</p>
+<ol>
+<li>相同的英文，两端翻译不一致，由于是不同的文件，不同的人来翻译会存在差异；</li>
+<li>部分转义字符，比如安卓中的&quot;被直接转义过去了；</li>
+<li>存在部分符号被替换/修改了;</li>
+<li>英文里前面是名字（可变，ios中用%@代替），后面是金币（可变，ios中用%@代替），但是在翻译成中文后，金币在前面，名字在后面；</li>
+<li>部分富文本被裁剪了，不利于翻译；</li>
+</ol>
+<h6 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h6><ol>
+<li>考虑到如果将两端的相同部分的英文合并到一起的话，是不是就可以减少一些这样的误差；摆在面前的就是如何将两端合并成一个文件，并便于后期维护管理；<br>很自然的想到excel，但是excel并不能很好管理，不支持版本控制，退而求其次，使用csv来试试；于是就需要实现两个方向；<ol>
+<li>将.string文件转换成csv；</li>
+<li>将.xml文件转换成csv；</li>
+</ol>
+</li>
+</ol>
+<p>基于自己目前的实力，选用了python来完成，并且python也提供了csv和xml对应的api，至于.string文件中的键值对就使用正则来扣取出来；</p>
+<ol start="2">
+<li><p>通过将xml转换成csv的时候，这种特殊符号被转义就已经体现出来了；关于这点，查看了python中的相关api，没有找到解决的办法；<br>于是考虑通过将整个xml文件读取出来，然后通过正则来扣取出相关带有特殊符号的键值对，最后将具有特殊符号的键值对替换到csv文件中；</p>
+</li>
+<li><p>这种不是由于研发操作导致的，在提供给翻译处理的时候，就提供一份清单，告知他们那些字符具有特殊含义，不要随意改动；</p>
+</li>
+<li><p>android端，比较好处理通过<code>%1$s，%2$s</code>来区分，ios这边，我考虑的是通过<code>%1@,%2@</code>来区分，然后针对不同的结果进行处理；<br>这是我的处理方式，代码如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 其实将%1@，%2@替换成对应的参数；</span></span><br><span class="line">+ (<span class="built_in">NSString</span> *)formatUnsteadyParams:(<span class="built_in">NSString</span> *)format, ...&#123;</span><br><span class="line">    va_list p;</span><br><span class="line">    <span class="built_in">NSMutableArray</span> *array = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">    va_start(p, format);</span><br><span class="line">    <span class="keyword">id</span> arg;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">YES</span>)&#123;</span><br><span class="line">        arg = va_arg(p, <span class="keyword">id</span>);</span><br><span class="line">        <span class="keyword">if</span> (!arg) &#123;<span class="keyword">break</span>;&#125;</span><br><span class="line">        [array addObject:arg];</span><br><span class="line">    &#125;</span><br><span class="line">    va_end(p);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= array.count; i++) &#123;</span><br><span class="line">        <span class="built_in">NSString</span> *key = [[<span class="string">@"%"</span> stringByAppendingFormat:<span class="string">@"%d"</span>, i] stringByAppendingString:<span class="string">@"@"</span>];</span><br><span class="line">        <span class="keyword">id</span> v = array[i<span class="number">-1</span>];</span><br><span class="line">        format = [format stringByReplacingOccurrencesOfString:key withString:[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>, v]];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> format;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>至于富文本，我考虑的是通过html文本来实现，这样就可以避免因为裁剪而导致的文本不好翻译；</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSMutableAttributedString</span> *)htmlString:(<span class="built_in">NSString</span> *)htmlString&#123;</span><br><span class="line">    <span class="keyword">return</span> [[<span class="built_in">NSMutableAttributedString</span> alloc] initWithData:[htmlString dataUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>] options:@&#123;<span class="built_in">NSDocumentTypeDocumentAttribute</span>:<span class="built_in">NSHTMLTextDocumentType</span>,<span class="built_in">NSCharacterEncodingDocumentAttribute</span>:@(<span class="built_in">NSUTF8StringEncoding</span>)&#125; documentAttributes:<span class="literal">nil</span> error:<span class="literal">nil</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>至于html如下；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;&lt;head&gt;&lt;style&gt; .span-light&#123;color: #7ba1aa; font-size: 14px;&#125;&lt;/style&gt;&lt;/head&gt;&lt;body style=\&quot;color: #557479; font-size: 14px; font-family:Helvetica\&quot;&gt;You will now receive a verification email from us. If it&apos;s not in your inbox, please check your&lt;span class=\&quot;span-light\&quot;&quot;&gt; junk mail&lt;/span&gt; or&lt;span class=\&quot;span-light\&quot;&gt; spam folder&lt;/span&gt; or&lt;span class=\&quot;span-light\&quot;&gt; whitelist Pokio&apos;s email address.&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="中期"><a href="#中期" class="headerlink" title="中期"></a>中期</h5><p>前期问题都有办法解决了，版本比对也能够做到了，接下来就是考虑后期维护的问题了；</p>
+<p>如何做到增量更新，我们不可能在开发的时候就去修改csv，那么就是我们一边在开发需求，在开发完需求后再处理csv了；<br>于是，我考虑将迭代后的xml和迭代后的.string文件，和我们已经在版本管理中的csv做个对比，如果csv中没有对应的键值对，<br>就将新的键值对添加进来，或者输出给到产品来翻译；</p>
+<h5 id="后期"><a href="#后期" class="headerlink" title="后期"></a>后期</h5><p>随着支持语言的版本越来越多，脚本已经不再能满足单个的语言了，很多逻辑都需要持续维护了，<br>比如脚本之前将ios，android端相同键值对合并的处理方式，<br>因为之前只存在，英文，中文，俄文，那么我可以以英文和中文为参考点，来判断是否能够将ios，android相同的键值对合并到一起；<br>但是增加新的语言，比如西班牙语后，有些相同的地方（相同英文，相同中文），对应的西班牙语，会存在<code>&quot;</code>号，这个对android是没有影响的，<br>转换成xml即可，但是对ios来说是需要添加<code>\&quot;</code>，那么这种就不能合并到一起了；<br>关于这点，我确实没有想到什么合适的方法，暂时就每种语言提供一份csv；</p>
+<p>维护的话，就变成了维护多份不同语言的csv，只是不需要区分ios和android；</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/26/解读FBRetainCycleDetector/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -700,1572 +2281,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/26/cmake_study/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/26/cmake_study/" itemprop="url">study-cmake</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-26T09:47:29+08:00">
-                2020-05-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cmake/" itemprop="url" rel="index">
-                    <span itemprop="name">cmake</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/26/cmake_study/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/26/cmake_study/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2020/05/26/cmake_study/" class="leancloud_visitors" data-flag-title="study-cmake">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="在开始了解cmake时，先简单了解下下面的几种文件："><a href="#在开始了解cmake时，先简单了解下下面的几种文件：" class="headerlink" title="在开始了解cmake时，先简单了解下下面的几种文件："></a>在开始了解cmake时，先简单了解下下面的几种文件：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*.o文件     =&gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件</span><br><span class="line">*.a文件     =&gt;      静态库文件</span><br><span class="line">*.so文件    =&gt;      动态链接库</span><br></pre></td></tr></table></figure>
-
-<h4 id="cmake能为我们做些什么"><a href="#cmake能为我们做些什么" class="headerlink" title="cmake能为我们做些什么"></a>cmake能为我们做些什么</h4><p>CMake 可以编译源代码、制作程序库、产生适配器（wrapper）、还可以用任意的顺序建构执行档。CMake 支持 in-place 建构（二进档和源代码在同一个目录树中）和 out-of-place 建构（二进档在别的目录里），因此可以很容易从同一个源代码目录树中建构出多个二进档。CMake 也支持静态与动态程式库的建构。                 – 来自百科</p>
-<h4 id="cmake-tutorial"><a href="#cmake-tutorial" class="headerlink" title="cmake-tutorial"></a>cmake-tutorial</h4><h5 id="step1"><a href="#step1" class="headerlink" title="step1"></a>step1</h5><h6 id="1-简单的创建一个可执行程序"><a href="#1-简单的创建一个可执行程序" class="headerlink" title="1.简单的创建一个可执行程序"></a>1.简单的创建一个可执行程序</h6><ol>
-<li><p>在你的<code>source code directory</code>里，添加CmakeLists.txt</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># 设置你的工程名，在后面相关api中，工程名用的比较多，</span><br><span class="line"># 可以将project和target来对比了解</span><br><span class="line">project(Tutorial)</span><br><span class="line"></span><br><span class="line"># 给工程添加可执行文件，你的执行源码</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>建议在<code>source code directory</code>中新建一个文件夹<code>build</code><br>然后进入build文件夹下执行以下命令</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake ../</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>执行命令</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --build .</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>这时候你会看到在同级目录下存在着Tutorial的Unix可执行文件</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./Tutorial 5</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h6 id="2-添加版本号和配置头文件"><a href="#2-添加版本号和配置头文件" class="headerlink" title="2.添加版本号和配置头文件"></a>2.添加版本号和配置头文件</h6><ol>
-<li><p>在CmakeLists.txt中设置版本号和配置头文件</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># 设置工程名和工程版本号，</span><br><span class="line"># 可以通过如下方式拿到</span><br><span class="line"># PROJECT_VERSION, &lt;PROJECT-NAME&gt;_VERSION</span><br><span class="line"># PROJECT_VERSION_MAJOR, &lt;PROJECT-NAME&gt;_VERSION_MAJOR</span><br><span class="line"># PROJECT_VERSION_MINOR, &lt;PROJECT-NAME&gt;_VERSION_MINOR</span><br><span class="line"># PROJECT_VERSION_PATCH, &lt;PROJECT-NAME&gt;_VERSION_PATCH</span><br><span class="line"># PROJECT_VERSION_TWEAK, &lt;PROJECT-NAME&gt;_VERSION_TWEAK.</span><br><span class="line">project(Tutorial VERSION 1.0)</span><br><span class="line"></span><br><span class="line"># 配置TutrialConfig.h.in，之后会生成TutorialConfig.h文件，</span><br><span class="line"># *.h.in文件中，可以执行cmake相关的一些api</span><br><span class="line">configure_file(TutorialConfig.h.in TutorialConfig.h)</span><br><span class="line"></span><br><span class="line"># 由于上面的*.h文件会写入到binary对应的文件夹下，所以这里需要告知需要索引的目录</span><br><span class="line"># PROJECT_BINARY_DIR 可以理解为全局变量，字义中的意思 </span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                       &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                       )</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>填写好对应的*.h.in文件</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 配置好要使用到的宏定义，</span><br><span class="line">// @Tutorial_VERSION_MAJOR@ 拿到项目的版本号的第一个值，上面的1，格式上需要加上两个@</span><br><span class="line">#define Tutorial_VERSION_MAJOR @Tutorial_VERSION_MAJOR@</span><br><span class="line">#define Tutorial_VERSION_MINOR @Tutorial_VERSION_MINOR@</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在对应的<em>.cxx中导入头文件</em>.h，添加上对应的代码（注意这里是.h，而不是.h.in，这是因为最终会生成.h来给我们使用)</p>
- <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="comment">// report version</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; argv[<span class="number">0</span>] &lt;&lt; <span class="string">" Version "</span> &lt;&lt; Tutorial_VERSION_MAJOR &lt;&lt; <span class="string">"."</span></span><br><span class="line">            &lt;&lt; Tutorial_VERSION_MINOR &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Usage: "</span> &lt;&lt; argv[<span class="number">0</span>] &lt;&lt; <span class="string">" number"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译执行的命令同<a href="#1.简单的创建一个可执行程序">step1</a></p>
-</li>
-</ol>
-<h6 id="3-指定C-标注库"><a href="#3-指定C-标注库" class="headerlink" title="3.指定C++标注库"></a>3.指定C++标注库</h6><p>由于C++11有一些新特性，需要指定对应的C++标准库，给的教程上就拿<code>std::stod()</code>和<code>atof()</code>比较</p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line"></span><br><span class="line"># set the project name and version</span><br><span class="line">project(Tutorial VERSION 1.0)</span><br><span class="line"></span><br><span class="line"># specify the C++ standard</span><br><span class="line">set(CMAKE_CXX_STANDARD 11)</span><br><span class="line">set(CMAKE_CXX_STANDARD_REQUIRED True)</span><br></pre></td></tr></table></figure></code></pre><h6 id="4-构建和测试"><a href="#4-构建和测试" class="headerlink" title="4.构建和测试"></a>4.构建和测试</h6><p>教程中的命令如下</p>
-<pre><code>build:
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir Step1_build</span><br><span class="line"><span class="built_in">cd</span> Step1_build</span><br><span class="line">cmake ../Step1</span><br><span class="line">cmake --build .</span><br></pre></td></tr></table></figure>
-
-test:
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Tutorial 4294967296</span><br><span class="line">Tutorial 10</span><br><span class="line">Tutorial</span><br></pre></td></tr></table></figure></code></pre><h5 id="step2-添加library"><a href="#step2-添加library" class="headerlink" title="step2 添加library"></a>step2 添加library</h5><p>给工程添加一个静态库，范例中的意图是将<em>.cpp和对应的</em>.h打包成一个静态库<em>.a，供我们主函数调用;<br>*.cpp和对应的</em>.h放在MathFunctions文件夹下</p>
-<ol>
-<li><p>在MathFunctions文件夹下创建一个CMakeLists.txt文件</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将mysqrt.cxx最终打包成*.a文件</span><br><span class="line">add_library(MathFunctions mysqrt.cxx)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>为了能使用到对应的程序库，我们需要在源文件夹下的CMakeLists.txt中添加路径，以便能够构建，源文件夹下的CMakeLists.txt如下：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 添加路径</span><br><span class="line">add_subdirectory(MathFunctions)</span><br><span class="line"></span><br><span class="line"># add the executable</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">target_link_libraries(Tutorial PUBLIC MathFunctions)</span><br><span class="line"></span><br><span class="line"># add the binary tree to the search path for include files</span><br><span class="line"># so that we will find TutorialConfig.h</span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                        &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                        &quot;$&#123;PROJECT_SOURCE_DIR&#125;/MathFunctions&quot;</span><br><span class="line">                        )</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>上面是给我们工程添加了library，如果我们想调整为可选配置的时候，这时候就可以像这样操作</p>
-<ol start="3">
-<li><p>使用option来配置一些环境变量来，执行指定的流程</p>
-<p> 在源文件夹下的CMakeLists.txt就可以改变成如下这样</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">option(USE_MYMATH &quot;Use tutorial provided math implementation&quot; ON)</span><br><span class="line"></span><br><span class="line"># configure a header file to pass some of the CMake settings</span><br><span class="line"># to the source code</span><br><span class="line">configure_file(TutorialConfig.h.in TutorialConfig.h)</span><br></pre></td></tr></table></figure>
-
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">if(USE_MYMATH)</span><br><span class="line">    add_subdirectory(MathFunctions)</span><br><span class="line">    list(APPEND EXTRA_LIBS MathFunctions)</span><br><span class="line">    list(APPEND EXTRA_INCLUDES &quot;$&#123;PROJECT_SOURCE_DIR&#125;/MathFunctions&quot;)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"># add the executable</span><br><span class="line">add_executable(Tutorial tutorial.cxx)</span><br><span class="line"></span><br><span class="line">target_link_libraries(Tutorial PUBLIC $&#123;EXTRA_LIBS&#125;)</span><br><span class="line"></span><br><span class="line"># add the binary tree to the search path for include files</span><br><span class="line"># so that we will find TutorialConfig.h</span><br><span class="line">target_include_directories(Tutorial PUBLIC</span><br><span class="line">                        &quot;$&#123;PROJECT_BINARY_DIR&#125;&quot;</span><br><span class="line">                        $&#123;EXTRA_INCLUDES&#125;</span><br><span class="line">                        )</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在你的源代码（tutorial.cxx）中添加如下code</p>
- <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> USE_MYMATH</span></span><br><span class="line"><span class="meta">#  <span class="meta-keyword">include</span> <span class="meta-string">"MathFunctions.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> USE_MYMATH</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> outputValue = mysqrt(inputValue);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> outputValue = <span class="built_in">sqrt</span>(inputValue);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>最后在*.h.in文件下添加宏定义USE_MYMATH</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#cmakedefine USE_MYMATH</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译命令执行，参考<a href="#step1">step1</a></p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/22/c_increase/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/22/c_increase/" itemprop="url">c_increase</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-22T11:11:29+08:00">
-                2020-05-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/c/" itemprop="url" rel="index">
-                    <span itemprop="name">c</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/22/c_increase/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/22/c_increase/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2020/05/22/c_increase/" class="leancloud_visitors" data-flag-title="c_increase">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引</p>
-<ol>
-<li><p>操作二进制某一位的值</p>
- <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// x为对应的数据，y为位移值</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">123</span>, y = <span class="number">2</span></span><br><span class="line">x |= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数置1</span></span><br><span class="line">x &amp;= ~(<span class="number">1</span>&lt;&lt;y)   <span class="comment">// 指定的某一位数置0</span></span><br><span class="line">x ^= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数取反</span></span><br><span class="line">((x) &gt;&gt; (y)&amp;<span class="number">1</span>) <span class="comment">// 获取的某一位的值</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/11/debug-file/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/11/debug-file/" itemprop="url">debug_file</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-11T18:47:29+08:00">
-                2020-05-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ios/" itemprop="url" rel="index">
-                    <span itemprop="name">ios</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/11/debug-file/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/11/debug-file/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2020/05/11/debug-file/" class="leancloud_visitors" data-flag-title="debug_file">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>解决问题：以前总是在模拟器上调试，后面测试发现bug，而作为研发，我又要去重现bug，关于这个bug要么是服务器问题，要么是客户端问题，那么为啥我不能直接就从测试那里拿到日志，直接定位问题不就好了么，而不是去重现出这些问题；</p>
-<p>思路：所以我就想自己在客户端写些本地日志文件，通过客户端直接查阅这些日志文件或者分享给开发；</p>
-<p><label style="color:#399ad6"><a href="https://github.com/YYXuelangwang/debugFile" target="_blank" rel="noopener">github仓库地址</a></label></p>
-<p>流程图如下：（T_T流程图不怎么美观哈，大概意思能看懂）</p>
-<p>调试按钮的实现</p>
-<img src="/2020/05/11/debug-file/button.png" title="debug按钮">
-
-<p>按钮，我是用一个悬浮按钮来实现；点击按钮后，会显示隐藏的子按钮，对应的就是上图功能按钮（呈现原型散开），你也可以通过键值对<code>&lt;key:NSString, value:block&gt;</code>来添加更多的子按钮事件，样式如下：</p>
-<img src="/2020/05/11/debug-file/btn.png" title="btn">
-
-<p>展示调试信息或分享调试文件</p>
-<img src="/2020/05/11/debug-file/function.png" title="实现思路">
-
-<p>点击展示debug文件后，会弹出一个tableview的视图，显示了所有在’document/debug’下的文件，当然你也可以自己定义你指定的文件夹来显示文件夹下的文件，点击cell后，你可以选择直接预览或者分享给其他人，</p>
-<img src="/2020/05/11/debug-file/share1.png" title="shareFile1">
-
-<img src="/2020/05/11/debug-file/share2.png" title="shareFile2">
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/07/给hexo配置tag:categories/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/07/给hexo配置tag:categories/" itemprop="url">blog config tags/categories</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-07T09:47:00+08:00">
-                2020-05-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog/" itemprop="url" rel="index">
-                    <span itemprop="name">blog</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/07/给hexo配置tag:categories/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/07/给hexo配置tag:categories/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2020/05/07/给hexo配置tag:categories/" class="leancloud_visitors" data-flag-title="blog config tags/categories">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在网上找到了方法，现在搬砖到这里方便后面人查用</p>
-<p>原因：在自己打开next主题下面对应的tags/categories开关后，点击标签/分类报错</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot GET /tags/</span><br></pre></td></tr></table></figure>
-
-<p>解决</p>
-<ol>
-<li><p>生成对应的page（index.md) </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  blog hexo new page <span class="string">"tags"</span></span><br><span class="line">INFO  Created: ~/develop/blog/<span class="built_in">source</span>/tags/index.md</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改步骤1中生成的index.md<br> 生成的文件是这样的</p>
- <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-05-07 09:20:24</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p> 修改后的文件是这样的</p>
- <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-05-07 09:20:24</span><br><span class="line">type: "tags"</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在对应的主题配置文件中，修改menu：下的配置</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="comment">#about: /about/ || user</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>搬砖文献<br><a href="https://www.zhihu.com/question/29017171" target="_blank" rel="noopener">hexo下的分类和标签无法显示</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/06/给自己仓库使用CocoaPod管理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/06/给自己仓库使用CocoaPod管理/" itemprop="url">给自己的仓库使用cocoapod管理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-06T09:20:29+08:00">
-                2020-05-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ios/" itemprop="url" rel="index">
-                    <span itemprop="name">ios</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/06/给自己仓库使用CocoaPod管理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/06/给自己仓库使用CocoaPod管理/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2020/05/06/给自己仓库使用CocoaPod管理/" class="leancloud_visitors" data-flag-title="给自己的仓库使用cocoapod管理">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>使用CocoaPods后，你可以将自己写的一些类库，控件管理起来；方便自己在不同项目中导入，而不再通过手动拖拽文件/文件夹</p>
-<h3 id="CocoaPods简介"><a href="#CocoaPods简介" class="headerlink" title="CocoaPods简介"></a>CocoaPods简介</h3><ol>
-<li><p>cocoapods原理：根据podfile的描述，找到对应代码库的podspec文件，然后根据podspec中的描述，找到代码仓库，从中下载到自己工程中</p>
-</li>
-<li><p>cocoapods依赖trunk服务器管理，所以需要通过trunk推送自己的podspec<br> 注册trunk的命令</p>
- <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod trunk register mail name  </span><br><span class="line"><span class="comment"># mail 是邮箱地址，name是用户名</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="CocoaPods的安装"><a href="#CocoaPods的安装" class="headerlink" title="CocoaPods的安装"></a>CocoaPods的安装</h3><p>如果你电脑里还没有安装cocoapods，安装命令是</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install cocoapods</span><br></pre></td></tr></table></figure>
-
-<p>查用切换ruby镜像源的命令，为了你能快速安装，当然，你也可以翻墙</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看ruby镜像源</span></span><br><span class="line">gem sources -l</span><br><span class="line"><span class="comment"># 移除当前国外镜像源，从上面拿取</span></span><br><span class="line">gem sources --remove https://rubygems.org</span><br><span class="line"><span class="comment"># 添加ruby china镜像源</span></span><br><span class="line">gem <span class="built_in">source</span> -a https://gems.ruby-china.com</span><br></pre></td></tr></table></figure>
-
-<h3 id="podspec文件的说明"><a href="#podspec文件的说明" class="headerlink" title="podspec文件的说明"></a>podspec文件的说明</h3><p>生成*.podspec文件(<label style="color:#399ad6">命令是：pod spec create spec文件名</label>)，放在自己的仓库中，需要你绑定tag（<code>git tag [your version]</code>），配置说明如下：</p>
-<figure class="highlight podspec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new <span class="keyword">do</span> <span class="params">|s|</span></span><br><span class="line"> </span><br><span class="line">  <span class="comment">#设置组件库的名称</span></span><br><span class="line">  s.name         = <span class="string">"xxx"</span>  </span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置组件库的版本号</span></span><br><span class="line">  s.version      = <span class="string">"5.4.9"</span> </span><br><span class="line"></span><br><span class="line">  <span class="comment">#组件库的简介</span></span><br><span class="line">  s.summary      = <span class="string">"xxxxxx"</span> </span><br><span class="line"></span><br><span class="line">  <span class="comment"># 组件库的详情描述，要求比简介的字数多些</span></span><br><span class="line">  s.description  = <span class="string">&lt;&lt;-DESC</span></span><br><span class="line"><span class="string">                  xxxxxxxxxxx</span></span><br><span class="line">                   DESC</span><br><span class="line">  <span class="comment">#设置仓库主页</span></span><br><span class="line">  s.homepage     = <span class="string">"https://www.yuntongxun.com/"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置许可</span></span><br><span class="line">  s.license      = <span class="string">"MIT"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置作者</span></span><br><span class="line">  s.author       = &#123; <span class="string">"xxx"</span> =&gt; <span class="string">"xxx"</span> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置支持的最低系统版本</span></span><br><span class="line">  s.ios.deployment_target = <span class="string">"8.0"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置仓库源,表示在哪可以找到组件工程(支持 git、svn、http 服务器)</span></span><br><span class="line">  s.source  = &#123; <span class="symbol">:git</span> =&gt; <span class="string">"https://xxxxxxx"</span>, <span class="symbol">:tag</span> =&gt; <span class="string">"<span class="subst">#&#123;s.version&#125;</span>"</span> &#125;</span><br><span class="line"><span class="comment">#s.source = &#123; :svn =&gt; 'http://xxxxxxx', :tag =&gt;  "#&#123;s.version&#125;" &#125;</span></span><br><span class="line"><span class="comment">#s.source = &#123; :http =&gt; 'http://xxxxxx/xxx.zip' &#125;</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">#资源文件</span></span><br><span class="line">  s.resources  = <span class="string">"sdk/CCPSDKBundle.bundle"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置源文件路径，不是整个工程的文件，而是自己封装的需要暴露出来的代码，以后别的工程引入，就会引入这里的代码。</span></span><br><span class="line">  s.source_files = <span class="string">"sdk/*.h"</span></span><br><span class="line"> </span><br><span class="line"> <span class="comment">#设置使用的静态库(非系统)</span></span><br><span class="line">  s.vendored_library = <span class="string">'sdk/*.a'</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置依赖库(系统)，不需要 lib，例如： libicucore写成icucore即可</span></span><br><span class="line">  s.libraries    = <span class="string">"resolv.9"</span>,<span class="string">"icucore"</span>,<span class="string">"sqlite3"</span>,<span class="string">"z"</span>,<span class="string">"xml2"</span>,<span class="string">"bz2.1.0"</span>,<span class="string">"c++"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置依赖的 framework(系统)，写的时候不需要后缀名</span></span><br><span class="line">  s.framework    = <span class="string">"CoreTelephony"</span>,<span class="string">"MediaPlayer"</span>,<span class="string">"CFNetwork"</span>,<span class="string">"SystemConfiguration"</span>,<span class="string">"MobileCoreServices"</span>,<span class="string">"AudioToolbox"</span>,<span class="string">"AVFoundation"</span>,<span class="string">"VideoToolbox"</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置使用的framework(非系统)</span></span><br><span class="line"> <span class="comment"># vendored_frameworks = ""</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#设置子目录</span></span><br><span class="line">  s.subspec <span class="string">'Delegate'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/Delegate/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'enums'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/enums/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'Manager'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/Manager/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'private'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/private/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'types'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/types/*.h"</span></span><br><span class="line">  <span class="comment">#三级目录</span></span><br><span class="line">  ss.subspec <span class="string">'LiveChatRoomType'</span> <span class="keyword">do</span> <span class="params">|sss|</span></span><br><span class="line">  sss.source_files = <span class="string">"sdk/types/LiveChatRoomType/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  s.subspec <span class="string">'board'</span> <span class="keyword">do</span> <span class="params">|ss|</span></span><br><span class="line">  ss.source_files = <span class="string">"sdk/board/*.h"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置组件库是否是基于 ARC 内存管理的，默认为 true，如果不是，会自动添加-fno-objc-arc </span></span><br><span class="line">  s.requires_arc = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#如果部分是ARC</span></span><br><span class="line">  <span class="comment">#spec.requires_arc = false</span></span><br><span class="line">  <span class="comment">#spec.requires_arc = ['Classes/*ARC.m', 'Classes/ARC.mm'] //指定 ARC 的文件</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置依赖的其他 pod 库</span></span><br><span class="line">  <span class="comment"># s.dependency "JSONKit", "~&gt; 1.4"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#设置xcconfig</span></span><br><span class="line">  s.xcconfig = &#123;</span><br><span class="line">      <span class="string">'OTHER_LINKER_FLAGS'</span> =&gt; <span class="string">'-ObjC'</span>,</span><br><span class="line">      <span class="string">'ENABLE_BITCODE'</span> =&gt; <span class="string">'NO'</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="验证pod库，将自己的podspec推送到cocoapods的索引库"><a href="#验证pod库，将自己的podspec推送到cocoapods的索引库" class="headerlink" title="验证pod库，将自己的podspec推送到cocoapods的索引库"></a>验证pod库，将自己的podspec推送到cocoapods的索引库</h3><ol>
-<li>验证pod库命令<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pod lib lint </span><br><span class="line"><span class="comment"># --verbose             打印详细log</span></span><br><span class="line"><span class="comment"># --allow-warnings      当出现警告，但不影响pod库的使用的时候会验证通过</span></span><br><span class="line"><span class="comment"># --use-libraries       使用了自己的私有库</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>话外：<br>    如果是模拟器错误，找到对应的模拟器（xcode =&gt; window =&gt; devices and simulators），然后删除</p>
-<ol start="2">
-<li><p>推送自己的podspec到cocoapods的索引库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk push --verbose --allow-warnings --use-libraries</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试能否索引到</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod search [你在podspec中设置的仓库名]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加移除其他维护者命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod trunk add-owner [仓库名] [维护者邮件]</span><br><span class="line">pod trunk remove-owner [仓库名] [维护者邮件]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>从trunk中移除仓库索引</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod trunk delete [仓库名] [tag]</span><br><span class="line"><span class="comment"># 不加tag，移除所有版本</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="如果不想推送到trunk"><a href="#如果不想推送到trunk" class="headerlink" title="如果不想推送到trunk"></a>如果不想推送到trunk</h3><ol>
-<li><p>参考上面的<a href="#podspec文件的说明">podspec文件的说明</a>，在仓库中创建好.podspec文件</p>
-</li>
-<li><p>在需要添加的工程里，更改podfile文件，添加自己的仓库，样式如下</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 你自己的仓库地址</span><br><span class="line">source &apos;https://github.com/tpctt/Specs.git&apos; </span><br><span class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</span><br><span class="line">platform :ios, &quot;8.0&quot;</span><br><span class="line">target:XX  do</span><br><span class="line">pod &apos;仓库名&apos; , &apos;~&gt; 1.4.0&apos;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-
-<h3 id="搬砖文献："><a href="#搬砖文献：" class="headerlink" title="搬砖文献："></a>搬砖文献：</h3><p><a href="https://www.jianshu.com/p/e3ec9a8bec97" target="_blank" rel="noopener">如何将自己的组件库使用cocoapods管理</a><br><a href="https://www.jianshu.com/p/310c1d09ab31" target="_blank" rel="noopener">在github创建自己的pod仓库</a><br><a href="http://guides.cocoapods.org/making/specs-and-specs-repo.html" target="_blank" rel="noopener">官方介绍specs</a><br><a href="http://guides.cocoapods.org/making/getting-setup-with-trunk.html" target="_blank" rel="noopener">官方配置trunk网址</a><br><a href="http://guides.cocoapods.org/syntax/podfile.html#pod" target="_blank" rel="noopener">官方podfile文件说明</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/blog_comment/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/30/blog_comment/" itemprop="url">blog config comment/visitors plug-in</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-30T19:47:00+08:00">
-                2020-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog/" itemprop="url" rel="index">
-                    <span itemprop="name">blog</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/30/blog_comment/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/30/blog_comment/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2020/04/30/blog_comment/" class="leancloud_visitors" data-flag-title="blog config comment/visitors plug-in">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>写这篇文章的目的旨在，记录自己是如何给自己的hexo博客添加comment的，希望能给到你一些帮助</p>
-<h3 id="Comment"><a href="#Comment" class="headerlink" title="Comment"></a>Comment</h3><h4 id="1-comment插件"><a href="#1-comment插件" class="headerlink" title="1. comment插件"></a>1. comment插件</h4><p>当你使用一种主题的时候，你可以打开对应主题文件目录中的<label style="color:#b77a64">_config.yml</label>文件，你可以看到很多对应的功能或说明；我这里使用的主题是<label style="color:#b77a64">next</label>，对应的文件目录结构是<label style="color:#399ad6"><code>themes/next/_config.yml</code></label></p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Valine.</span></span><br><span class="line"><span class="comment"># You can get your appid and appkey from https://leancloud.cn</span></span><br><span class="line"><span class="comment"># more info please open https://valine.js.org</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">    enable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    appid:</span>  <span class="comment"># your leancloud application appid</span></span><br><span class="line"><span class="attr">    appkey:</span> <span class="comment"># your leancloud application appkey</span></span><br><span class="line"><span class="attr">    notify:</span> <span class="literal">true</span> <span class="comment"># mail notifier , https://github.com/xCss/Valine/wiki</span></span><br><span class="line"><span class="attr">    verify:</span> <span class="literal">false</span> <span class="comment"># Verification code</span></span><br><span class="line"><span class="attr">    placeholder:</span> <span class="string">Just</span> <span class="string">go</span> <span class="string">go</span> <span class="comment"># comment box placeholder</span></span><br><span class="line"><span class="attr">    avatar:</span> <span class="string">mm</span> <span class="comment"># gravatar style</span></span><br><span class="line"><span class="attr">    guest_info:</span> <span class="string">nick,mail,link</span> <span class="comment"># custom comment header</span></span><br><span class="line"><span class="attr">    pageSize:</span> <span class="number">10</span> <span class="comment"># pagination size</span></span><br></pre></td></tr></table></figure>
-
-<p>上面你看到的就是next主题支持的comment插件<label style="color:#b77a64">valine</label>；你也可以搜索你的主题可以支持的comment插件；</p>
-<h4 id="2-valine"><a href="#2-valine" class="headerlink" title="2. valine"></a>2. <a href="https://valine.js.org/" target="_blank" rel="noopener">valine</a></h4><blockquote>
-<p>valine是一款基于LeanCloud的快速、简洁且高效的无后端评论系统。<br>valine评论功能是依赖<a href="https://www.leancloud.cn/" target="_blank" rel="noopener">LeanCloud</a>的，需要你在leanCloud注册一个自己的产品，拿到对应的appid和appkey；</p>
-</blockquote>
-<ol>
-<li><p>配置leanCloud</p>
-<p> 在你创建好自己的产品后，（[如何创建自己的产品])，配置邮件模板路径<em><code>设置 =&gt; 邮件模板</code></em>，将其中用于重置密码的邮件主题更改内容（这是因为Valine官方提供的邮件提醒功能是基于Leancloud的密码重置邮件提醒）</p>
- <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Hi, &#123;&#123;username&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">你在 &#123;&#123;appname&#125;&#125; 的评论收到了新的回复，请点击查看：</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"你的网址首页链接"</span> <span class="attr">style</span>=<span class="string">"display: inline-block; padding: 10px 20px; border-radius: 4px; background-color: #3090e4; color: #fff; text-decoration: none;"</span>&gt;</span>马上查看<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p> 上面代码中记得将<label style="color:#b77a64">“你的网址首页链接”</label>更换为自己的博客地址</p>
-</li>
-<li><p>修改_config.yml文件配置信息</p>
-<p> 修改next主题中对应的key-value，就是上面提到的_config.yml文件，将appid,appkey替换为你在leancloud中对应产品的appid,appkey<label style="color:#b77a64">(路径：设置 =&gt; 应用key)</label>，enable设置为true</p>
-<p> 至此，你就可以看到评论系统了，尝试评论后，在leanCloud网站上查看自己应用的数据库消息，你将看到评论信息<label style="color:#b77a64">(路径：存储 =&gt; 结构化数据 =&gt; Comment)</label></p>
-</li>
-<li><p><a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin</a>实现邮件提醒功能</p>
-<p> 进入<a href="https://www.leancloud.cn/" target="_blank" rel="noopener">leancloud</a>中，自己应用目录下，点击云引擎 =&gt; 设置，填写valine-admin的代码库并保存<code>https://github.com/zhaojun1998/Valine-Admin</code></p>
-<p> 切换到部署标签，<label style="color:#b77a64">（路径：云引擎 =&gt; 部署）</label>，分支选择master，点击部署</p>
-<p> 设置云引擎的环境变量，<label style="color:#b77a64">（记得在保存后，需要重启云引擎，路径：云引擎 =&gt; 部署）</label></p>
-<blockquote>
-<p><label style="color:#399ad6"><strong>SITE_NAME</strong></label> : 网站名称。<br> <label style="color:#399ad6"><strong>SITE_URL</strong></label> : 网站地址, 最后不要加 / 。<br> <label style="color:#399ad6"><strong>SMTP_USER</strong></label> : SMTP 服务用户名，一般为邮箱地址。<br> <label style="color:#399ad6"><strong>SMTP_PASS</strong></label> : SMTP 密码，一般为授权码，而不是邮箱的登陆密码，请自行查询对应邮件服务商的获取方式<br> <label style="color:#399ad6"><strong>SMTP_SERVICE</strong></label> : 邮件服务提供商，支持 QQ、163、126、Gmail、”Yahoo”、…… ，全部支持请参考 : <a href="https://nodemailer.com/smtp/well-known/#supported-services" target="_blank" rel="noopener">Nodemailer Supported services</a>。 — 如这里没有你使用的邮件提供商，请查看<a href="https://www.nhtzj.com/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8" target="_blank" rel="noopener">自定义邮件服务器</a><br> <label style="color:#399ad6"><strong>SENDER_NAME</strong></label> : 寄件人名称。</p>
-</blockquote>
-<p> 如果这里你需要使用到自己的邮箱，或者SMTP_SERVICE中不支持，那么你需要额外设置以下三个环境变量，否则不用哈</p>
-<blockquote>
-<p><label style="color:#399ad6"><strong>SMTP_HOST</strong></label> : 邮件服务提供商 SMTP 地址，如 qq : smtp.qq.com，此项需要自行查询或询问其服务商。<br> <label style="color:#399ad6"><strong>SMTP_PORT</strong></label> : 邮件服务提供商 SMTP 端口, 此项需要自行查询或询问其服务商。<br> <label style="color:#399ad6"><strong>SMTP_SECURE</strong></label> : 是否启用加密, 默认为 true，一般不需要设置，如有特殊请自行配置。 此项需要自行查询或询问其服务商。</p>
-</blockquote>
-<p> 额外的两个参数，可加可不加</p>
-<blockquote>
-<p><label style="color:#399ad6"><strong>TO_EMAIL</strong></label>：这个是填收邮件提醒的邮箱地址，若没有这个字段，则将邮件发到SMTP_USER。<br> <label style="color:#399ad6"><strong>TEMPLATE_NAME</strong></label>：设置提醒邮件的主题，目前内置了两款主题，分别为 default 与 rainbow。默认为 default 。</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="visitors"><a href="#visitors" class="headerlink" title="visitors"></a>visitors</h3><p>配置主题中的<label style="color:#b77a64">_config.yml</label>文件，对应的目录结构：<label style="color:#399ad6"><code>themes/next/_config.yml</code></label></p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Show number of visitors to each article.</span></span><br><span class="line"><span class="comment"># You can visit https://leancloud.cn get AppID and AppKey.</span></span><br><span class="line"><span class="attr">leancloud_visitors:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  app_id:</span> <span class="comment"># your leancloud appid</span></span><br><span class="line"><span class="attr">  app_key:</span> <span class="comment"># your leancloud appkey</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><ol>
-<li><p>因为免费版的LeanCloud容器，是有强制性休眠策略的，不能24小时运行；每天必须休眠6个小时；30分钟内没有外部请求，则休眠；休眠后如果有新的外部请求实例则马上启动（但激活时此次发送邮件会失败）；所以，如果你要解决此问题，可参考<label style="color:#b77a64"><a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></label></p>
-</li>
-<li><p>关于SMTP_PASS，SMTP密码，SMTP授权码，如何获取，可以参看<a href="https://service.mail.qq.com/cgi-bin/help?subtype=1&id=28&no=1001256" target="_blank" rel="noopener">SMTP授权码</a></p>
-</li>
-</ol>
-<p>因为是根据大神博客来操作的，所以很多图片说明在大神文章中都有，在此就不再添加了</p>
-<h3 id="文献参考："><a href="#文献参考：" class="headerlink" title="文献参考："></a>文献参考：</h3><p>  <a href="https://www.nhtzj.com/3315416634/" target="_blank" rel="noopener">NexT主题设置Valine评论系统邮件提醒</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin仓库地址</a><br>  <a href="https://github.com/zhaojun1998/Valine-Admin/blob/master/%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE.md#%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">Valine-Admin配置LeanCloud休眠策略</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/28/update_blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/28/update_blog/" itemprop="url">blog update</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-28T12:47:00+08:00">
-                2020-04-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog/" itemprop="url" rel="index">
-                    <span itemprop="name">blog</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/28/update_blog/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/28/update_blog/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2020/04/28/update_blog/" class="leancloud_visitors" data-flag-title="blog update">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>写这篇文章的目的是为了记录，自己需要改进自己的博客时，能快速找到各位前辈大能的文章，地址</p>
-<h4 id="主题Next"><a href="#主题Next" class="headerlink" title="主题Next"></a>主题Next</h4><ol>
-<li><a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">github地址</a></li>
-<li><a href="https://github.com/theme-next/awesome-next" target="_blank" rel="noopener">相关插件（搜索，评论等）github地址</a></li>
-</ol>
-<h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><ol>
-<li><a href="https://hexo.io/docs/one-command-deployment" target="_blank" rel="noopener">hexo文档地址</a></li>
-<li>给自己的hexo博客添加评论，使用的是minivaline<ol>
-<li>要使用minvaline需要现在<a href="https://leancloud.cn/dashboard/app.html?appid=uuE0OYy95m5hobJboOUKcMYo-gzGzoHsz#/key" target="_blank" rel="noopener">leancloud</a>上注册一个应用，拿到对应的appkey和appid<br><a href="https://github.com/MiniValine/hexo-next-minivaline" target="_blank" rel="noopener">Hexo Next MiniValine</a></li>
-</ol>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/shell_increase/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xuelangwang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/me.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="hexo-xuelangwang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/26/shell_increase/" itemprop="url">shell increase</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-26T08:51:00+08:00">
-                2020-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/shell/" itemprop="url" rel="index">
-                    <span itemprop="name">shell</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/26/shell_increase/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/26/shell_increase/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2020/04/26/shell_increase/" class="leancloud_visitors" data-flag-title="shell increase">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>写这篇文章的目的是为了收集自己平时在工作中使用到的shell命令或一些方法，方便自己后面追溯，（主要是自己记不住T_T）</p>
-<h4 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h4><p>grep用来过滤文件内容的每一行再好不过了，内部应该也是启用了io的相关操作吧（如果你有兴趣可以研究一下），当然，它可以过滤你在控制台的输出；你可以使用命令<label style="color:#b77a64"><code>man grep</code></label>来查看grep的更多信息，这里列举一些常见用法：</p>
-<ol>
-<li><p><label style="color:#b77a64">grep [message]</label></p>
-<p> 过滤每一行包含<em>message</em>的内容，并输出在控制台里</p>
-</li>
-<li><p><label style="color:#b77a64">grep ‘reg’</label></p>
-<p> 过滤每一行中符合正则表达式的内容，并输出在控制台里；如果你有考虑多个正则表达式，那么你可能会用到下面的命令来执行<label style="color:#b77a64"><code>grep -e &#39;regA&#39; -e &#39;regB&#39;</code> </label>（这个命令的意思是’或‘，内容只要符合其中任何一个正则表达式，就会被输出/拿到）、<label style="color:#b77a64"><code>grep &#39;regA&#39; | grep &#39;regB&#39;</code></label>(这个命令的意思是’与‘，相当于执行了两遍grep命令，如果是少数内容（几个文件）还好，多的话（上万个文件）还得找下grep对应的指令集了)</p>
-</li>
-<li><p><label style="color:#b77a64">grep -v ‘reg/message’</label></p>
-<p> 取反，不包含指定的正则表达式<em>reg</em>或者<em>message</em></p>
-</li>
-<li><p><label style="color:#b77a64">grep –color ‘message’</label></p>
-<p> 给<em>message</em>添加颜色，方便自己阅读</p>
-</li>
-</ol>
-<p>一些组合命令：</p>
-<ol>
-<li><p><label style="color:#b77a64">find [dir] -name ‘*.txt’ | xargs grep ‘message’&lt;</label>&gt;</p>
-<p> 前半段的意思是在<em>dir</em>中找到以后缀以.txt结尾的文件列表，后半段的意思就是过滤出来每个文件中包含message内容的行；grep后的命令你可以参考上面的内容来改动；</p>
-</li>
-<li><p><label style="color:#b77a64">grep ‘xxx’ | sed -n ‘/2020-04-20 16:00:00/,/2020-04-20 19:00:00/p’ test.log</label></p>
-<p> 过滤日志信息，结合sed的使用来过滤某一段时间的信息；</p>
-</li>
-</ol>
-<h4 id="dirs-pushd-popd"><a href="#dirs-pushd-popd" class="headerlink" title="dirs pushd popd"></a>dirs pushd popd</h4><p>dirs:   显示当前目录栈中的所有记录</p>
-<blockquote>
-</blockquote>
-<pre><code>-c 删除目录栈中的所有记录
--l 以完整格式显示
--p 一个目录一行的方式显示
--v 每行一个目录来显示目录栈的内容，每个目录前加上编号
-+N 显示从左到右的第n个目录，数字从0开始
--N 显示从右到左的第n个目录，数字从0开始</code></pre><p>pushd:  将目录拉入栈中，并切换到该目录下；不加参数时，会将栈最上面两个目录对换位置；</p>
-<blockquote>
-</blockquote>
-<pre><code>+N  将第n个目录移动到栈顶，（从左往右数，第n个）
--N  将第n个目录移动到栈顶，（从右往左数，第n个）
--n  将目录入栈时，不切换目录</code></pre><p>popd:   删除目录栈中的记录；不加参数时，会先删除目录栈上最上面的记录，然后切换到目录栈中最上面的目录下</p>
-<blockquote>
-</blockquote>
-<pre><code>+N  将第n个目录删除，（从左往右数，第n个）
--N  将第n个目录删除，（从右往左数，第n个）
--n  将目录出栈时，不切换目录</code></pre><h4 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h4><p>eval:   将所有的参数拼接成一个字符串，然后作为一条命令来执行；结果就是命令执行后的status</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2313,7 +2333,7 @@ test:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2324,7 +2344,7 @@ test:
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2335,7 +2355,7 @@ test:
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2382,7 +2402,7 @@ test:
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

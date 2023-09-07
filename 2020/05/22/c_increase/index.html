@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引  操作二进制某一位的值  123456// x为对应的数据，y为位移值int x = 123, y = 2x |= (1&amp;lt;&amp;lt;y)    // 指定的某一位数置1x &amp;amp;= ~(1&amp;lt;&amp;lt;y)   // 指定的某一位数置0x ^= (1&amp;lt;&amp;lt;y)    // 指定的某一位">
+<meta name="description" content="写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引  操作二进制某一位的值  1234567// x为对应的数据，y为位移值int x = 123, y = 2x |= (1&amp;lt;&amp;lt;y)    // 指定的某一位数置1x &amp;amp;= ~(1&amp;lt;&amp;lt;y)   // 指定的某一位数置0x ^= (1&amp;lt;&amp;lt;y)    // 指定的某一">
 <meta name="keywords" content="c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="c_increase">
 <meta property="og:url" content="http://yoursite.com/2020/05/22/c_increase/index.html">
 <meta property="og:site_name" content="hexo-xuelangwang">
-<meta property="og:description" content="写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引  操作二进制某一位的值  123456// x为对应的数据，y为位移值int x = 123, y = 2x |= (1&amp;lt;&amp;lt;y)    // 指定的某一位数置1x &amp;amp;= ~(1&amp;lt;&amp;lt;y)   // 指定的某一位数置0x ^= (1&amp;lt;&amp;lt;y)    // 指定的某一位">
+<meta property="og:description" content="写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引  操作二进制某一位的值  1234567// x为对应的数据，y为位移值int x = 123, y = 2x |= (1&amp;lt;&amp;lt;y)    // 指定的某一位数置1x &amp;amp;= ~(1&amp;lt;&amp;lt;y)   // 指定的某一位数置0x ^= (1&amp;lt;&amp;lt;y)    // 指定的某一">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-22T03:09:24.466Z">
+<meta property="og:updated_time" content="2020-11-10T03:06:03.001Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="c_increase">
-<meta name="twitter:description" content="写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引  操作二进制某一位的值  123456// x为对应的数据，y为位移值int x = 123, y = 2x |= (1&amp;lt;&amp;lt;y)    // 指定的某一位数置1x &amp;amp;= ~(1&amp;lt;&amp;lt;y)   // 指定的某一位数置0x ^= (1&amp;lt;&amp;lt;y)    // 指定的某一位">
+<meta name="twitter:description" content="写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引  操作二进制某一位的值  1234567// x为对应的数据，y为位移值int x = 123, y = 2x |= (1&amp;lt;&amp;lt;y)    // 指定的某一位数置1x &amp;amp;= ~(1&amp;lt;&amp;lt;y)   // 指定的某一位数置0x ^= (1&amp;lt;&amp;lt;y)    // 指定的某一">
 
 
 
@@ -398,7 +398,7 @@
         <p>写这篇文章的目的是为了缓存下来平时使用到的一些简单算法，一些基础知识啥的，方便后面自己来索引</p>
 <ol>
 <li><p>操作二进制某一位的值</p>
- <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// x为对应的数据，y为位移值</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">123</span>, y = <span class="number">2</span></span><br><span class="line">x |= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数置1</span></span><br><span class="line">x &amp;= ~(<span class="number">1</span>&lt;&lt;y)   <span class="comment">// 指定的某一位数置0</span></span><br><span class="line">x ^= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数取反</span></span><br><span class="line">((x) &gt;&gt; (y)&amp;<span class="number">1</span>) <span class="comment">// 获取的某一位的值</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// x为对应的数据，y为位移值</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">123</span>, y = <span class="number">2</span></span><br><span class="line">x |= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数置1</span></span><br><span class="line">x &amp;= ~(<span class="number">1</span>&lt;&lt;y)   <span class="comment">// 指定的某一位数置0</span></span><br><span class="line">x ^= (<span class="number">1</span>&lt;&lt;y)    <span class="comment">// 指定的某一位数取反</span></span><br><span class="line">((x) &gt;&gt; (y)&amp;<span class="number">1</span>) <span class="comment">// 获取的某一位的值 </span></span><br><span class="line">x = x&gt;&gt;<span class="number">1</span>       <span class="comment">// 取某个值的一半，向下取整</span></span><br></pre></td></tr></table></figure>
 
 </li>
 </ol>
@@ -474,8 +474,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/05/26/cmake_study/" rel="prev" title="study-cmake">
-                study-cmake <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/26/解读FBRetainCycleDetector/" rel="prev" title="解读FBRetainCycleDetector">
+                解读FBRetainCycleDetector <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -549,7 +549,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -560,7 +560,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -571,7 +571,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -618,7 +618,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

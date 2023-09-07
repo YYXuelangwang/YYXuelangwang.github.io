@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="在开始了解cmake时，先简单了解下下面的几种文件：123*.o文件     =&amp;gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件*.a文件     =&amp;gt;      静态库文件*.so文件    =&amp;gt;      动态链接库  cmake能为我们做些什么CMake 可以编译源代码、制作程序库、产生适配器（wrappe">
+<meta name="description" content="在开始了解cmake时，先简单了解下下面的几种文件：123*.o文件     =&amp;gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件*.a文件     =&amp;gt;      静态库文件，.a是.o文件通过某种方式打包在一起的静态库文件*.so文件    =&amp;gt;      动态链接库，动态库文件  cmake能为我们做些什么C">
 <meta name="keywords" content="cmake">
 <meta property="og:type" content="article">
 <meta property="og:title" content="study-cmake">
 <meta property="og:url" content="http://yoursite.com/2020/05/26/cmake_study/index.html">
 <meta property="og:site_name" content="hexo-xuelangwang">
-<meta property="og:description" content="在开始了解cmake时，先简单了解下下面的几种文件：123*.o文件     =&amp;gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件*.a文件     =&amp;gt;      静态库文件*.so文件    =&amp;gt;      动态链接库  cmake能为我们做些什么CMake 可以编译源代码、制作程序库、产生适配器（wrappe">
+<meta property="og:description" content="在开始了解cmake时，先简单了解下下面的几种文件：123*.o文件     =&amp;gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件*.a文件     =&amp;gt;      静态库文件，.a是.o文件通过某种方式打包在一起的静态库文件*.so文件    =&amp;gt;      动态链接库，动态库文件  cmake能为我们做些什么C">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-11T02:00:52.067Z">
+<meta property="og:updated_time" content="2021-06-07T01:21:26.265Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="study-cmake">
-<meta name="twitter:description" content="在开始了解cmake时，先简单了解下下面的几种文件：123*.o文件     =&amp;gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件*.a文件     =&amp;gt;      静态库文件*.so文件    =&amp;gt;      动态链接库  cmake能为我们做些什么CMake 可以编译源代码、制作程序库、产生适配器（wrappe">
+<meta name="twitter:description" content="在开始了解cmake时，先简单了解下下面的几种文件：123*.o文件     =&amp;gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件*.a文件     =&amp;gt;      静态库文件，.a是.o文件通过某种方式打包在一起的静态库文件*.so文件    =&amp;gt;      动态链接库，动态库文件  cmake能为我们做些什么C">
 
 
 
@@ -395,7 +395,7 @@
       
 
       
-        <h4 id="在开始了解cmake时，先简单了解下下面的几种文件："><a href="#在开始了解cmake时，先简单了解下下面的几种文件：" class="headerlink" title="在开始了解cmake时，先简单了解下下面的几种文件："></a>在开始了解cmake时，先简单了解下下面的几种文件：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*.o文件     =&gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件</span><br><span class="line">*.a文件     =&gt;      静态库文件</span><br><span class="line">*.so文件    =&gt;      动态链接库</span><br></pre></td></tr></table></figure>
+        <h4 id="在开始了解cmake时，先简单了解下下面的几种文件："><a href="#在开始了解cmake时，先简单了解下下面的几种文件：" class="headerlink" title="在开始了解cmake时，先简单了解下下面的几种文件："></a>在开始了解cmake时，先简单了解下下面的几种文件：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*.o文件     =&gt;      链接文件，相当于windows里的obj文件，一般情况下，一个*.c或*.cpp文件对应一个*.o文件</span><br><span class="line">*.a文件     =&gt;      静态库文件，.a是.o文件通过某种方式打包在一起的静态库文件</span><br><span class="line">*.so文件    =&gt;      动态链接库，动态库文件</span><br></pre></td></tr></table></figure>
 
 <h4 id="cmake能为我们做些什么"><a href="#cmake能为我们做些什么" class="headerlink" title="cmake能为我们做些什么"></a>cmake能为我们做些什么</h4><p>CMake 可以编译源代码、制作程序库、产生适配器（wrapper）、还可以用任意的顺序建构执行档。CMake 支持 in-place 建构（二进档和源代码在同一个目录树中）和 out-of-place 建构（二进档在别的目录里），因此可以很容易从同一个源代码目录树中建构出多个二进档。CMake 也支持静态与动态程式库的建构。                 – 来自百科</p>
 <h4 id="cmake-tutorial"><a href="#cmake-tutorial" class="headerlink" title="cmake-tutorial"></a>cmake-tutorial</h4><h5 id="step1"><a href="#step1" class="headerlink" title="step1"></a>step1</h5><h6 id="1-简单的创建一个可执行程序"><a href="#1-简单的创建一个可执行程序" class="headerlink" title="1.简单的创建一个可执行程序"></a>1.简单的创建一个可执行程序</h6><ol>
@@ -461,6 +461,9 @@ test:
 <li><p>编译命令执行，参考<a href="#step1">step1</a></p>
 </li>
 </ol>
+<p>参考资料和文献地址：<br>CMake 官网: <a href="https://cmake.org/" target="_blank" rel="noopener">cmake.org</a></p>
+<p>CMake 文档: <a href="https://cmake.org/documentation/" target="_blank" rel="noopener">cmake.org/documentation</a></p>
+<p>CMake FAQ: <a href="https://cmake.org/Wiki/CMake_FAQ" target="_blank" rel="noopener">Wiki/CMake_FAQ</a></p>
 
       
     </div>
@@ -523,8 +526,8 @@ test:
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/05/22/c_increase/" rel="next" title="c_increase">
-                <i class="fa fa-chevron-left"></i> c_increase
+              <a href="/2020/05/26/multi_lang/" rel="next" title="multi_lang多语言实现方案">
+                <i class="fa fa-chevron-left"></i> multi_lang多语言实现方案
               </a>
             
           </div>
@@ -533,8 +536,8 @@ test:
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/05/26/解读FBRetainCycleDetector/" rel="prev" title="解读FBRetainCycleDetector">
-                解读FBRetainCycleDetector <i class="fa fa-chevron-right"></i>
+              <a href="/2020/07/09/binary-tree/" rel="prev" title="binary-tree">
+                binary-tree <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -617,7 +620,7 @@ test:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -628,7 +631,7 @@ test:
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -639,7 +642,7 @@ test:
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -702,7 +705,7 @@ test:
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
